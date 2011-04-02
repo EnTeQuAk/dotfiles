@@ -5,6 +5,37 @@ if [ -f /etc/bashrc ]; then
 	. /etc/bashrc
 fi
 
+# enable programmable completion features (you don't need to enable
+# this, if it's already enabled in /etc/bash.bashrc and /etc/profile
+# sources /etc/bash.bashrc).
+if [ -f /etc/bash_completion ]; then
+    . /etc/bash_completion
+fi
+
+# sudo completion
+complete -cf sudo
+
+# set PATH so it includes user's private bin if it exists
+if [ -d ~/.bin ] ; then
+    PATH=~/.bin:"${PATH}"
+fi
+
+if [ -d ~/bin ] ; then
+    PATH=~/bin:"${PATH}"
+fi
+
+if [ -d /usr/sbin ] ; then
+	PATH=/usr/sbin:"${PATH}"
+fi
+
+if [ -d ~/.local/bin ]; then
+	PATH=~/.local/bin:"${PATH}"
+fi
+
+
+# Global environment definitions
+# ------------------------------
+
 # don't put duplicate lines in the history. See bash(1) for more options
 export HISTCONTROL=ignoredups
 # ... and ignore same sucessive entries.
@@ -13,12 +44,30 @@ export HISTCONTROL=ignoreboth
 # export vim as our editor
 export EDITOR="vim"
 
+# integrate with ksshaskpass
+if [ -f "/usr/bin/ksshaskpass" ]; then
+    export SSH_ASKPASS="/usr/bin/ksshaskpass"
+fi
+
+export HISTCONTROL=erasedups # Ignore duplicate entries in history
+export HISTSIZE=10000 # Increases size of history
+export HISTIGNORE="&:ls:ll:la:l.:pwd:exit:clear:clr:[bf]g"
+shopt -s histappend # Append history instead of overwriting
+shopt -s cdspell # Correct minor spelling errors in cd command
+shopt -s dotglob # includes dotfiles in pathname expansion
+shopt -s checkwinsize # If window size changes, redraw contents
+shopt -s cmdhist # Multiline commands are a single command in history.
+shopt -s extglob # Allows basic regexps in bash.
+set ignoreeof on # Typing EOF (CTRL+D) will not exit interactive sessions
+
 # check the window size after each command and, if necessary,
 # update the values of LINES and COLUMNS.
 shopt -s checkwinsize
 
-# Alias definitions.
-# User specific aliases and functions
+
+# Alias definitions
+# -----------------
+
 alias banshee='XLIB_SKIP_ARGB_VISUALS=1 banshee-1'
 alias acka='ack -a'
 alias cdpr='cd ~/Projects'
@@ -54,6 +103,17 @@ alias servethis="python2 -c 'import SimpleHTTPServer; SimpleHTTPServer.test()'"
 alias clr='clear;echo "Currently logged in on $(tty), as $(whoami) in directory $(pwd)."'
 alias pypath='python -c "import sys; print sys.path" | tr "," "\n" | grep -v "egg"'
 alias pycclean='find . -name "*.pyc" -exec rm {} \;'
+
+# "last as root"
+alias lr='su -c "$(history | tail -n 2 | head -n 1 | sed -e "s/^[ ]*[0-9]*[ ]*//g")"'
+
+# enable color support of ls and also add handy aliases
+alias ls='ls -F --color=auto'
+alias grep='grep --color=auto'
+alias fgrep='fgrep --color=auto'
+alias egrep='egrep --color=auto'
+
+alias ll='ls -halG'
 
 # bash function to decompress archives - http://www.shell-fu.org/lister.php?id=375
 extract () {
@@ -91,65 +151,10 @@ exip () {
 }
 
 
-# "last as root"
-alias lr='su -c "$(history | tail -n 2 | head -n 1 | sed -e "s/^[ ]*[0-9]*[ ]*//g")"'
-
-# enable color support of ls and also add handy aliases
-alias ls='ls -F --color=auto'
-alias grep='grep --color=auto'
-alias fgrep='fgrep --color=auto'
-alias egrep='egrep --color=auto'
-
-alias ll='ls -halG'
-
-
-# enable programmable completion features (you don't need to enable
-# this, if it's already enabled in /etc/bash.bashrc and /etc/profile
-# sources /etc/bash.bashrc).
-if [ -f /etc/bash_completion ]; then
-    . /etc/bash_completion
-fi
-
-# sudo completion
-complete -cf sudo
-
-#INYOKA_COMPLETION="/home/ente/Projects/inyoka/inyoka-sandbox/extra/fab_bash_completion"
-# initialize fab bash completion
-if [ -f "$INYOKA_COMPLETION" ]; then
-	. "$INYOKA_COMPLETION"
-fi
-
-# set PATH so it includes user's private bin if it exists
-if [ -d ~/.bin ] ; then
-    PATH=~/.bin:"${PATH}"
-fi
-
-if [ -d ~/bin ] ; then
-    PATH=~/bin:"${PATH}"
-fi
-
-if [ -d /usr/sbin ] ; then
-	PATH=/usr/sbin:"${PATH}"
-fi
-
-if [ -d ~/.local/bin ]; then
-	PATH=~/.local/bin:"${PATH}"
-fi
-
-
-# Gibt mittels Cowsay und Fortunes Sprueche aus
-#if [ -f /usr/bin/fortune -a -d /usr/share/cowsay ]; then
-#     dir='/usr/share/cowsay/'
-#     file=`/bin/ls -1 "$dir" | sort --random-sort | head -1`
-#     cow=$(echo "$file" | sed -e "s/\.cow//")
-#     fortune | cowsay -f $cow
-#	 echo -e "\n\n"
-#fi
+# Virtual Python Environment, VCS and Fancy Promt
+# -----------------------------------------------
 
 # Advanced VCS information in bash
-_bold=$(tput bold)
-_normal=$(tput sgr0)
-
 __vcs_dir() {
   local vcs base_dir sub_dir ref
   sub_dir() {
@@ -193,44 +198,19 @@ __vcs_dir() {
   echo "${vcs:+($vcs $ref)}"
 }
 
-# Colorized, VCS sensitive Promt
-NO_COLOUR="[\033[0m]"
-
-function EXT_COLOR () {
-	echo -ne "\033[38;5;$1m";
-}
-
+# Export the promt with advanced vcs information
 export PS1='\[\e[33;1m\]$(__vcs_dir)\[\e[0m\] \[\e[32;1m\]\w> \[\e[0m\]'
 
-# improve liferea performance
-export LIFEREA_SYNCHRONOUS=0
-
-# speedup firefox rendering
-export MOZ_DISABLE_PANGO=1
-
-# integrate with ksshaskpass
-if [ -f "/usr/bin/ksshaskpass" ]; then
-    export SSH_ASKPASS="/usr/bin/ksshaskpass"
-fi
-
-export HISTCONTROL=erasedups # Ignore duplicate entries in history
-export HISTSIZE=10000 # Increases size of history
-export HISTIGNORE="&:ls:ll:la:l.:pwd:exit:clear:clr:[bf]g"
-shopt -s histappend # Append history instead of overwriting
-shopt -s cdspell # Correct minor spelling errors in cd command
-shopt -s dotglob # includes dotfiles in pathname expansion
-shopt -s checkwinsize # If window size changes, redraw contents
-shopt -s cmdhist # Multiline commands are a single command in history.
-shopt -s extglob # Allows basic regexps in bash.
-set ignoreeof on # Typing EOF (CTRL+D) will not exit interactive sessions
+# Automatic virtualenv activation based on .venv config file with
+# hook integration.
 
 export WORKON_HOME=$HOME/.virtualenvs
 source /usr/bin/virtualenvwrapper.sh
 
-
-# Automatically activate Git projects' virtual environments based on the
-# directory name of the project. Virtual environment name can be overridden
-# by placing a .venv file in the project root with a virtualenv name in it
+# Automatically a Projects virtual environments based on the
+# directory name of the project. Virtual environment name will be identified
+# by placing a .venv file in the project root with a virtualenv name in it.
+# If a .venv_hook file exists it gets sourced.
 function workon_cwd {
     if [ $? == 0 ]; then
         # Find the repo root and check for virtualenv name override
