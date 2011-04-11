@@ -68,16 +68,22 @@ shopt -s checkwinsize
 # Alias definitions
 # -----------------
 
-alias banshee='XLIB_SKIP_ARGB_VISUALS=1 banshee-1'
 alias acka='ack -a'
 alias cdpr='cd ~/Projects'
 alias siny='sudo /etc/rc.d/mysqld start && sudo /etc/rc.d/memcached start && sudo /etc/rc.d/nginx start'
 alias sps='sudo service postgresql start'
 alias sapache='sudo service httpd start start'
 
-alias cduuprod='cd ~/Projects/inyoka/inyoka-staging && workon uuprod && source init.sh'
-alias cdiny='cd ~/Projects/inyoka/inyoka-sandbox && source ../bin/activate'
+# Shortcuts for some OpenSource projects
+alias cdustaging='cd ~/Projects/inyoka/inyoka-staging'
+alias cdiny='cd ~/Projects/inyoka/inyoka-sandbox'
 
+# Shortcuts for my daily work
+alias cdcw='cd ~/Projects/chocri/websites'
+alias cdcm='cd ~/Projects/chocri/marklar'
+alias cdcj='cd ~/Projects/chocri/jobmanager'
+
+# Git related shortcuts
 alias gitl='git log --pretty=format:"%h %s" --graph'
 
 # convert permissions to octal - http://www.shell-fu.org/lister.php?id=205
