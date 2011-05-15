@@ -89,8 +89,8 @@ alias gitl='git log --pretty=format:"%h %s" --graph'
 # convert permissions to octal - http://www.shell-fu.org/lister.php?id=205
 alias lo='ls -l | sed -e 's/--x/1/g' -e 's/-w-/2/g' -e 's/-wx/3/g' -e 's/r--/4/g' -e 's/r-x/5/g' -e 's/rw-/6/g' -e 's/rwx/7/g' -e 's/---/0/g''
 
-# get an ordered list of subdirectory sizes - http://www.shell-fu.org/lister.php?id=275
-alias dux='du -sk ./* | sort -n | awk '\''BEGIN{ pref[1]="K"; pref[2]="M"; pref[3]="G";} { total = total + $1; x = $1; y = 1; while( x > 1000 ) { x = (x + 1023)/1000; y++; } printf("%g%s\t%s\n",int(x*10)/10,pref[y],$2); } END { y = 1; while( total > 1000 ) { total = (total + 1000)/1000; y++; } printf("Total: %g%s\n",int(total*10)/10,pref[y]); }'\'''
+# get an ordered list of subdirectory sizes
+alias dux='du -skh ./* | sort -n | grep -v total && du -cskh ./* | grep --color=never total'
 
 alias ..='cd ..' # Go up one directory
 alias ...='cd ../..' # Go up two directories

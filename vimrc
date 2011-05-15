@@ -5,12 +5,14 @@
 syntax on
 if has("gui_running")
   colorscheme ente
-  set guifont=Consolas\ 10
+  set guifont=Consolas\ 11
   "au GUIEnter * set fullscreen <-- Breaks!
 else
   colorscheme desert
 endif
 
+
+call pathogen#runtime_append_all_bundles()
 
 " Disable Generation of Backup Files
 " ----------------------------------
@@ -161,6 +163,10 @@ autocmd FileType c setlocal expandtab shiftwidth=4 tabstop=4 softtabstop=4 omnif
 " ----------
 autocmd FileType cs setlocal shiftwidth=8 tabstop=8 softtabstop=8
 
+" CoffeeScript Support
+" --------------------
+au BufNewFile,BufRead *.coffee set filetype=less
+autocmd FileType coffee setlocal shiftwidth=2 tabstop=2 softtabstop=2
 
 " Inyoka Syntax Support
 " ---------------------
