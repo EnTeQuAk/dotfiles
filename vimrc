@@ -11,6 +11,7 @@ else
   colorscheme desert
 endif
 
+call pathogen#runtime_append_all_bundles()
 
 " Disable Generation of Backup Files
 " ----------------------------------
@@ -305,6 +306,9 @@ map  :BufClose<cr>
 " Some configuration for supertab
 
 let g:SuperTabDefaultCompletionType = 'context'
+let g:SuperTabCompletionContexts = ['s:ContextText', 's:ContextDiscover']
+let g:SuperTabContextTextOmniPrecedence = ['&omnifunc', '&completefunc']
+let g:SuperTabContextDiscoverDiscovery = ["&completefunc:<c-x><c-u>", "&omnifunc:<c-x><c-o>"]
 
 
 " Misc Buffer Shortcuts/Configurations
@@ -406,3 +410,15 @@ map <C-L> :let &guifont=&guifont<cr>
 "
 " Copy to Lodgeit on ^p
 map <C-p> :Lodgeit<CR>
+
+
+nmap <buffer> <F5> :call JumpToTestFile()<CR>
+fun! JumpToTestFile()
+  let line = getline("$")
+  if line =~ "^### testfile: "
+    let filename = strpart(line, 14)
+    execute ":e " . filename
+  else
+    echo "TEST PATTERN ### testfile: NOT FOUND!"
+  endif
+endfun
