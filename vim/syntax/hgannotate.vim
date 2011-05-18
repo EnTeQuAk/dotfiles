@@ -1,5 +1,5 @@
 " Vim syntax file
-" Language:	SVN annotate output
+" Language:	HG annotate output
 " Maintainer:	Bob Hiestand <bob.hiestand@gmail.com>
 " Remark:	Used by the vcscommand plugin.
 " License:
@@ -27,14 +27,14 @@ if exists("b:current_syntax")
 	finish
 endif
 
-syn match svnName /\S\+/ contained
-syn match svnVer /^\s*\zs\d\+/ contained nextgroup=svnName skipwhite
-syn match svnHead /^\s*\d\+\s\+\S\+/ contains=svnVer,svnName
+syn match hgVer /\d\+/ contained
+syn match hgName /^\s*\S\+/ contained
+syn match hgHead /^\s*\S\+\s\+\d\+:/ contains=hgVer,hgName
 
-if !exists("did_svnannotate_syntax_inits")
-	let did_svnannotate_syntax_inits = 1
-	hi link svnName Type
-	hi link svnVer Statement
+if !exists("did_hgannotate_syntax_inits")
+	let did_hgannotate_syntax_inits = 1
+	hi link hgName Type
+	hi link hgVer Statement
 endif
 
-let b:current_syntax="svnAnnotate"
+let b:current_syntax="hgAnnotate"
