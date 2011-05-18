@@ -1,0 +1,20 @@
+startup_message off
+deflogin on
+
+silencewait 15
+msgwait 3
+
+# visual bell
+activity "%C -> %n%f %t activity!"
+vbell off
+vbell_msg " **beep** "
+
+# turn sending of screen messages to hardstatus off
+hardstatus on
+
+caption always "%{= mw}%c:%s | %Y%m%d | %=  %{= mw}%-w%{= wm}%50>%n-%t%{-}%+w%{= mw}%-38=%1` | %l"
+
+defscrollback 10000
+defutf8 on
+altscreen on
+shelltitle "> |bash"
