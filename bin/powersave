@@ -1,0 +1,222 @@
+#!/bin/bash                                
+#                                          
+# rc.local                                 
+#                                          
+# This script is executed at the end of each multiuser runlevel.
+# Make sure that the script will "exit 0" on success or any other
+# value on error.                                                
+#                                                                
+# In order to enable or disable this script just change the execution
+# bits.                                                              
+#                                                                    
+# By default this script does nothing.                               
+
+#exit 0
+###    
+##     
+## From lesswatts.org
+#                    
+# Zusammenstellung von Befehlen die man nach dem booten aktivieren muss 
+# auch von Powertop usw                                                 
+#                                                                       
+#   Modem und Bluetooth in Bios abschalten                              
+#                                                                       
+#                                                                       
+
+# The sched_mc_power_savings tunable can save a significant amount of power (multiple Watts) under workloads where there is idle time in the system. To enable the tunable, use this command:                                                                                               
+# These power savings options may impact the performance of some applications.                                                                
+
+echo 1 > /sys/devices/system/cpu/sched_mc_power_savings
+
+# The VM subsystem, in the Linux kernel, buffers writes to files that applications perform for a period of time. This caching allows the kernel to group consecutive writes into one big write, and to generally optimize the disk IO to be the most efficient. The kernel, by default, will start writing out data to disk after 5 seconds, so, if a power failure or kernel crash happens, at most, 5 seconds of data would be lost.    
+#                                                                                                                                             
+#                                                                                                                                             
+# If your machine has a reliable power supply (for example because you have a UPS or because your laptop has a battery) and doesn't crash much, you can increase this time so that the VM subsystem can do a better job optimizing the IO, as well as having the disk (and the SATA link when using ALPM) in lower power states for a longer period of time.                                                                              
+#                                                                                                                                             
+# To increase the timeout to 15 seconds, you can issue this command:                                                                          
+
+echo 60000 > /proc/sys/vm/dirty_writeback_centisecs
+
+# For several years, the Linux kernel has had a "laptop mode" for the IO subsystem. When laptop mode is enabled, the kernel will try to be smart about when to do IO, to give the disk and the SATA links as much time as possible in a low power state.                                    
+#                                                                                                                                             
+# To enable laptop mode, you can use this command:                                                                                            
+# Several distributions also include the laptopmode scripts as part of their standard installation. These scripts enable laptop mode automatically, in some cases.                                                                                                                          
+
+echo 5 > /proc/sys/vm/laptop_mode
+
+# hal is a core component of the various desktop environments and deals with all sorts of hardware interaction. One component of the hal daemon is the part where it polls the cdrom drive regularly (as often as once every two seconds!) to see if the user has inserted a CD. This is used, for example, to automatically open a new window with a file browser for the CD.                                                            
+#                                                                                                                                             
+#                                                                                                                                             
+# Such regular polling will keep the hardware awake somewhat; the amount of power consumed depends on the exact type of CDROM drive. It also depends on the presence of the ALPM feature.                                                                                                   
+#                                                                                                                                             
+#                                                                                                                                             
+# If you rarely or never insert CDs (for example because the machine in question is a server located 3000 miles away), you can save some power by stopping this polling.                                                                                                                    
+#                                                                                                                                             
+#                                                                                                                                             
+# Current versions of hal have a special command for this:                                                                                    
+
+hal-disable-polling --device /dev/cdrom
+# Note that this means that you will not get a pop-up window if you insert a CD. To enable this polling again, use the this command:
+#                                                                                                                                   
+# hal-disable-polling --device /dev/scd0 --enable-polling                                                                           
+
+#Most ethernet controllers have a feature called "Wake On Lan" (WOL). WOL allows #the administrator to send the computer, when it's turned off, a magic packet o#ver ethernet that then powers the computer on.                                                                             
+
+
+#WOL is a great feature if you regularly power up computers remotely. However, WO#L also keeps the network card active, even when the computer is powered off.                                                                                                                              
+
+
+ethtool -s eth0 wol d
+# d:g g to enable Battery charge control features
+
+# To set the thresholds for starting and stopping battery charging (in percent of current full charge capacity):
+#                                                                                                               
+#     # echo 40 > /sys/devices/platform/smapi/BAT0/start_charge_thresh                                          
+#     # echo 70 > /sys/devices/platform/smapi/BAT0/stop_charge_thresh                                           
+#     # cat /sys/devices/platform/smapi/BAT0/*_charge_thresh                                                    
+#                                                                                                               
+
+echo 12 > /sys/devices/platform/smapi/BAT0/start_charge_thresh
+echo 92 > /sys/devices/platform/smapi/BAT0/stop_charge_thresh 
+
+# Hint:
+# Battery charging thresholds can be used to keep Li-Ion ad Li-Polymer batteries partially charged, in order to increase their lifetime.
+#                                                                                                                                       
+# To prevent charging for 17 minutes (regardless of thresholds):                                                                        
+#                                                                                                                                       
+#     # echo 17 > /sys/devices/platform/smapi/BAT0/inhibit_charge_minutes                                                               
+#                                                                                                                                       
+# Hint:                                                                                                                                 
+# Charge inhibiting can be used to reduce the power draw of the laptop, in order to use an under-spec power supply                      
+# that can't handle the combined power draw of running and charging. It can also be used to control which battery is charged when using an Ultrabay battery.                                                                                                                                
+#                                                                                                                                             
+# To cancel charging preventation:                                                                                                            
+#                                                                                                                                             
+#     # echo 0 > /sys/devices/platform/smapi/BAT0/inhibit_charge_minutes                                                                      
+#                                                                                                                                             
+# To force battery discharging (even if connected to AC):                                                                                     
+#                                                                                                                                             
+#     # echo 1 > /sys/devices/platform/smapi/BAT0/force_discharge                                                                             
+#                                                                                                                                             
+# Hint:                                                                                                                                       
+# This can be used to choose which battery is discharged when using an UltraBay battery.                                                      
+#                                                                                                                                             
+# To cancel forced discharge:                                                                                                                 
+#                                                                                                                                             
+#     # echo 0 > /sys/devices/platform/smapi/BAT0/force_discharge                                                                             
+
+#Battery status features
+#                       
+# To view extended battery status such as charging state, voltage, current, capacity, cycle count and model information:
+#                                                                                                                       
+# # cat /sys/devices/platform/smapi/BAT0/installed                                                                      
+# # cat /sys/devices/platform/smapi/BAT0/state       # idle/charging/discharging                                        
+# # cat /sys/devices/platform/smapi/BAT0/cycle_count                                                                    
+# # cat /sys/devices/platform/smapi/BAT0/current_now # instantaneous current                                            
+# # cat /sys/devices/platform/smapi/BAT0/current_avg # last minute average                                              
+# # cat /sys/devices/platform/smapi/BAT0/power_now   # instantaneous power                                              
+# # cat /sys/devices/platform/smapi/BAT0/power_avg   # last minute average                                              
+# # cat /sys/devices/platform/smapi/BAT0/last_full_capacity                                                             
+# # cat /sys/devices/platform/smapi/BAT0/remaining_percent                                                              
+# # cat /sys/devices/platform/smapi/BAT0/remaining_running_time                                                         
+# # cat /sys/devices/platform/smapi/BAT0/remaining_charging_time                                                        
+# # cat /sys/devices/platform/smapi/BAT0/remaining_capacity                                                             
+# # cat /sys/devices/platform/smapi/BAT0/design_capacity                                                                
+# # cat /sys/devices/platform/smapi/BAT0/voltage                                                                        
+# # cat /sys/devices/platform/smapi/BAT0/design_voltage                                                                 
+# # cat /sys/devices/platform/smapi/BAT0/manufacturer                                                                   
+# # cat /sys/devices/platform/smapi/BAT0/model                                                                          
+# # cat /sys/devices/platform/smapi/BAT0/barcoding                                                                      
+# # cat /sys/devices/platform/smapi/BAT0/chemistry                                                                      
+# # cat /sys/devices/platform/smapi/BAT0/serial                                                                         
+# # cat /sys/devices/platform/smapi/BAT0/manufacture_date                                                               
+# # cat /sys/devices/platform/smapi/BAT0/first_use_date                                                                 
+# # cat /sys/devices/platform/smapi/BAT0/temperature # in milli-Celsius                                                 
+# # cat /sys/devices/platform/smapi/ac_connected                                                                        
+#                                                                                                                       
+# The raw status data is also available, including some fields not listed above (in case you can figure them out):      
+#                                                                                                                       
+#     # cat /sys/devices/platform/smapi/BAT0/dump                                                                       
+#                                                                                                                       
+# In all of the above, replace BAT0 with BAT1 to address the 2nd battery.                                               
+
+
+#Backlight auf 80 % stellen
+
+xbacklight -set 75
+
+# #bildschirm abscha  lten nach 5 min inaktivität
+
+xset +dpms
+xset dpms 0 0 300
+
+# The current generation onboard audio (often called "High Definition" or HDA) has power savings capabilities similar to AC97. The Linux ALSA drivers support these capabilities, as of version 1.0.15 of the ALSA subsystem. These are scheduled to appear in the 2.6.24 kernel.           
+#                                                                                                                                             
+#                                                                                                                                             
+# Unlike the AC97 power saving mode, the HDA power saving mode is enabled by default.                                                         
+#                                                                                                                                             
+#                                                                                                                                             
+# If you are running an older kernel, you can download the ALSA sound drivers from the ALSA website.                                          
+
+
+# To see if power save is enabled for the HDA controllers, you can use this command:
+#                                                                                   
+# # cat /sys/module/snd_hda_intel/parameters/power_save                             
+# 10                                                                                
+#                                                                                   
+# Power saving is enabled if the value that this shows is greater than zero.        
+
+echo 10 > /sys/module/snd_hda_intel/parameters/power_save
+
+# SATA Link Power Management
+#                           
+# On kernels 2.6.24 and new this enables SATA Link Power Management:
+#                                                                   
+ echo min_power > /sys/class/scsi_host/host0/link_power_management_policy
+ echo min_power > /sys/class/scsi_host/host1/link_power_management_policy
+#                                                                        
+# Disable it by replacing min_power with max_performance.                
+
+# When you don't have an external monitor plugged, disable CRT and DVI output (for some, this can make a difference in power usage) :
+
+###############################echo crt_disable > /proc/acpi/ibm/video
+
+#Same for PCMCIA/CardBus. Some users experiences interrupts clouds (sometime up to several thousands interrupts/second) causing CPU wakeups, thus totally preventing the CPU to reach lower C-states. If you don't use PCMCIA, you may disable it the same way (unloading seems insufficient to restore the system properly, you have to boot without it):                                                                                
+
+#nicht immer eintragen da eintrag permanent
+#echo "blacklist pcmcia" >> /etc/modprobe.d/blacklist.conf
+#echo "blacklist yenta_socket" >> /etc/modprobe.d/blacklist.conf
+
+# Autosuspend for USB-Devs
+echo 1 > /sys/bus/usb/devices/usb1/power/autosuspend
+echo 1 > /sys/bus/usb/devices/usb2/power/autosuspend
+echo 1 > /sys/bus/usb/devices/usb3/power/autosuspend
+echo 1 > /sys/bus/usb/devices/usb4/power/autosuspend
+echo 1 > /sys/bus/usb/devices/usb5/power/autosuspend
+echo 1 > /sys/bus/usb/devices/usb6/power/autosuspend
+echo 1 > /sys/bus/usb/devices/usb7/power/autosuspend
+echo 1 > /sys/bus/usb/devices/usb8/power/autosuspend
+echo 1 > /sys/bus/usb/devices/1-6/power/autosuspend #camera
+
+#sound mit powersave
+echo 4 > /sys/module/snd_hda_intel/parameters/power_save
+
+# Tweak virtual memory to conserve power when running on batteries.
+
+echo 10 > /proc/sys/vm/swappiness
+echo 0 > /proc/sys/vm/dirty_expire_centisecs
+echo 0 > /proc/sys/vm/dirty_writeback_centisecs
+echo 60 > /proc/sys/vm/dirty_background_ratio
+echo 95 > /proc/sys/vm/dirty_ratio
+
+#Misc:
+
+killall hald-addon-storage:
+
+echo 0 > /proc/sys/kernel/nmi_watchdog
+
+echo userspace > /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor
+
+echo userspace > /sys/devices/system/cpu/cpu1/cpufreq/scaling_governor
+
+exit 0

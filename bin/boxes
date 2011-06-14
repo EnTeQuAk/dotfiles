@@ -1,0 +1,157 @@
+#!/bin/bash
+DGRAY="\e[0;30m"
+PINK="\e[0;31m"
+TEAL="\e[01;32m"
+WHITE="\e[0;37m"
+GREEN="\e[1;32m"
+PISS="\e[0;33m"
+GRAY="\e[0;37m"
+YELLOW="\e[0;33m"
+COL5="\e[0;32m";
+COLOFF="\x1b[0;37;00m";
+RESET="\e[0m"
+
+ask_yesno() {
+  read -p "$1 [N/y] " yesno
+  [[ ${yesno:0:1} == [Yy] ]]
+  return # implicitly returns value of above compare
+}
+
+SERVERS="$HOME/.servers.list"
+if [[ ! -f "$SERVERS" ]]; then
+if ask_yesno "No server list found, would you like to create one now?"; then
+touch $SERVERS || { echo "Unable to write to '$SERVERS'"; exit 1; }
+  else
+echo "Canceling..."
+    exit 1
+  fi
+fi
+
+# sweep server list
+sed -i '/^[\t\ ]*$/d' "$SERVERS"
+
+NUM_SERVERS=$(wc -l < "$SERVERS")
+
+# utility dispatcher
+iterate_and() {
+  [[ $(type -t $1) = function ]] || return 1
+  while IFS='|' read user host port group nl; do
+    $1 "$user" "$host" "$port" "${group/#\$\$/}" "$nl" # nl might not exist, so its last
+  done < "${2:-$SERVERS}"
+}
+
+export_to_ssh() {
+  local user=$1 host=$2 port=$3
+  printf "Host %s\n\tUser %s\n\tPort %s\n\n" "$host" "$user" "$port"
+}
+
+list() {
+  local user=$1 host=$2 port=$3 group=$4 nl=$5
+  printf "${nl:+%-8s}${YELLOW}%-15s${COLOFF} ${WHITE}%-35s${COLOFF} ${TEAL}%6s${COLOFF} %-12s\n" $nl "$user" "$host" "$port" "$group"
+}
+
+keyup() {
+  local user=$1 host=$2 port=$3
+  [[ -z $user$host$port ]] && return
+echo -ne "Sending key to ${YELLOW}$host...${COLOFF} "
+  ssh-copy-id "-p $port $user@$host" &>/dev/null &&
+    echo -e "${GREEN}Success${COLOFF}!" ||
+    echo -e "${PINK}Error${COLOFF}!"
+}
+
+action=$1; shift
+case $action in
+  connect)
+    [[ -z $1 ]]
+    (( $1 > NUM_SERVERS || $1 <= 0 )) && { echo "Invalid server entry." >&2; exit 1; }
+    IFS='|' read user host port < <(sed -n "${1}{p;q;}" "$SERVERS")
+    ssh -t -p $port $user@$host
+  ;;
+
+  add)
+    (( $# < 2 || $# > 4 )) && { echo "Usage: ${0##*/} add <user> <host> [port] [group]" >&2; exit 1; }
+    echo "$1|$2|${3:-22}|${4:-\$\$}" >> "$SERVERS"
+  ;;
+
+  keyup)
+    if [[ $1 ]]; then
+if [[ -z ${1//[[:digit:]]} ]]; then # strictly numerical
+        (( $1 > NUM_SERVERS || $1 <= 0 )) && { echo "Invalid server entry." >&2; exit 1; }
+        keyup $(sed "${1}s/|/ /g" "$SERVERS")
+      else # must be a group
+        iterate_and keyup < <(sed -n "/|$1\$/p" "$SERVERS")
+      fi
+else
+iterate_and keyup
+    fi
+  ;;
+
+  edit)
+    [[ $2 =~ user|host|port|group ]] || (( $# == 2 )) || { echo "Usage: ${0##*/} edit <user|host|port|group>" >&2; exit 1; }
+    (( $1 > NUM_SERVERS || $1 <= 0 )) && { echo "Invalid server entry." >&2; exit 1; }
+
+    echo "Altering entry: $(sed -n "${1}{p;q;}" "$SERVERS")"
+    read -p "Enter new $2: " entry
+    [[ -z $entry ]] && { echo "New entry is empty. Aborting..." >&2; exit 1; }
+    case $2 in
+      user) sed -i "$1s,^\([^|]\+\)|,$entry|," "$SERVERS" ;;
+      host) sed -i "$1s,|\([-[:alnum:]\.\_]\+\)|,|$entry|," "$SERVERS" ;;
+      port) sed -i "$1s,|[[:digit:]]\+|,|$entry|," "$SERVERS" ;;
+     group) sed -i "$1s,|[^|]\+\$,|$entry," "$SERVERS" ;;
+    esac
+  ;;
+
+  remove)
+    (( $1 > NUM_SERVERS || $1 <= 0 )) && { echo "Usage: ${0##*/} remove <server-num>" >&2; exit 1; }
+    echo "Deleting entry: $(sed -n "${1}{p;q;}" "$SERVERS")"
+    prompt='\e[0;31m Are you sure? \e[0;37m'
+    if ask_yesno "$prompt"; then
+sed -i "${1}d" "$SERVERS"
+      echo -e "\e[0;31m Server removed from database.\e[0;37m"
+    else
+echo "Canceling.."
+      exit 1
+    fi
+  ;;
+
+  list)
+    echo -e "\n ${PINK}######## ####### ## ## ######## ###### \n" \
+                      " ## ## ## ## ## ## ## ## ##\n" \
+                      " ## ## ## ## ## ## ## ## \n" \
+                      " ######## ## ## ### ###### ###### \n" \
+                      " ## ## ## ## ## ## ## ##\n" \
+                      " ## ## ## ## ## ## ## ## ##\n" \
+                      " ######## ####### ## ## ######## ######${COLOFF}\n"
+    printf "%-7s ${YELLOW}%-15s${COLOFF} ${WHITE}%-35s${COLOFF} ${TEAL}%6s${COLOFF} %-12s\n" "No." "Username" "Hostname" "Port" "Group"
+    echo "-------------------------------------------------------------------------------"
+
+    if [[ $1 ]]; then
+if [[ -z ${1//[[:digit:]]} ]]; then # strictly numerical
+        (( $1 > NUM_SERVERS || $1 <= 0 )) && { echo "Invalid server entry." >&2; exit 1; }
+        list $(awk -F'|' 'NR == '$1'{print $1,$2,$3,$4,NR }' "$SERVERS")
+      else # must be a group
+        iterate_and list <(awk '/\|'$1'$/{ print $0,"|",NR }' "$SERVERS")
+      fi
+else
+iterate_and list | nl --number-format=ln
+    fi
+  ;;
+
+  export) iterate_and export_to_ssh ;;
+  search) iterate_and list <(awk -F'|' "/$1/"'{ printf "%s|%s|%s|%s|%d\n",$1,$2,$3,$4,NR }' "$SERVERS") ;;
+
+  *) {
+     [[ $action ]] && echo "Invalid action: '$action'"
+     echo "Usage: "
+     echo " connect <servernum>"
+     echo " list [servernum]"
+     echo " add <user> <host> [port]"
+     echo " keyup <servernum>"
+     echo " edit <servernum> <user|host|port>"
+     echo " remove <servernum>"
+     echo " search <pattern>"
+     echo " export <servernum>"
+     exit 1
+     } >&2
+  ;;
+esac
