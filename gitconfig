@@ -1,0 +1,46 @@
+[user]
+email = cg@webshox.org
+name = Christopher Grebs
+
+[github]
+user = EnTeQuAk
+
+[color]
+ui = auto
+branch = auto
+diff = auto
+interactive = auto
+status = auto
+grep = yes
+
+[alias]
+st = status
+ci = commit
+br = branch
+co = checkout
+df = diff
+lg = log -p
+lol = log --graph --decorate --pretty=oneline --abbrev-commit
+lola = log --graph --decorate --pretty=oneline --abbrev-commit --all
+ls = ls-files
+br = branch
+co = checkout
+last = show --stat HEAD
+logdel = log --diff-filter=D --summary
+out = !git-out
+st = status
+countcommits = shortlog -sn
+
+[merge]
+tool = vimdiff
+log = true
+
+[push]
+default = current
+
+[help]
+autocorrect = 1
+
+[branch "master"]
+remote = origin
+merge = master
