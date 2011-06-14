@@ -176,7 +176,7 @@ __vcs_dir() {
     while [ ! -d "$base_dir/.git" ]; do base_dir="$base_dir/.."; [ $(readlink -f "${base_dir}") = "/" ] && return 1; done
     base_dir=$(readlink -f "$base_dir")
     sub_dir=$(sub_dir "${base_dir}")
-    ref=$(git describe --tags 2>/dev/null || git describe --all 2>/dev/null)
+    ref=$(git describe --all 2>/dev/null)
     vcs="git"
   }
 
