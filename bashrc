@@ -64,6 +64,10 @@ set ignoreeof on # Typing EOF (CTRL+D) will not exit interactive sessions
 # update the values of LINES and COLUMNS.
 shopt -s checkwinsize
 
+# External config
+[[ -r ~/.dircolors && -x /usr/bin/dircolors ]] && eval $(dircolors -b ~/.dircolors)
+[[ -r ~/.bash_aliases ]] && . ~/.bash_aliases
+[[ -z $BASH_COMPLETION && -r /etc/bash_completion ]] && . /etc/bash_completion
 
 # Alias definitions
 # -----------------
@@ -109,6 +113,8 @@ alias servethis="python2 -c 'import SimpleHTTPServer; SimpleHTTPServer.test()'"
 alias clr='clear;echo "Currently logged in on $(tty), as $(whoami) in directory $(pwd)."'
 alias pypath='python -c "import sys; print sys.path" | tr "," "\n" | grep -v "egg"'
 alias pycclean='find . -name "*.pyc" -exec rm {} \;'
+alias xo='xdg-open'
+alias wtc="curl --silent 'http://whatthecommit.com/index.txt'"
 
 # "last as root"
 alias lr='su -c "$(history | tail -n 2 | head -n 1 | sed -e "s/^[ ]*[0-9]*[ ]*//g")"'
@@ -118,8 +124,9 @@ alias ls='ls -F --color=auto'
 alias grep='grep --color=auto'
 alias fgrep='fgrep --color=auto'
 alias egrep='egrep --color=auto'
-
 alias ll='ls -halG'
+
+
 
 # bash function to decompress archives - http://www.shell-fu.org/lister.php?id=375
 extract () {
@@ -154,6 +161,14 @@ exip () {
     # gather external ip address
     echo -n "Current External IP: "
     curl -s -m 5 http://myip.dk | grep "ha4" | sed -e 's/<b>IP Address:<\/b> <span class="ha4">//g' -e 's/<\/span><br \/><br \/>//g'
+}
+
+
+lsmod() {
+  {
+    echo "Module Size Ref UsedBy Stat Address"
+    cat /proc/modules
+  } | column -t
 }
 
 

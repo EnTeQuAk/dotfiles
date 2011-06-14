@@ -415,15 +415,3 @@ map <C-L> :let &guifont=&guifont<cr>
 "
 " Copy to Lodgeit on ^p
 map <C-p> :Lodgeit<CR>
-
-
-nmap <buffer> <F5> :call JumpToTestFile()<CR>
-fun! JumpToTestFile()
-  let line = getline("$")
-  if line =~ "^### testfile: "
-    let filename = strpart(line, 14)
-    execute ":e " . filename
-  else
-    echo "TEST PATTERN ### testfile: NOT FOUND!"
-  endif
-endfun
