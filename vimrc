@@ -315,6 +315,9 @@ map  :BufClose<cr>
 "let g:SuperTabCompletionContexts = ['s:ContextText', 's:ContextDiscover']
 "let g:SuperTabContextTextOmniPrecedence = ['&omnifunc', '&completefunc']
 
+let g:SuperTabDefaultCompletionType = "context"
+
+
 
 " Misc Buffer Shortcuts/Configurations
 " ------------------------------------
@@ -371,7 +374,7 @@ vnoremap <silent> gv :call VisualSearch('gv')<CR>
 " Some omni completition hacking
 " ------------------------------
 "  * Enter just selects the entry but don't apply it
-set completeopt-=preview
+set completeopt=menuone,longest,preview
 inoremap <expr> <CR> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
 
 
