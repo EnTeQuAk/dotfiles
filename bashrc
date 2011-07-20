@@ -228,8 +228,8 @@ export PS1='\[\e[33;1m\]$(__vcs_dir)\[\e[0m\] \[\e[32;1m\]\w> \[\e[0m\]'
 # Automatic virtualenv activation based on .venv config file with
 # hook integration.
 
-export WORKON_HOME=$HOME/.virtualenvs
-source /usr/bin/virtualenvwrapper.sh
+#export WORKON_HOME=$HOME/.virtualenvs
+#source /usr/bin/virtualenvwrapper.sh
 
 # Automatically a Projects virtual environments based on the
 # directory name of the project. Virtual environment name will be identified
