@@ -53,6 +53,7 @@ set guioptions-=T
 set gcr=a:blinkon0
 set ruler
 set nocursorline
+set wildmenu
 
 
 " Set Better Indention
