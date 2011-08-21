@@ -155,6 +155,12 @@ let python_highlight_builtins=0
 au BufNewFile,BufRead *.less set filetype=less
 autocmd FileType less setlocal expandtab shiftwidth=2 tabstop=2 softtabstop=2
 
+" Scss Support
+" ------------
+au BufNewFile,BufRead *.scss set filetype=scss
+autocmd FileType scss setlocal expandtab shiftwidth=2 tabstop=2 softtabstop=2
+
+
 " C/C++ Support
 " -----------
 autocmd FileType cpp setlocal expandtab shiftwidth=4 tabstop=4 softtabstop=4

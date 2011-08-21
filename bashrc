@@ -125,7 +125,8 @@ alias grep='grep --color=auto'
 alias fgrep='fgrep --color=auto'
 alias egrep='egrep --color=auto'
 alias ll='ls -halG'
-
+alias fl='foreman start --procfile=Procfile.local'
+alias ip='python -c "import IPython; IPython.embed()"'
 
 
 # bash function to decompress archives - http://www.shell-fu.org/lister.php?id=375
@@ -229,7 +230,7 @@ export PS1='\[\e[33;1m\]$(__vcs_dir)\[\e[0m\] \[\e[32;1m\]\w> \[\e[0m\]'
 # hook integration.
 
 #export WORKON_HOME=$HOME/.virtualenvs
-#source /usr/bin/virtualenvwrapper.sh
+source /usr/bin/virtualenvwrapper.sh
 
 # Automatically a Projects virtual environments based on the
 # directory name of the project. Virtual environment name will be identified
