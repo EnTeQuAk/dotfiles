@@ -83,9 +83,9 @@ alias cdustaging='cd ~/Projects/inyoka/inyoka-staging'
 alias cdiny='cd ~/Projects/inyoka/inyoka-sandbox'
 
 # Shortcuts for my daily work
-alias cdcw='cd ~/Projects/chocri/websites'
-alias cdcm='cd ~/Projects/chocri/marklar'
-alias cdcj='cd ~/Projects/chocri/jobmanager'
+alias cdnu='cd ~/Projects/native/native.uranos'
+alias cdnt='cd ~/Projects/native/native.triton'
+alias cdsdbs='cd ~/Projects/native/sdbs2'
 
 # Git related shortcuts
 alias gitl='git log --pretty=format:"%h %s" --graph'
@@ -228,8 +228,7 @@ export PS1='\[\e[33;1m\]$(__vcs_dir)\[\e[0m\] \[\e[32;1m\]\w> \[\e[0m\]'
 
 # Automatic virtualenv activation based on .venv config file with
 # hook integration.
-
-#export WORKON_HOME=$HOME/.virtualenvs
+export WORKON_HOME=$HOME/.virtualenvs
 source /usr/bin/virtualenvwrapper.sh
 
 # Automatically a Projects virtual environments based on the
