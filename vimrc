@@ -293,6 +293,10 @@ let g:explDetailedHelp=0
 map  :Explore!<CR>
 
 
+" Command-T
+" ---------
+set wildignore+=*.o,*.obj,.git,*.pyc,*.pyo
+
 " Better Search
 " -------------
 set hlsearch
