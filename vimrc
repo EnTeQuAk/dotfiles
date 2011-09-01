@@ -13,8 +13,6 @@ endif
 
 call pathogen#runtime_append_all_bundles()
 
-call pathogen#runtime_append_all_bundles()
-
 " Disable Generation of Backup Files
 " ----------------------------------
 "  actually they are nice but vim is stable and doesn't crash :D
@@ -50,6 +48,7 @@ let maplocalleader="\\"
 " highlightng as well as numbers.
 " also highlight current line and disable the blinking r.
 set guioptions-=T
+set guioptions-=m
 set gcr=a:blinkon0
 set ruler
 set nocursorline
