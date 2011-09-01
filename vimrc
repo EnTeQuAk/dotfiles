@@ -36,6 +36,7 @@ let maplocalleader="\\"
 " highlightng as well as numbers.
 " also highlight current line and disable the blinking r.
 set guioptions-=T
+set guioptions-=m
 set gcr=a:blinkon0
 set ruler
 set nocursorline
@@ -159,8 +160,9 @@ autocmd FileType cs setlocal shiftwidth=8 tabstop=8 softtabstop=8
 
 " CoffeeScript Support
 " --------------------
-au BufNewFile,BufRead *.coffee set filetype=less
-autocmd FileType coffee setlocal shiftwidth=2 tabstop=2 softtabstop=2
+" au BufNewFile,BufRead *.coffee set filetype=less
+" autocmd FileType coffee setlocal shiftwidth=2 tabstop=2 softtabstop=2
+au BufNewFile,BufRead *.coffee setl expandtab shiftwidth=2 tabstop=2 softtabstop=2
 
 " Inyoka Syntax Support
 " ---------------------
