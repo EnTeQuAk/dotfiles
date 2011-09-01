@@ -1,18 +1,3 @@
-" Enable Syntax Colors
-" --------------------
-"  in GUI mode we go with fruity and Consolas 10
-"  in CLI mode desert looks better (fruity is GUI only)
-syntax on
-if has("gui_running")
-  colorscheme ente
-  set guifont=Consolas\ 11
-  "au GUIEnter * set fullscreen <-- Breaks!
-else
-  colorscheme desert
-endif
-
-call pathogen#runtime_append_all_bundles()
-
 call pathogen#runtime_append_all_bundles()
 
 " Disable Generation of Backup Files
@@ -25,6 +10,7 @@ set noswapfile
 " Some File Type Stuff
 " --------------------
 "  Enable filetype plugins and disable indentation
+syntax on
 filetype on
 filetype plugin on
 filetype indent off
@@ -449,3 +435,22 @@ EOF
 
 " Avoid scrolling problems
 set lazyredraw
+
+let g:solarized_termcolors=256
+call togglebg#map("<F6>")
+let g:solarized_visibility = 'low'
+let g:solarized_contrast = 'high'
+
+" Enable Syntax Colors
+" --------------------
+"  in GUI mode we go with fruity and Consolas 10
+"  in CLI mode desert looks better (fruity is GUI only)
+
+if has('gui_running')
+    set background=light
+    set guifont=Consolas\ 11
+    colorscheme solarized
+else
+    set background=dark
+    colorscheme desert
+endif
