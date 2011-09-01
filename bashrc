@@ -211,7 +211,7 @@ __vcs_dir() {
     while [ ! -d "$base_dir/.hg" ]; do base_dir="$base_dir/.."; [ $(readlink -f "${base_dir}") = "/" ] && return 1; done
     base_dir=$(readlink -f "$base_dir")
     sub_dir=$(sub_dir "${base_dir}")
-    ref=$(< "${base_dir}/.hg/branch")
+    ref=$(hg branch)
     vcs="hg"
   }
 
