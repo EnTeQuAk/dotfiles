@@ -128,6 +128,7 @@ alias egrep='egrep --color=auto'
 alias ll='ls -halG'
 alias fl='foreman start --procfile=Procfile.local'
 alias ssu='./Projects/sshuttle/sshuttle --dns -vvr webshox 0/0'
+alias ipy='python -c "import IPython; IPython.embed()"'
 
 # bash function to decompress archives - http://www.shell-fu.org/lister.php?id=375
 extract () {
