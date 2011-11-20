@@ -101,6 +101,7 @@ alias ...='cd ../..' # Go up two directories
 alias l='ls -lah' # Long view, show hidden
 alias la='ls -AF' # Compact view, show hidden
 alias ll='ls -lFh' # Long view, no hidden
+alias fwrab='ssh -L 55672:localhost:55672 apollo13@eshu'
 
 # Helpers
 alias grep='grep --color=auto' # Always highlight grep search term
@@ -126,8 +127,7 @@ alias fgrep='fgrep --color=auto'
 alias egrep='egrep --color=auto'
 alias ll='ls -halG'
 alias fl='foreman start --procfile=Procfile.local'
-alias ip='python -c "import IPython; IPython.embed()"'
-
+alias ssu='./Projects/sshuttle/sshuttle --dns -vvr webshox 0/0'
 
 # bash function to decompress archives - http://www.shell-fu.org/lister.php?id=375
 extract () {
