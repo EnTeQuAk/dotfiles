@@ -130,6 +130,8 @@ alias fl='foreman start --procfile=Procfile.local'
 alias ssu='./Projects/sshuttle/sshuttle --dns -vvr webshox 0/0'
 alias ipy='python -c "import IPython; IPython.embed()"'
 alias t='task'
+alias tw='task list +work'
+alias toli='task list +oli'
 
 # bash function to decompress archives - http://www.shell-fu.org/lister.php?id=375
 extract () {
