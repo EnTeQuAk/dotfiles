@@ -136,6 +136,7 @@ alias fl='foreman start --procfile=Procfile.local'
 alias ssu='./Projects/sshuttle/sshuttle --dns -vvr webshox 0/0'
 alias ipy='python -c "import IPython; IPython.embed()"'
 alias t='task'
+alias sub='subl -n .'
 alias tw='task list +work'
 alias toli='task list +oli'
 alias jpp='python -mjson.tool'
@@ -172,7 +173,14 @@ extract () {
 bb() {
     local P="$(hg paths 2>/dev/null | grep 'bitbucket.org' | head -1)"
     local URL="$(echo $P | sed -e's|.*\(bitbucket.org.*\)|http://\1|')"
-    [[ -n $URL ]] && firefox $URL || echo "No BitBucket path found!"
+    [[ -n $URL ]] && firefox $URL || echo "No Bitbucket path found!"
+}
+
+# open up the github page for the current repository
+gg() {
+    local P="$(git remote -v 2>/dev/null | grep 'github.com' | head -1)"
+    local URL="$(echo $P | sed -e's|.*\(github.com.*\)|http://\1|' | sed -e 's| (fetch)||' | sed -e 's|.com:|.com\/|' | sed -e 's|.git$||')"
+    [[ -n $URL ]] && firefox $URL || echo "No GitHub path found!"
 }
 
 exip () {
