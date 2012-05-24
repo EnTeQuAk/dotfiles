@@ -49,6 +49,12 @@ if [ -f "/usr/bin/ksshaskpass" ]; then
     export SSH_ASKPASS="/usr/bin/ksshaskpass"
 fi
 
+export GEM_HOME=/home/ente/.gems
+
+if [ -d "$GEM_HOME/bin" ] ; then
+    PATH="$GEM_HOME/bin":"${PATH}"
+fi
+
 export HISTCONTROL=erasedups # Ignore duplicate entries in history
 export HISTSIZE=10000 # Increases size of history
 export HISTIGNORE="&:ls:ll:la:l.:pwd:exit:clear:clr:[bf]g"
@@ -132,6 +138,13 @@ alias ipy='python -c "import IPython; IPython.embed()"'
 alias t='task'
 alias tw='task list +work'
 alias toli='task list +oli'
+alias jpp='python -mjson.tool'
+
+function foo() { /path/to/command "$@" ;}
+function sub() {
+    subl -n "$@";
+}
+
 
 # bash function to decompress archives - http://www.shell-fu.org/lister.php?id=375
 extract () {
