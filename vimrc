@@ -290,6 +290,16 @@ autocmd FileType vim setlocal expandtab shiftwidth=2 tabstop=8 softtabstop=2
 au! BufRead,BufNewFile *.json setfiletype json 
 
 
+" Vagrantfile support
+" -------------------
+au BufRead,BufNewFile Vagrantfile set filetype=ruby
+autocmd FileType ruby setlocal expandtab shiftwidth=4 tabstop=8
+
+" Puppet support
+" --------------
+au BufRead,BufNewFile *.pp setfiletype puppet
+
+
 " Folding
 " -------
 "
