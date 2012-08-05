@@ -32,6 +32,12 @@ if [ -d ~/.local/bin ]; then
 	PATH=~/.local/bin:"${PATH}"
 fi
 
+RUBY_GEM=$(ruby -rubygems -e "puts Gem.user_dir")/bin
+
+if [ -d $RUBY_GEM ]; then
+    PATH=$RUBY_GEM:"${PATH}"
+fi
+
 
 # Global environment definitions
 # ------------------------------
@@ -277,3 +283,4 @@ function venv_cd {
 }
 
 alias cd="venv_cd"
+
