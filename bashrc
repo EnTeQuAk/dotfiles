@@ -141,6 +141,7 @@ alias tw='task list +work'
 alias toli='task list +oli'
 alias jpp='python -mjson.tool'
 alias git='hub'
+alias pcire='sudo sh -c "echo  1 > /sys/bus/pci/rescan"'
 
 function foo() { /path/to/command "$@" ;}
 function sub() {
