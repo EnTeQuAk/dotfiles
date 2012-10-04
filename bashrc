@@ -32,6 +32,12 @@ if [ -d ~/.local/bin ]; then
 	PATH=~/.local/bin:"${PATH}"
 fi
 
+RUBY_GEM=$(ruby -rubygems -e "puts Gem.user_dir")/bin
+
+if [ -d $RUBY_GEM ]; then
+    PATH=$RUBY_GEM:"${PATH}"
+fi
+
 
 # Global environment definitions
 # ------------------------------
@@ -139,6 +145,8 @@ alias t='task'
 alias tw='task list +work'
 alias toli='task list +oli'
 alias jpp='python -mjson.tool'
+alias git='hub'
+alias pcire='sudo sh -c "echo  1 > /sys/bus/pci/rescan"'
 
 function sub() {
     subl -n "$@";
@@ -288,3 +296,4 @@ function venv_cd {
 }
 
 alias cd="venv_cd"
+
