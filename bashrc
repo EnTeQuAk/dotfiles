@@ -49,7 +49,7 @@ if [ -f "/usr/bin/ksshaskpass" ]; then
     export SSH_ASKPASS="/usr/bin/ksshaskpass"
 fi
 
-export GEM_HOME=/home/ente/.gems
+export GEM_HOME=/home/ente/.gem/ruby/1.9.1
 
 if [ -d "$GEM_HOME/bin" ] ; then
     PATH="$GEM_HOME/bin":"${PATH}"
@@ -136,12 +136,10 @@ alias fl='foreman start --procfile=Procfile.local'
 alias ssu='./Projects/sshuttle/sshuttle --dns -vvr webshox 0/0'
 alias ipy='python -c "import IPython; IPython.embed()"'
 alias t='task'
-alias sub='subl -n .'
 alias tw='task list +work'
 alias toli='task list +oli'
 alias jpp='python -mjson.tool'
 
-function foo() { /path/to/command "$@" ;}
 function sub() {
     subl -n "$@";
 }
