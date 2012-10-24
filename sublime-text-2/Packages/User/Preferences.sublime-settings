@@ -1,0 +1,18 @@
+{
+//	"auto_complete": false,
+	"close_windows_when_empty": false,
+	"color_scheme": "Packages/Tomorrow Color Schemes/Tomorrow-Night.tmTheme",
+	"draw_white_space": "all",
+	"fold_buttons": false,
+	"font_face": "Consolas",
+	"font_options": [
+		"subpixel_antialias"
+    ],
+    "font_size": 12,
+    "highlight_line": true,
+    "rulers": [72, 79],
+    "translate_tabs_to_spaces": true,
+    "trim_trialing_white_space_on_save": true,
+    "folder_exclude_patterns": [".svn", ".git", ".hg", "CVS", "_build", "dist", "build", "site"],
+	"theme": "Soda Dark.sublime-theme"
+}
