@@ -1,8 +1,9 @@
 {
-	"auto_upgrade_last_run": 1351073800,
+	"auto_upgrade_last_run": null,
 	"installed_packages":
 	[
 		"Codeigniter Codeintel Helper",
+		"Origami",
 		"Package Control",
 		"SublimeCodeIntel",
 		"SublimeLinter",
