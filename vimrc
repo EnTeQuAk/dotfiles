@@ -489,7 +489,7 @@ let g:solarized_contrast = 'high'
 
 if has('gui_running')
     set background=light
-    set guifont=Consolas\ 11
+    set guifont=Consolas\ 13
     colorscheme solarized
 else
     set background=dark
