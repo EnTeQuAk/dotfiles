@@ -32,6 +32,10 @@ if [ -d ~/.local/bin ]; then
 	PATH=~/.local/bin:"${PATH}"
 fi
 
+if [ -d ~/bin/Sencha/Cmd/3.0.0.250/sencha ]; then
+    PATH=~/bin/Sencha/Cmd/3.0.0.250/sencha:"${PATH}"
+fi
+
 RUBY_GEM=$(ruby -rubygems -e "puts Gem.user_dir")/bin
 
 if [ -d $RUBY_GEM ]; then
@@ -219,7 +223,6 @@ __vcs_dir() {
     echo ${sub_dir#/}
   }
 
-  # BROKEN!
   git_dir() {
     base_dir="."
     while [ ! -d "$base_dir/.git" ]; do base_dir="$base_dir/.."; [ $(readlink -f "${base_dir}") = "/" ] && return 1; done
@@ -261,8 +264,9 @@ export PS1='\[\e[33;1m\]$(__vcs_dir)\[\e[0m\] \[\e[32;1m\]\w> \[\e[0m\]'
 
 # Automatic virtualenv activation based on .venv config file with
 # hook integration.
+export VIRTUALENVWRAPPER_PYTHON=/usr/bin/python
 export WORKON_HOME=$HOME/.virtualenvs
-source /usr/bin/virtualenvwrapper.sh
+source /usr/bin/virtualenvwrapper_lazy.sh
 
 # Automatically a Projects virtual environments based on the
 # directory name of the project. Virtual environment name will be identified
@@ -299,3 +303,7 @@ function venv_cd {
 
 alias cd="venv_cd"
 
+
+export PATH=/home/ente/bin/Sencha/Cmd/3.0.0.250:$PATH
+
+export SENCHA_CMD_3_0_0="/home/ente/bin/Sencha/Cmd/3.0.0.250"

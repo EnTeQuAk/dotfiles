@@ -3,6 +3,7 @@
 	"installed_packages":
 	[
 		"Codeigniter Codeintel Helper",
+		"Origami",
 		"Package Control",
 		"SublimeCodeIntel",
 		"SublimeLinter",
