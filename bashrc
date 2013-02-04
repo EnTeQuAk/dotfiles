@@ -38,6 +38,10 @@ if [ -d $RUBY_GEM ]; then
     PATH=$RUBY_GEM:"${PATH}"
 fi
 
+if [ -d /usr/local/heroku/bin ]; then
+    PATH=/usr/local/heroku/bin:"${PATH}"
+fi
+
 
 # Global environment definitions
 # ------------------------------
@@ -86,9 +90,6 @@ shopt -s checkwinsize
 
 alias acka='ack -a'
 alias cdpr='cd ~/Projects'
-alias siny='sudo /etc/rc.d/mysqld start && sudo /etc/rc.d/memcached start && sudo /etc/rc.d/nginx start'
-alias sps='sudo service postgresql start'
-alias sapache='sudo service httpd start start'
 
 # Shortcuts for some OpenSource projects
 alias cdustaging='cd ~/Projects/inyoka/inyoka-staging'
@@ -147,6 +148,7 @@ alias toli='task list +oli'
 alias jpp='python -mjson.tool'
 alias git='hub'
 alias pcire='sudo sh -c "echo  1 > /sys/bus/pci/rescan"'
+alias cdpap='cd ~/Projects/paperc'
 
 function sub() {
     subl -n "$@";
