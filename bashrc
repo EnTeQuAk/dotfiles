@@ -44,11 +44,15 @@ fi
 
 [ -d /usr/bin/core_perl ] && PATH=$PATH:/usr/bin/core_perl
 
-RUBY_GEM=$(ruby -rubygems -e "puts Gem.user_dir")/bin
+#RUBY_GEM=$(ruby -rubygems -e "puts Gem.user_dir")/bin
+#
+#if [ -d $RUBY_GEM ]; then
+#    PATH=$RUBY_GEM:"${PATH}"
+#fi
 
-if [ -d $RUBY_GEM ]; then
-    PATH=$RUBY_GEM:"${PATH}"
-fi
+# PATH=~/.gem/ruby/1.9.1/bin:"${PATH}"
+# PATH=/usr/lib/ruby/gems/1.9.1:"${PATH}"
+# GEM_HOME=~/.gem/ruby/1.9.1/
 
 if [ -d /usr/local/heroku/bin ]; then
     PATH=/usr/local/heroku/bin:"${PATH}"
@@ -69,12 +73,6 @@ export EDITOR="vim"
 # integrate with ksshaskpass
 if [ -f "/usr/bin/ksshaskpass" ]; then
     export SSH_ASKPASS="/usr/bin/ksshaskpass"
-fi
-
-export GEM_HOME=/home/ente/.gem/ruby/1.9.1
-
-if [ -d "$GEM_HOME/bin" ] ; then
-    PATH="$GEM_HOME/bin":"${PATH}"
 fi
 
 export HISTCONTROL=erasedups # Ignore duplicate entries in history
@@ -100,7 +98,7 @@ shopt -s checkwinsize
 # Alias definitions
 # -----------------
 
-alias acka='ack -a'
+alias acka='ag -a'
 alias cdpr='cd ~/Projects'
 
 # Shortcuts for some OpenSource projects
@@ -314,4 +312,6 @@ alias cd="venv_cd"
 
 export PATH=/home/ente/bin/Sencha/Cmd/3.0.0.250:$PATH
 
-export SENCHA_CMD_3_0_0="/home/ente/bin/Sencha/Cmd/3.0.0.250"
+export SENCHA_CMD_3_0_0="/tmp/packerbuild-1000/sencha-cmd/sencha-cmd/pkg/opt/Sencha/Cmd/3.0.0.250"
+
+export PATH=/tmp/packerbuild-1000/sencha-cmd/sencha-cmd/pkg/opt/Sencha/Cmd/3.0.0.250:$PATH
