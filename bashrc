@@ -50,9 +50,10 @@ fi
 #    PATH=$RUBY_GEM:"${PATH}"
 #fi
 
-# PATH=~/.gem/ruby/1.9.1/bin:"${PATH}"
-# PATH=/usr/lib/ruby/gems/1.9.1:"${PATH}"
-# GEM_HOME=~/.gem/ruby/1.9.1/
+PATH=~/.gem/ruby/1.9.1/bin:"${PATH}"
+PATH=/usr/lib/ruby/gems/1.9.1:"${PATH}"
+GEM_HOME=~/.gem/ruby/1.9.1/
+
 
 if [ -d /usr/local/heroku/bin ]; then
     PATH=/usr/local/heroku/bin:"${PATH}"
