@@ -1,3 +1,5 @@
 {
-	"font_size": 11
+	"font_size": 11,
+    "translate_tabs_to_spaces": true,
+    "use_tab_stops": true
 }
