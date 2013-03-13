@@ -1,0 +1,7 @@
+# Allows us to search based on existing command.
+# e.g type "cd /" and type key up to search for everything
+# that starts with "cd /"
+"\e[A": history-search-backward
+"\e[B": history-search-forward
+set show-all-if-ambiguous on
+set completion-ignore-case on
