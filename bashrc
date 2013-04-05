@@ -50,9 +50,8 @@ fi
 #    PATH=$RUBY_GEM:"${PATH}"
 #fi
 
-PATH=~/.gem/ruby/1.9.1/bin:"${PATH}"
-PATH=/usr/lib/ruby/gems/1.9.1:"${PATH}"
-GEM_HOME=~/.gem/ruby/1.9.1/
+PATH=~/.gem/ruby/2.0.0/bin:"${PATH}"
+PATH=/usr/lib/ruby/gems/2.0.0:"${PATH}"
 
 
 if [ -d /usr/local/heroku/bin ]; then
@@ -316,3 +315,6 @@ export PATH=/home/ente/bin/Sencha/Cmd/3.0.0.250:$PATH
 export SENCHA_CMD_3_0_0="/tmp/packerbuild-1000/sencha-cmd/sencha-cmd/pkg/opt/Sencha/Cmd/3.0.0.250"
 
 export PATH=/tmp/packerbuild-1000/sencha-cmd/sencha-cmd/pkg/opt/Sencha/Cmd/3.0.0.250:$PATH
+
+
+export PATH=/home/ente/Downloads/dart-sdk/bin:$PATH
