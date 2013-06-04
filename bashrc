@@ -163,8 +163,10 @@ alias pcire='sudo sh -c "echo  1 > /sys/bus/pci/rescan"'
 alias cdpap='cd ~/Projects/paperc'
 
 function sub() {
-    subl -n "$@";
+    subl3 -n . "$@";
 }
+
+alias subl='sub'
 
 
 # bash function to decompress archives - http://www.shell-fu.org/lister.php?id=375
