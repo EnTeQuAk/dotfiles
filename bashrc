@@ -1,5 +1,7 @@
 # .bashrc
 
+export PATH=/usr/local/share/python:/usr/local/bin:$PATH
+
 # Source global definitions
 if [ -f /etc/bashrc ]; then
 	. /etc/bashrc
