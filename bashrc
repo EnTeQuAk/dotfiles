@@ -316,9 +316,13 @@ alias cd="venv_cd"
 
 export PATH=/home/ente/bin/Sencha/Cmd/3.0.0.250:$PATH
 
-export SENCHA_CMD_3_0_0="/tmp/packerbuild-1000/sencha-cmd/sencha-cmd/pkg/opt/Sencha/Cmd/3.0.0.250"
+export SENCHA_CMD_3_0_0="/tmp/packerbuild-1000/sencha-cmd/sencha-cmd/pkg/sencha-cmd/opt/Sencha/Cmd/3.1.2.342"
 
 export PATH=/tmp/packerbuild-1000/sencha-cmd/sencha-cmd/pkg/opt/Sencha/Cmd/3.0.0.250:$PATH
 
 
 export PATH=/home/ente/Downloads/dart-sdk/bin:$PATH
+
+export PATH=/tmp/packerbuild-1000/sencha-cmd/sencha-cmd/pkg/sencha-cmd/opt/Sencha/Cmd/3.1.2.342:$PATH
+
+export PATH=/opt/android-sdk/tools:$PATH
