@@ -326,3 +326,9 @@ export PATH=/home/ente/Downloads/dart-sdk/bin:$PATH
 export PATH=/tmp/packerbuild-1000/sencha-cmd/sencha-cmd/pkg/sencha-cmd/opt/Sencha/Cmd/3.1.2.342:$PATH
 
 export PATH=/opt/android-sdk/tools:$PATH
+
+export PATH=/opt/android-sdk/platform-tools/:$PATH
+
+export ANDROID_NDK_ROOT=/opt/android-ndk
+export ANDROID_SDK_ROOT=/opt/android-sdk
+export PATH=$ANDROID_NDK_ROOT:$ANDROID_SDK_ROOT:$PATH
