@@ -97,6 +97,9 @@ shopt -s checkwinsize
 [[ -r ~/.bash_aliases ]] && . ~/.bash_aliases
 [[ -z $BASH_COMPLETION && -r /etc/bash_completion ]] && . /etc/bash_completion
 
+# Some history hacking
+[[ "${PROMPT_COMMAND}" ]] && PROMPT_COMMAND="$PROMPT_COMMAND;history -a" || PROMPT_COMMAND="history -a"
+
 # Alias definitions
 # -----------------
 
@@ -332,3 +335,4 @@ export PATH=/opt/android-sdk/platform-tools/:$PATH
 export ANDROID_NDK_ROOT=/opt/android-ndk
 export ANDROID_SDK_ROOT=/opt/android-sdk
 export PATH=$ANDROID_NDK_ROOT:$ANDROID_SDK_ROOT:$PATH
+export ANDROID_HOME=$ANDROID_SDK_ROOT
