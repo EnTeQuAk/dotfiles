@@ -1,6 +1,0 @@
-#!/bin/bash
-if [ "$1" == "" ]; then
-		echo "benutze: tvout 'Programm Datei'"
-else
-		DISPLAY=:0.1 $1 $2
-fi
