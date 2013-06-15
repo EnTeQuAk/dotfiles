@@ -1,46 +1,49 @@
 [user]
-email = cg@webshox.org
-name = Christopher Grebs
+	email = cg@webshox.org
+	name = Christopher Grebs
 
 [github]
-user = EnTeQuAk
+	user = EnTeQuAk
+
+[core]
+	editor = vim
+	bare = true
 
 [color]
-ui = auto
-branch = auto
-diff = auto
-interactive = auto
-status = auto
-grep = yes
+	ui = true
+
+[color "branch"]
+  current = yellow reverse
+  local = yellow bold
+  remote = green bold
+  plain = red bold
+
+[format]
+	pretty = medium
 
 [alias]
-st = status
-ci = commit
-br = branch
-co = checkout
-df = diff
-lg = log -p
-lol = log --graph --decorate --pretty=oneline --abbrev-commit
-lola = log --graph --decorate --pretty=oneline --abbrev-commit --all
-ls = ls-files
-br = branch
-co = checkout
-last = show --stat HEAD
-logdel = log --diff-filter=D --summary
-out = !git-out
-st = status
-countcommits = shortlog -sn
+	out = cherry -v
+	edit-unmerged = "!f() { git ls-files --unmerged | cut -f2 | sort -u ; }; vim `f`"
+	add-unmerged = "!f() { git ls-files --unmerged | cut -f2 | sort -u ; }; git add `f`"
+	graphviz = "!f() { echo 'digraph git {' ; git log --pretty='format:  %h -> { %p }' \"$@\" | sed 's/[0-9a-f][0-9a-f]*/\"&\"/g' ; echo '}'; }; f"
+	record = ! sh -c '(git add -p -- $@ && git commit) || git reset' --
+    who = shortlog -s --
+	lg = log -p
+	lol = log --graph --decorate --pretty=oneline --abbrev-commit
+	lola = log --graph --decorate --pretty=oneline --abbrev-commit --all
+	ls = ls-files
 
-[merge]
-tool = vimdiff
-log = true
+[branch]
+	autosetupmerge = true
 
 [push]
-default = current
+	default = simple
 
-[help]
-autocorrect = 1
+[hub]
+  protocol = https
 
-[branch "master"]
-remote = origin
-merge = master
+[core]
+  pager = less -R
+
+[push]
+  default = matching
