@@ -71,6 +71,11 @@ fi
 # update the values of LINES and COLUMNS.
 shopt -s checkwinsize
 
+# More search tools in bash
+bind '"\e[A"':history-search-backward
+bind '"\e[B"':history-search-forward
+
+
 # Alias definitions
 # -----------------
 
