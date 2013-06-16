@@ -165,7 +165,8 @@ gg() {
 exip () {
     # gather external ip address
     echo -n "Current External IP: "
-    curl -s -m 5 http://myip.dk | grep "ha4" | sed -e 's/<b>IP Address:<\/b> <span class="ha4">//g' -e 's/<\/span><br \/><br \/>//g'
+    curl -s -m 5 http://ipecho.net/plain
+    echo
 }
 
 
