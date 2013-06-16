@@ -22,6 +22,7 @@
 	pretty = medium
 
 [alias]
+	st = status -sb
 	out = cherry -v
 	edit-unmerged = "!f() { git ls-files --unmerged | cut -f2 | sort -u ; }; vim `f`"
 	add-unmerged = "!f() { git ls-files --unmerged | cut -f2 | sort -u ; }; git add `f`"
@@ -32,18 +33,24 @@
 	lol = log --graph --decorate --pretty=oneline --abbrev-commit
 	lola = log --graph --decorate --pretty=oneline --abbrev-commit --all
 	ls = ls-files
+	lasttag = describe --tags --abbrev=0
+	branches = branch -vv
+	rup = !git remote update `git rev-parse --symbolic-full-name HEAD@{u}|cut -d/ -f3`
 
 [branch]
 	autosetupmerge = true
 
 [push]
-	default = simple
+	default = current
 
 [hub]
-  protocol = https
+	protocol = https
 
 [core]
-  pager = less -R
+	pager = less -R
 
 [push]
-  default = matching
+	default = matching
+
+[diff]
+	algorithm = patience
