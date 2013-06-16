@@ -12,6 +12,10 @@ fi
 # sudo completion
 complete -cf sudo
 
+if [ -e "$HOME/.git-completion.bash" ]; then
+  source "$HOME/.git-completion.bash"
+fi
+
 # Include custom 
 export PATH=/usr/local/share/python:/usr/local/bin:$PATH
 
