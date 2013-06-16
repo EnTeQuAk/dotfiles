@@ -237,6 +237,10 @@ export VIRTUALENVWRAPPER_PYTHON=/usr/bin/python
 export WORKON_HOME=$HOME/.virtualenvs
 source /usr/bin/virtualenvwrapper_lazy.sh
 
+# Python development
+export PYTHONDONTWRITEBYTECODE=1
+export PYTHONSTARTUP="$HOME/.pythonrc.py"
+
 # Automatically a Projects virtual environments based on the
 # directory name of the project. Virtual environment name will be identified
 # by placing a .venv file in the project root with a virtualenv name in it.
