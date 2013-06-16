@@ -28,7 +28,7 @@
 	add-unmerged = "!f() { git ls-files --unmerged | cut -f2 | sort -u ; }; git add `f`"
 	graphviz = "!f() { echo 'digraph git {' ; git log --pretty='format:  %h -> { %p }' \"$@\" | sed 's/[0-9a-f][0-9a-f]*/\"&\"/g' ; echo '}'; }; f"
 	record = ! sh -c '(git add -p -- $@ && git commit) || git reset' --
-    who = shortlog -s --
+  who = shortlog -s --
 	lg = log -p
 	lol = log --graph --decorate --pretty=oneline --abbrev-commit
 	lola = log --graph --decorate --pretty=oneline --abbrev-commit --all
@@ -36,6 +36,7 @@
 	lasttag = describe --tags --abbrev=0
 	branches = branch -vv
 	rup = !git remote update `git rev-parse --symbolic-full-name HEAD@{u}|cut -d/ -f3`
+  check = ! sh -c 'git checkout -b "$0" --track $(git branch -a | grep "$0" | tr -d "[:blank:]")'
 
 [branch]
 	autosetupmerge = true
