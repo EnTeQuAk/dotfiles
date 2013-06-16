@@ -1,84 +1,55 @@
-# .bashrc
-
-export PATH=/usr/local/share/python:/usr/local/bin:$PATH
-
 # Source global definitions
 if [ -f /etc/bashrc ]; then
 	. /etc/bashrc
 fi
 
-# enable programmable completion features (you don't need to enable
-# this, if it's already enabled in /etc/bash.bashrc and /etc/profile
-# sources /etc/bash.bashrc).
-if [ -f /etc/bash_completion ]; then
-    . /etc/bash_completion
-fi
+
+# Bash Completion
+# ===============
+
+[ -r /usr/share/bash-completion/bash_completion   ] && . /usr/share/bash-completion/bash_completion
 
 # sudo completion
 complete -cf sudo
 
-# set PATH so it includes user's private bin if it exists
-if [ -d ~/.bin ] ; then
-    PATH=~/.bin:"${PATH}"
-fi
+# Include custom 
+export PATH=/usr/local/share/python:/usr/local/bin:$PATH
+
+
+# PATH modifications
+# ==================
 
 if [ -d ~/bin ] ; then
     PATH=~/bin:"${PATH}"
 fi
 
-if [ -d /usr/sbin ] ; then
-	PATH=/usr/sbin:"${PATH}"
+# Support for local ruby gems
+RUBY_GEM=$(ruby -rubygems -e "puts Gem.user_dir")/bin
+
+if [ -d $RUBY_GEM ]; then
+    PATH=$RUBY_GEM:"${PATH}"
 fi
 
-if [ -d ~/.local/bin ]; then
-	PATH=~/.local/bin:"${PATH}"
-fi
+PATH="${RUBY_GEM}/bin":"${PATH}"
 
-if [ -d ~/bin/Sencha/Cmd/3.0.0.250/sencha ]; then
-    PATH=~/bin/Sencha/Cmd/3.0.0.250/sencha:"${PATH}"
-fi
+export PATH=/opt/android-sdk/tools:$PATH
 
-[ -d /usr/bin/site_perl ] && PATH=$PATH:/usr/bin/site_perl
-[ -d /usr/lib/perl5/site_perl/bin ] && PATH=$PATH:/usr/lib/perl5/site_perl/bin
+export PATH=/opt/android-sdk/platform-tools/:$PATH
 
-[ -d /usr/bin/vendor_perl ] && PATH=$PATH:/usr/bin/vendor_perl
-[ -d /usr/lib/perl5/vendor_perl/bin ] && PATH=$PATH:/usr/lib/perl5/vendor_perl/bin
-
-[ -d /usr/bin/core_perl ] && PATH=$PATH:/usr/bin/core_perl
-
-#RUBY_GEM=$(ruby -rubygems -e "puts Gem.user_dir")/bin
-#
-#if [ -d $RUBY_GEM ]; then
-#    PATH=$RUBY_GEM:"${PATH}"
-#fi
-
-PATH=~/.gem/ruby/2.0.0/bin:"${PATH}"
-PATH=/usr/lib/ruby/gems/2.0.0:"${PATH}"
-
-
-if [ -d /usr/local/heroku/bin ]; then
-    PATH=/usr/local/heroku/bin:"${PATH}"
-fi
+export ANDROID_NDK_ROOT=/opt/android-ndk
+export ANDROID_SDK_ROOT=/opt/android-sdk
+export PATH=$ANDROID_NDK_ROOT:$ANDROID_SDK_ROOT:$PATH
+export ANDROID_HOME=$ANDROID_SDK_ROOT
 
 
 # Global environment definitions
-# ------------------------------
+# ==============================
 
-# don't put duplicate lines in the history. See bash(1) for more options
-export HISTCONTROL=ignoredups
-# ... and ignore same sucessive entries.
-export HISTCONTROL=ignoreboth
-
-# export vim as our editor
-export EDITOR="vim"
-
-# integrate with ksshaskpass
-if [ -f "/usr/bin/ksshaskpass" ]; then
-    export SSH_ASKPASS="/usr/bin/ksshaskpass"
-fi
+# History control
+# --------------
 
 export HISTCONTROL=erasedups # Ignore duplicate entries in history
-export HISTSIZE=10000 # Increases size of history
+export HISTSIZE=1000000 # Increases size of history
 export HISTIGNORE="&:ls:ll:la:l.:pwd:exit:clear:clr:[bf]g"
 shopt -s histappend # Append history instead of overwriting
 shopt -s cdspell # Correct minor spelling errors in cd command
@@ -88,35 +59,24 @@ shopt -s cmdhist # Multiline commands are a single command in history.
 shopt -s extglob # Allows basic regexps in bash.
 set ignoreeof on # Typing EOF (CTRL+D) will not exit interactive sessions
 
+# export subl as our editor
+export EDITOR="subl"
+
+# integrate with ksshaskpass
+if [ -f "/usr/bin/ksshaskpass" ]; then
+    export SSH_ASKPASS="/usr/bin/ksshaskpass"
+fi
+
 # check the window size after each command and, if necessary,
 # update the values of LINES and COLUMNS.
 shopt -s checkwinsize
-
-# External config
-[[ -r ~/.dircolors && -x /usr/bin/dircolors ]] && eval $(dircolors -b ~/.dircolors)
-[[ -r ~/.bash_aliases ]] && . ~/.bash_aliases
-[[ -z $BASH_COMPLETION && -r /etc/bash_completion ]] && . /etc/bash_completion
-
-# Some history hacking
-[[ "${PROMPT_COMMAND}" ]] && PROMPT_COMMAND="$PROMPT_COMMAND;history -a" || PROMPT_COMMAND="history -a"
 
 # Alias definitions
 # -----------------
 
 alias acka='ag -a'
+alias aga='ag -a'
 alias cdpr='cd ~/Projects'
-
-# Shortcuts for some OpenSource projects
-alias cdustaging='cd ~/Projects/inyoka/inyoka-staging'
-alias cdiny='cd ~/Projects/inyoka/inyoka-sandbox'
-
-# Shortcuts for my daily work
-alias cdnu='cd ~/Projects/native/native.uranos'
-alias cdnt='cd ~/Projects/native/native.triton'
-alias cdsdbs='cd ~/Projects/native/sdbs2'
-
-# Git related shortcuts
-alias gitl='git log --pretty=format:"%h %s" --graph'
 
 # convert permissions to octal - http://www.shell-fu.org/lister.php?id=205
 alias lo='ls -l | sed -e 's/--x/1/g' -e 's/-w-/2/g' -e 's/-wx/3/g' -e 's/r--/4/g' -e 's/r-x/5/g' -e 's/rw-/6/g' -e 's/rwx/7/g' -e 's/---/0/g''
@@ -129,7 +89,6 @@ alias ...='cd ../..' # Go up two directories
 alias l='ls -lah' # Long view, show hidden
 alias la='ls -AF' # Compact view, show hidden
 alias ll='ls -lFh' # Long view, no hidden
-alias fwrab='ssh -L 55672:localhost:55672 apollo13@eshu'
 
 # Helpers
 alias grep='grep --color=auto' # Always highlight grep search term
@@ -140,7 +99,8 @@ alias du='du -h -c' # Calculate total disk usage for a folder
 # Nifty extras
 alias servethis="python2 -c 'import SimpleHTTPServer; SimpleHTTPServer.test()'"
 alias clr='clear;echo "Currently logged in on $(tty), as $(whoami) in directory $(pwd)."'
-alias pypath='python -c "import sys; print sys.path" | tr "," "\n" | grep -v "egg"'
+alias pypath='python -c "import sys; print(sys.path)" | tr "," "\n" | grep -v "egg"'
+alias py2path='python2 -c "import sys; print(sys.path)" | tr "," "\n" | grep -v "egg"'
 alias pycclean='find . -name "*.pyc" -exec rm {} \;'
 alias xo='xdg-open'
 alias wtc="curl --silent 'http://whatthecommit.com/index.txt'"
@@ -154,16 +114,10 @@ alias grep='grep --color=auto'
 alias fgrep='fgrep --color=auto'
 alias egrep='egrep --color=auto'
 alias ll='ls -halG'
-alias fl='foreman start --procfile=Procfile.local'
-alias ssu='./Projects/sshuttle/sshuttle --dns -vvr webshox 0/0'
 alias ipy='python -c "import IPython; IPython.embed()"'
-alias t='task'
-alias tw='task list +work'
-alias toli='task list +oli'
 alias jpp='python -mjson.tool'
 alias git='hub'
-alias pcire='sudo sh -c "echo  1 > /sys/bus/pci/rescan"'
-alias cdpap='cd ~/Projects/paperc'
+
 
 function sub() {
     subl3 -n . "$@";
@@ -224,7 +178,7 @@ lsmod() {
 
 
 # Virtual Python Environment, VCS and Fancy Promt
-# -----------------------------------------------
+# ===============================================
 
 # Advanced VCS information in bash
 __vcs_dir() {
@@ -315,24 +269,3 @@ function venv_cd {
 }
 
 alias cd="venv_cd"
-
-
-export PATH=/home/ente/bin/Sencha/Cmd/3.0.0.250:$PATH
-
-export SENCHA_CMD_3_0_0="/tmp/packerbuild-1000/sencha-cmd/sencha-cmd/pkg/sencha-cmd/opt/Sencha/Cmd/3.1.2.342"
-
-export PATH=/tmp/packerbuild-1000/sencha-cmd/sencha-cmd/pkg/opt/Sencha/Cmd/3.0.0.250:$PATH
-
-
-export PATH=/home/ente/Downloads/dart-sdk/bin:$PATH
-
-export PATH=/tmp/packerbuild-1000/sencha-cmd/sencha-cmd/pkg/sencha-cmd/opt/Sencha/Cmd/3.1.2.342:$PATH
-
-export PATH=/opt/android-sdk/tools:$PATH
-
-export PATH=/opt/android-sdk/platform-tools/:$PATH
-
-export ANDROID_NDK_ROOT=/opt/android-ndk
-export ANDROID_SDK_ROOT=/opt/android-sdk
-export PATH=$ANDROID_NDK_ROOT:$ANDROID_SDK_ROOT:$PATH
-export ANDROID_HOME=$ANDROID_SDK_ROOT
