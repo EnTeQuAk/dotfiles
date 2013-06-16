@@ -1,6 +1,11 @@
-install: install-vcprompt install-git install-hub install-bin install-bash \
-	install-pythonrc install-subl
+install: install-vim install-vcprompt install-git install-hub install-bin \
+	install-bash install-pythonrc install-subl
 
+
+install-vim:
+	rm -rf ~/.vim ~/.vimrc
+	ln -s `pwd`/vim ~/.vim
+	ln -s ~/.vim/vimrc ~/.vimrc
 
 install-vcprompt:
 	@rm -rf /tmp/vcprompt
@@ -11,7 +16,8 @@ install-vcprompt:
 	@rm -rf /tmp/vcprompt
 
 install-git:
-	rm ~/.gitconfig && ln -n `pwd`/gitconfig ~/.gitconfig
+	rm -f ~/.gitconfig
+	ln -n `pwd`/gitconfig ~/.gitconfig
 	curl -o ~/.git-completion.bash https://github.com/git/git/raw/master/contrib/completion/git-completion.bash -OL
 
 install-hub:
@@ -22,11 +28,13 @@ install-bin:
 	ln -fs `pwd`/bin/* ~/bin/
 
 install-bash:
-	rm ~/.bash_profile && rm ~/.bashrc
+	rm -f ~/.bashrc
+	rm -f ~/.bash_profile
 	ln -n `pwd`/bashrc ~/.bash_profile
 	ln -n ~/.bash_profile ~/.bashrc
 
 install-pythonrc:
+	rm -f ~/.pythonrc.py
 	ln -n `pwd`/python/pythonrc.py ~/.pythonrc.py
 
 install-subl:
