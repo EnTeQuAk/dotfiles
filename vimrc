@@ -285,6 +285,12 @@ autocmd FileType tex setlocal expandtab shiftwidth=2 tabstop=2 softtabstop=2 tex
 autocmd FileType vim setlocal expandtab shiftwidth=2 tabstop=8 softtabstop=2
 
 
+" Git Config
+" ---------
+autocmd BufNewFile,BufRead .gitconfig setlocal ft=gitconfig
+autocmd FileType gitconfig setlocal expandtab shiftwidth=2 tabstop=2 softtabstop=2
+
+
 " JSON
 " ----
 au! BufRead,BufNewFile *.json setfiletype json 
