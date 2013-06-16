@@ -236,6 +236,11 @@ export PS1='\[\e[33;1m\]$(__vcs_dir)\[\e[0m\] \[\e[32;1m\]\w> \[\e[0m\]'
 export VIRTUALENVWRAPPER_PYTHON=/usr/bin/python
 export WORKON_HOME=$HOME/.virtualenvs
 source /usr/bin/virtualenvwrapper_lazy.sh
+export VIRTUAL_ENV_DISABLE_PROMPT=1
+export VIRTUALENV_USE_DISTRIBUTE=1
+export PIP_VIRTUALENV_BASE=$WORKON_HOME
+export PIP_REQUIRE_VIRTUALENV=true
+export PIP_RESPECT_VIRTUALENV=true
 
 # Python development
 export PYTHONDONTWRITEBYTECODE=1
