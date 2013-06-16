@@ -187,54 +187,14 @@ lsmod() {
 # Virtual Python Environment, VCS and Fancy Promt
 # ===============================================
 
-# Advanced VCS information in bash
-__vcs_dir() {
-  local vcs base_dir sub_dir ref
-  sub_dir() {
-    local sub_dir
-    sub_dir=$(readlink -f "${PWD}")
-    sub_dir=${sub_dir#$1}
-    echo ${sub_dir#/}
-  }
-
-  git_dir() {
-    base_dir="."
-    while [ ! -d "$base_dir/.git" ]; do base_dir="$base_dir/.."; [ $(readlink -f "${base_dir}") = "/" ] && return 1; done
-    base_dir=$(readlink -f "$base_dir")
-    sub_dir=$(sub_dir "${base_dir}")
-    ref=$(git describe --all 2>/dev/null)
-    vcs="git"
-  }
-
-  svn_dir() {
-    [ -d ".svn" ] || return 1
-    base_dir="."
-    while [ -d "$base_dir/../.svn" ]; do base_dir="$base_dir/.."; done
-    base_dir=$(readlink -f "$base_dir")
-    sub_dir=$(sub_dir "${base_dir}")
-    ref=$(svn info "$base_dir" | awk '/^URL/ { sub(".*/","",$0); r=$0 } /^Revision/ { sub("[^0-9]*","",$0); print r":"$0 }')
-    vcs="svn"
-  }
-
-  hg_dir() {
-    base_dir="."
-    while [ ! -d "$base_dir/.hg" ]; do base_dir="$base_dir/.."; [ $(readlink -f "${base_dir}") = "/" ] && return 1; done
-    base_dir=$(readlink -f "$base_dir")
-    sub_dir=$(sub_dir "${base_dir}")
-    ref=$(hg branch)
-    vcs="hg"
-  }
-
-  svn_dir ||
-  git_dir ||
-  hg_dir ||
-  base_dir="$PWD"
-
-  echo "${vcs:+($vcs $ref)}"
+_vcprompt () {
+    vcprompt -f "[%n:%b%m] "
 }
 
 # Export the promt with advanced vcs information
-export PS1='\[\e[33;1m\]$(__vcs_dir)\[\e[0m\] \[\e[32;1m\]\w> \[\e[0m\]'
+export PS1='\[\e[33;1m\]$(_vcprompt)\[\e[0m\]\[\e[32;1m\]\w> \[\e[0m\]'
+
+
 
 # Automatic virtualenv activation based on .venv config file with
 # hook integration.
