@@ -1,5 +1,5 @@
 install: install-vim install-vcprompt install-git install-hub install-bin \
-	install-bash install-pythonrc install-subl
+	install-bash install-pythonrc install-subl install-inputrc
 
 
 install-vim:
@@ -32,6 +32,11 @@ install-bash:
 	rm -f ~/.bash_profile
 	ln -n `pwd`/bashrc ~/.bash_profile
 	ln -n ~/.bash_profile ~/.bashrc
+
+
+install-inputrc:
+	rm -f ~/.inputrc
+	ln -n `pwd`/inputrc ~/.inputrc
 
 install-pythonrc:
 	rm -f ~/.pythonrc.py
