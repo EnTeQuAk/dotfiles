@@ -87,7 +87,7 @@ alias cdpr='cd ~/Projects'
 alias lo='ls -l | sed -e 's/--x/1/g' -e 's/-w-/2/g' -e 's/-wx/3/g' -e 's/r--/4/g' -e 's/r-x/5/g' -e 's/rw-/6/g' -e 's/rwx/7/g' -e 's/---/0/g''
 
 # get an ordered list of subdirectory sizes
-alias dux='du -skh ./* | sort -h | grep -v total && du -cskh ./* | grep --color=never total'
+alias dux='du -skh ./* | sort -h | grep -v total && du -cskh ./* | grep total'
 
 alias ..='cd ..' # Go up one directory
 alias ...='cd ../..' # Go up two directories
@@ -96,7 +96,7 @@ alias la='ls -AF' # Compact view, show hidden
 alias ll='ls -lFh' # Long view, no hidden
 
 # Helpers
-alias grep='grep --color=auto' # Always highlight grep search term
+alias grep='grep' # Always highlight grep search term
 alias ping='ping -c 5' # Pings with 5 packets, not unlimited
 alias df='df -h' # Disk free, in gigabytes, not bytes
 alias du='du -h -c' # Calculate total disk usage for a folder
@@ -114,11 +114,10 @@ alias rvim="gvim --remote-silent"
 # "last as root"
 alias lr='su -c "$(history | tail -n 2 | head -n 1 | sed -e "s/^[ ]*[0-9]*[ ]*//g")"'
 
-# enable color support of ls and also add handy aliases
-alias ls='ls -F --color=auto'
-alias grep='grep --color=auto'
-alias fgrep='fgrep --color=auto'
-alias egrep='egrep --color=auto'
+alias ls='ls -F'
+alias grep='grep'
+alias fgrep='fgrep'
+alias egrep='egrep'
 alias ll='ls -halG'
 alias ipy='python -c "import IPython; IPython.embed()"'
 alias jpp='python -mjson.tool'

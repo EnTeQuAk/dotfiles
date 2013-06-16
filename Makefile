@@ -44,6 +44,6 @@ install-pythonrc:
 
 install-subl:
 ifeq ($(shell uname),Darwin)
-	sudo ln -n "/Applications/Sublime Text 3.app/Contents/SharedSupport/bin/subl" /usr/local/bin/subl
+	sudo ln -n "/Applications/Sublime Text.app/Contents/SharedSupport/bin/subl" /usr/local/bin/subl
 endif
 
