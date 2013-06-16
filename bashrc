@@ -104,6 +104,7 @@ alias py2path='python2 -c "import sys; print(sys.path)" | tr "," "\n" | grep -v 
 alias pycclean='find . -name "*.pyc" -exec rm {} \;'
 alias xo='xdg-open'
 alias wtc="curl --silent 'http://whatthecommit.com/index.txt'"
+alias rvim="gvim --remote-silent"
 
 # "last as root"
 alias lr='su -c "$(history | tail -n 2 | head -n 1 | sed -e "s/^[ ]*[0-9]*[ ]*//g")"'
