@@ -5,7 +5,7 @@ install: install-vim install-vcprompt install-git install-hub install-bin \
 install-vim:
 	rm -rf ~/.vim ~/.vimrc
 	ln -s `pwd`/vim ~/.vim
-	ln -s ~/.vim/vimrc ~/.vimrc
+	ln -s `pwd`/vimrc ~/.vimrc
 
 install-vcprompt:
 	@rm -rf /tmp/vcprompt
@@ -30,21 +30,21 @@ install-bin:
 install-bash:
 	rm -f ~/.bashrc
 	rm -f ~/.bash_profile
-	ln -n `pwd`/bashrc ~/.bash_profile
-	ln -n ~/.bash_profile ~/.bashrc
+	ln -s `pwd`/bashrc ~/.bash_profile
+	ln -s ~/.bash_profile ~/.bashrc
 
 install-inputrc:
 	rm -f ~/.inputrc
-	ln -n `pwd`/inputrc ~/.inputrc
+	ln -s `pwd`/inputrc ~/.inputrc
 
 install-pythonrc:
 	rm -f ~/.pythonrc.py
-	ln -n `pwd`/python/pythonrc.py ~/.pythonrc.py
+	ln -s `pwd`/python/pythonrc.py ~/.pythonrc.py
 
 install-subl:
 ifeq ($(shell uname),Darwin)
 	sudo rm -f /usr/local/bin/subl /usr/local/bin/subl3
-	sudo ln -n "/Applications/Sublime Text.app/Contents/SharedSupport/bin/subl" /usr/local/bin/subl
-	sudo ln -n /usr/local/bin/subl /usr/local/bin/subl3
+	sudo ln -s "/Applications/Sublime Text.app/Contents/SharedSupport/bin/subl" /usr/local/bin/subl
+	sudo ln -s /usr/local/bin/subl /usr/local/bin/subl3
 endif
 
