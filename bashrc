@@ -17,7 +17,7 @@ if [ -e "$HOME/.git-completion.bash" ]; then
 fi
 
 # Include custom 
-export PATH=/usr/local/share/python:/usr/local/bin:$PATH
+export PATH=/usr/local/share/python:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:$PATH
 
 
 # PATH modifications
@@ -244,3 +244,7 @@ function venv_cd {
 }
 
 alias cd="venv_cd"
+
+# Set architecture flags
+export ARCHFLAGS="-arch x86_64"
+
