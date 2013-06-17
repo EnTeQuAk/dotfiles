@@ -92,7 +92,6 @@ alias dux='du -skh ./* | sort -h | grep -v total && du -cskh ./* | grep total'
 if [ "$(uname)" == "Darwin" ]; then
     alias ls='ls -GF'
 else
-    echo 'foooo'
     alias ls='ls -F --color'
 fi
 
