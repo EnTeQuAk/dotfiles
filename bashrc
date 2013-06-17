@@ -187,7 +187,11 @@ lsmod() {
 # ===============================================
 
 _vcprompt () {
-    vcprompt -f "[%n:%b%m] "
+    if [ "$CD_VIRTUAL_ENV" ]; then
+        vcprompt -f "[%n:%b%m ($CD_VIRTUAL_ENV)] "
+    else
+        vcprompt -f "[%n:%b%m] "
+    fi
 }
 
 # Export the promt with advanced vcs information
