@@ -89,8 +89,16 @@ alias lo='ls -l | sed -e 's/--x/1/g' -e 's/-w-/2/g' -e 's/-wx/3/g' -e 's/r--/4/g
 # get an ordered list of subdirectory sizes
 alias dux='du -skh ./* | sort -h | grep -v total && du -cskh ./* | grep total'
 
+if [ "$(uname)" == "Darwin" ]; then
+    alias ls='ls -GF'
+else
+    echo 'foooo'
+    alias ls='ls -F --color'
+fi
+
 alias ..='cd ..' # Go up one directory
 alias ...='cd ../..' # Go up two directories
+
 alias l='ls -lah' # Long view, show hidden
 alias la='ls -AF' # Compact view, show hidden
 alias ll='ls -lFh' # Long view, no hidden
@@ -114,7 +122,6 @@ alias rvim="gvim --remote-silent"
 # "last as root"
 alias lr='su -c "$(history | tail -n 2 | head -n 1 | sed -e "s/^[ ]*[0-9]*[ ]*//g")"'
 
-alias ls='ls -F'
 alias grep='grep'
 alias fgrep='fgrep'
 alias egrep='egrep'
