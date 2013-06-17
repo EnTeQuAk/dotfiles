@@ -33,7 +33,6 @@ install-bash:
 	ln -n `pwd`/bashrc ~/.bash_profile
 	ln -n ~/.bash_profile ~/.bashrc
 
-
 install-inputrc:
 	rm -f ~/.inputrc
 	ln -n `pwd`/inputrc ~/.inputrc
@@ -44,6 +43,8 @@ install-pythonrc:
 
 install-subl:
 ifeq ($(shell uname),Darwin)
+	sudo rm -f /usr/local/bin/subl /usr/local/bin/subl3
 	sudo ln -n "/Applications/Sublime Text.app/Contents/SharedSupport/bin/subl" /usr/local/bin/subl
+	sudo ln -n /usr/local/bin/subl /usr/local/bin/subl3
 endif
 

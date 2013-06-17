@@ -199,7 +199,8 @@ export PS1='\[\e[33;1m\]$(_vcprompt)\[\e[0m\]\[\e[32;1m\]\w> \[\e[0m\]'
 # hook integration.
 export VIRTUALENVWRAPPER_PYTHON=/usr/bin/python
 export WORKON_HOME=$HOME/.virtualenvs
-source /usr/bin/virtualenvwrapper_lazy.sh
+[ -r /usr/bin/virtualenvwrapper_lazy.sh  ] && . /usr/bin/virtualenvwrapper_lazy.sh
+[ -r /usr/local/bin/virtualenvwrapper_lazy.sh  ] && . /usr/local/bin/virtualenvwrapper_lazy.sh
 export VIRTUAL_ENV_DISABLE_PROMPT=1
 export VIRTUALENV_USE_DISTRIBUTE=1
 export PIP_VIRTUALENV_BASE=$WORKON_HOME
