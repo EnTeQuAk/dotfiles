@@ -193,10 +193,16 @@ lsmod() {
 # ===============================================
 
 _vcprompt () {
-    if [ "$CD_VIRTUAL_ENV" ]; then
-        vcprompt -f "[%n:%b%m ($CD_VIRTUAL_ENV)] "
+    if [ "$VIRTUAL_ENV" ]; then
+        out=$(vcprompt -f "[%n:%b%m ($(basename $VIRTUAL_ENV))] ")
     else
-        vcprompt -f "[%n:%b%m] "
+        out=$(vcprompt -f "[%n:%b%m] ")
+    fi
+
+    if [ "$out" == "" ]; then
+        [[ -n "$VIRTUAL_ENV" ]] && echo "($(basename $VIRTUAL_ENV)) " || echo ""
+    else
+        echo "$out"
     fi
 }
 
