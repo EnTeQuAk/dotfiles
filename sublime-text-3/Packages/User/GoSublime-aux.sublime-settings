@@ -1,0 +1,19 @@
+{
+	"9o.hist./home/ente/Projects/weathy":
+	[
+		"help",
+		"clear",
+		"ls",
+		"go",
+		"go run",
+		"run",
+		"tsk",
+		"kill",
+		"go stop",
+		"go build",
+		"build"
+	],
+	"ann": "a13.06.22-1",
+	"install_version": "r13.06.22-1",
+	"version": "r13.06.22-1"
+}

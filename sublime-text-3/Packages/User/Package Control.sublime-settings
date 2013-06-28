@@ -1,9 +1,11 @@
 {
 	"installed_packages":
 	[
+		"GoSublime",
 		"MaxPane",
 		"Origami",
 		"Package Control",
+		"SearchInProject",
 		"StickySearch"
 	]
 }
