@@ -50,8 +50,5 @@
 [core]
 	pager = less -R
 
-[push]
-	default = matching
-
 [diff]
 	algorithm = patience
