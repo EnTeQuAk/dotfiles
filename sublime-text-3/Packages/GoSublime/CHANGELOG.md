@@ -4,30 +4,48 @@ GoSublime Changes
 Note: you may need to restart Sublime Text after GoSublime updates
 
 
+## 13.06.30-4
+	* try not to init() GoSublime more than once
+
+## 13.06.30-3
+	* the `up` and `down` arrows keys now traverses the 9o history when the cursor is in the prompt
+
+## 13.06.30-2
+	* added support for aliases via the setting `9o_aliases`, see the default settings files for documentation
+
+## 13.06.30-1
+	This update brings with it a new `GoSublime: Go` syntax definition.
+	If you get an error complaining about GoSublime .tmLanguage file,
+	you should be able to fix it by closing all `.go` files and restarting Sublime Text.
+	If you're using the `GoSublime-next.tmLanguage` please delete the file `Packages/User/GoSublime-next.sublime-settings` (if it exists).
+	On update(and restart), all views using syntax files with the base-name `GoSublime.tmLanguage`
+	or `GoSublime-next.tmLanguage` will be automatically changed to `GoSublime: Go`.
+	Hopefully this change will go smoothly.
+
+	For all other bugs relating to the new syntax definition (e.g. completion stops working)
+	please add a comment to https://github.com/DisposaBoy/GoSublime/issues/245
+
+	For all other feature requests or bugs, please open a new issue.
+
+	additionally:
+
+	* there is a new pre-defined variable _nm that is the base name of the current view
+	* all pre-defind env vars (_fn, _wd, etc.) are now defined globally and will appear within the
+		environment of all 9o command even when run through your shell
 
 
-** REQUEST FOR FEEDBACK **
 
-GoSublime is/I am, in need of your help in understanding what systems
-GoSublime is being used in. I'm interested in hearing about things like:
+## 13.06.29-2
+	* show the `go build` output when (re-)installing MarGo
+	* show the `go version` output on startup
+	* fix the main menu and command palette pointing to the wrong error log file
 
-* what shell you use
-* OS/version/language
-* what version of Go
-* what version of Sublime Text
-* whether or not you plan to upgrade to Sublime Text 3 when it's released
-* do you use GoSublime on a networked filesystem(NFS, sshfs, etc.)
-* whether you use Package Control to manage upgrades or just plain `git clone`
-* etc.
-
-Most of this information is available in the sanity check
-`ctrl+dot`,`ctrl+3` or `super+dot`,`super+3` on OS X
-
-If you're interested in particpating, please send an email to gosublime-rff@dby.me
-I probably won't reply, so TIA
-
-
-
+## 13.06.29-1
+	* added 9o `echo` command
+	* added two new env vars:
+		`$_wd (or $PWD)` contains the 9o working directory
+		`$_fn` contains the abs path to the current active view/file (if available)
+	* env vars on the 9o command line are expanded before the command is run. see 9o `help`
 
 ## 13.06.22-1
 	* NOTE: if you have your own GoSublime snippets, the meaning of `global` has changed.

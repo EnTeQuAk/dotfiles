@@ -90,7 +90,10 @@ class EV(sublime_plugin.EventListener):
 			if not cmd in cl:
 				cl.append(('^%d %s' % (i+1, cmd), cmd+' '))
 
-		for k in gs.gs9o:
+		for k in aliases():
+			cl.append((k, k+' '))
+
+		for k in builtins():
 			cl.append((k, k+' '))
 
 		cl.extend(DEFAULT_CL)
@@ -118,6 +121,48 @@ class Gs9oInsertLineCommand(sublime_plugin.TextCommand):
 			insln()
 			self.view.run_command("move", {"by": "lines", "forward": False})
 
+
+class Gs9oMoveHist(sublime_plugin.TextCommand):
+	def run(self, edit, up):
+		view = self.view
+		pos = gs.sel(view).begin()
+		if view.score_selector(pos, 'prompt.9o') <= 0:
+			return
+
+		aso = gs.aso()
+		vs = view.settings()
+		wd = vs.get('9o.wd')
+		hkey = _hkey(wd)
+		hist = [s for s in gs.dval(aso.get(hkey), []) if s.strip()]
+		if not hist:
+			return
+
+		r = view.extract_scope(pos)
+		cmd = view.substr(r).strip('#').strip()
+		try:
+			idx = hist.index(cmd) + (-1 if up else 1)
+			found = True
+		except Exception:
+			idx = -1
+			found = False
+
+		if cmd and not found:
+			hist.append(cmd)
+			aso.set(hkey, hist)
+			gs.save_aso()
+
+		if idx >= 0 and idx < len(hist):
+			cmd = hist[idx]
+		elif up:
+			if not found:
+				cmd = hist[-1]
+		else:
+			cmd = ''
+
+		view.replace(edit, r, '# %s \n' % cmd)
+		n = view.line(r.begin()).end()
+		view.sel().clear()
+		view.sel().add(sublime.Region(n, n))
 
 class Gs9oInitCommand(sublime_plugin.TextCommand):
 	def run(self, edit, wd=None):
@@ -177,6 +222,8 @@ class Gs9oInitCommand(sublime_plugin.TextCommand):
 			v.show(0)
 		else:
 			v.show(v.size()-1)
+
+		os.chdir(wd)
 
 class Gs9oOpenV(sublime_plugin.TextCommand):
 	def run(self, edit, wd=None, run=[], save_hist=False, focus_view=True):
@@ -284,6 +331,12 @@ def act_on_path(view, path):
 
 	return False
 
+
+def _exparg(s, m):
+	s = string.Template(s).safe_substitute(m)
+	s = os.path.expanduser(s)
+	return s
+
 class Gs9oExecCommand(sublime_plugin.TextCommand):
 	def is_enabled(self):
 		pos = gs.sel(self.view).begin()
@@ -294,6 +347,11 @@ class Gs9oExecCommand(sublime_plugin.TextCommand):
 		pos = gs.sel(view).begin()
 		line = view.line(pos)
 		wd = view.settings().get('9o.wd')
+
+		try:
+			os.chdir(wd)
+		except Exception:
+			gs.error_traceback(DOMAIN)
 
 		ln = view.substr(line).split('#', 1)
 		if len(ln) == 2:
@@ -334,19 +392,37 @@ class Gs9oExecCommand(sublime_plugin.TextCommand):
 			view.add_regions(rkey, [sublime.Region(line.begin(), view.size())], '')
 			view.run_command('gs9o_init')
 
-			cli = cmd.split(' ', 1)
-			nm = cli[0]
-			ag = cli[1].strip() if len(cli) == 2 else ''
+			nv = sh.env()
+			anv = nv.copy()
+			seen = {}
+			am = aliases()
+			while True:
+				cli = cmd.split(' ', 1)
+				nm = cli[0]
+				if not nm:
+					break
 
-			if nm == "cd":
-				args = [ag] if ag else []
-				cmd_cd(view, edit, args, wd, rkey)
-				return
+				ag = cli[1].strip() if len(cli) == 2 else ''
+
+				alias = am.get(nm, '')
+				if not alias:
+					break
+
+				if alias in seen:
+					gs.error(DOMAIN, 'recursive alias detected: `%s`' % alias)
+					break
+
+				seen[alias] = True
+				anv['_args'] = ag
+				cmd = string.Template(alias).safe_substitute(anv)
 
 			if nm != 'sh':
 				f = builtins().get(nm)
 				if f:
-					args = shlex.split(gs.astr(ag)) if ag else []
+					args = []
+					if ag:
+						args = [_exparg(s, nv) for s in shlex.split(gs.astr(ag))]
+
 					f(view, edit, args, wd, rkey)
 					return
 
@@ -375,6 +451,9 @@ class Gs9oPushOutput(sublime_plugin.TextCommand):
 		else:
 			view.insert(edit, view.size(), '\n%s' % output)
 			view.show(view.size())
+
+def aliases():
+	return gs.setting('9o_aliases', {}).copy()
 
 def builtins():
 	m = gs.gs9o.copy()
@@ -439,8 +518,12 @@ def _9_begin_call(name, view, edit, args, wd, rkey, cid):
 
 	return cid, cb
 
+def cmd_echo(view, edit, args, wd, rkey):
+	push_output(view, rkey, ' '.join(args))
+
 def cmd_which(view, edit, args, wd, rkey):
 	l = []
+	am = aliases()
 	m = builtins()
 
 	if not args:
@@ -455,6 +538,8 @@ def cmd_which(view, edit, args, wd, rkey):
 			v = '9o builtin: %s' % sh.which(k)
 		elif k in m:
 			v = '9o builtin'
+		elif k in am:
+			v = '9o alias: `%s`' % am[k]
 		else:
 			v = sh.which(k)
 

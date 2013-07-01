@@ -1,11 +1,12 @@
 import re
 import sublime
 
-ANN = 'a13.06.22-1'
-VERSION = 'r13.06.22-1'
+ANN = 'a13.06.30-4'
+VERSION = 'r13.06.30-4'
 VERSION_PAT = re.compile(r'\d{2}[.]\d{2}[.]\d{2}-\d+', re.IGNORECASE)
 DEFAULT_GO_VERSION = 'go?'
-GO_VERSION_OUTPUT_PAT = re.compile(r'(?:\b(go[.\d]+)\b|devel\W+(\w+))(?:.*\b(appengine|gae)\b)?', re.IGNORECASE)
+GO_VERSION_OUTPUT_PAT = re.compile(r'go\s+version\s+(\S+(?:\s+[+]\w+|\s+\([^)]+)?)', re.IGNORECASE)
+GO_VERSION_NORM_PAT = re.compile(r'[^\w.+-]+', re.IGNORECASE)
 PLATFORM = '%s-%s' % (sublime.platform(), sublime.arch())
 MARGO_EXE_PREFIX = 'gosublime.margo_'
 MARGO_EXE_SUFFIX = '.exe'

@@ -77,6 +77,7 @@ _default_settings = {
 	"linters": [],
 	"9o_instance": "",
 	"9o_color_scheme": "",
+	"9o_aliases": {},
 	"gohtml_extensions": [],
 }
 _settings = copy.copy(_default_settings)
@@ -687,9 +688,9 @@ def dval(v, d):
 
 def tm_path(name):
 	d = {
-		'9o': '9o.hidden-tmLanguage',
+		'9o': 'syntax/GoSublime-9o.tmLanguage',
 		'doc': 'GsDoc.hidden-tmLanguage',
-		'go': 'GoSublime.tmLanguage',
+		'go': 'syntax/GoSublime-Go.tmLanguage',
 		'gohtml': 'syntax/GoSublime-HTML.tmLanguage',
 	}
 

@@ -5,6 +5,7 @@ from collections import namedtuple
 import os
 import re
 import string
+import sublime
 import subprocess
 import time
 
@@ -216,9 +217,10 @@ def gs_init(_={}):
 			_env_ext['GOROOT'] = m.group(1).strip('"')
 
 	cr_go = ShellCommand('go version').run()
-	m = about.GO_VERSION_OUTPUT_PAT.search(cr_go.out + cr_go.err)
+	cr_go_out = cr_go.out + cr_go.err
+	m = about.GO_VERSION_OUTPUT_PAT.search(cr_go_out)
 	if m:
-		GO_VERSION = '-'.join(s for s in m.groups() if s)
+		GO_VERSION = about.GO_VERSION_NORM_PAT.sub('', m.group(1))
 
 	dur = (time.time() - start)
 
@@ -235,9 +237,10 @@ def gs_init(_={}):
 		v = v.replace(cmd_str, 'echo "..."')
 		cmd_lst.append(v)
 
-	_print('load env vars %s: go version %s = %s: %0.3fs' % (
+	_print('load env vars %s: go version: %s -> `%s` -> `%s`: %0.3fs' % (
 		cmd_lst,
 		cr_go.cmd_lst,
+		cr_go_out,
 		(GO_VERSION if GO_VERSION != about.DEFAULT_GO_VERSION else cr_go),
 		dur,
 	))
@@ -337,6 +340,16 @@ def env(m={}):
 
 
 	e['PATH'] = psep.join(add_path)
+
+	fn = gs.attr('active_fn', '')
+	wd =  gs.getwd()
+
+	e.update({
+		'PWD': wd,
+		'_wd': wd,
+		'_fn': fn,
+		'_nm': fn.replace('\\', '/').split('/')[-1],
+	})
 
 	# Ensure no unicode objects leak through. The reason is twofold:
 	# 	* On Windows, Python 2.6 (used by Sublime Text) subprocess.Popen

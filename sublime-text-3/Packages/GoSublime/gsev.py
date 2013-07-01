@@ -13,7 +13,12 @@ class EV(sublime_plugin.EventListener):
 		sublime.set_timeout(lambda: do_post_save(view), 0)
 
 	def on_activated(self, view):
-		sublime.set_timeout(lambda: do_sync_active_view(view), 0)
+		win = view.window()
+		if win is not None:
+			active_view = win.active_view()
+			if active_view is not None:
+				sublime.set_timeout(lambda: do_sync_active_view(active_view), 0)
+
 		sublime.set_timeout(lambda: do_set_gohtml_syntax(view), 0)
 
 	def on_load(self, view):
@@ -52,7 +57,9 @@ def do_post_save(view):
 			gs.end(tid)
 
 def do_sync_active_view(view):
-	fn = view.file_name()
+	fn = view.file_name() or ''
+	gs.set_attr('active_fn', fn)
+
 	if fn:
 		gs.set_attr('last_active_fn', fn)
 		if fn.lower().endswith('.go'):
