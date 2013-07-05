@@ -128,6 +128,7 @@ alias ll='ls -halG'
 alias ipy='python -c "import IPython; IPython.embed()"'
 alias jpp='python -mjson.tool'
 alias git='hub'
+lintdiff='pylint $(git diff --name-only $(git merge-base HEAD origin/master))'
 
 
 function sub() {
