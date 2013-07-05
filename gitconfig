@@ -37,7 +37,7 @@
 	branches = branch -vv
 	rup = !git remote update `git rev-parse --symbolic-full-name HEAD@{u}|cut -d/ -f3`
   check = ! sh -c 'git checkout -b "$0" --track $(git branch -a | grep "$0" | tr -d "[:blank:]")'
-  merge = merge -- log
+  merge = merge --log
 
 [branch]
 	autosetupmerge = true
