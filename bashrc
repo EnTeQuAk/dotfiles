@@ -128,7 +128,8 @@ alias ll='ls -halG'
 alias ipy='python -c "import IPython; IPython.embed()"'
 alias jpp='python -mjson.tool'
 alias git='hub'
-lintdiff='pylint $(git diff --name-only $(git merge-base HEAD origin/master))'
+alias lintdiff='pylint $(git diff --name-only)'
+alias submod='sub $(git diff --name-only)'
 
 
 function sub() {
@@ -225,7 +226,6 @@ export PIP_REQUIRE_VIRTUALENV=true
 export PIP_RESPECT_VIRTUALENV=true
 
 # Python development
-export PYTHONDONTWRITEBYTECODE=1
 export PYTHONSTARTUP="$HOME/.pythonrc.py"
 
 # Automatically a Projects virtual environments based on the

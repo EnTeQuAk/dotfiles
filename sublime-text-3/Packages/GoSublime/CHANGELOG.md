@@ -1,7 +1,43 @@
 GoSublime Changes
 -----------------
 
+
+
+
+********************
+Request for feedback
+====================
+
+I'm currently considering what to do about invalid(utf8) source files.
+If you can think of any reason why GoSublime should accept files where
+e.g. rune literals are invalid, or you write code where the `.go` files are not in the utf8 encoding
+please add a comment to https://github.com/DisposaBoy/GoSublime/issues/319
+or email me gosublime-utf8@dby.me
+
+As with previous RFFs, I might not respond so Thanks In Advance
+
+********************
+
+
+
 Note: you may need to restart Sublime Text after GoSublime updates
+
+## 13.07.17-1
+	* the behaviour of 9o output scrolling has changed. instead of attempting to show the end
+	    of the output, the start of the output will be shown instead.
+	    if you preferred the old behaviour, use the new setting `"9o_show_end": true`
+
+## 13.07.14-1
+	* fix comment toggling when the `Go` package is disabled
+
+## 13.07.12-1
+	* update gocode
+
+## 13.07.06-2
+	* the symbols [ ] ( ) { } , . are now treated as puctuation (they might be syntax highlighted)
+
+## 13.07.06-1
+	* the various operator groups, in addition to semi-colons are now treated as `operators` so they should now be syntax highlighted
 
 ## 13.07.03-1
 	* log MarGo build failure

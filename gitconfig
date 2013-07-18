@@ -45,9 +45,6 @@
 [push]
 	default = current
 
-[hub]
-	protocol = https
-
 [core]
 	pager = less -R
 
