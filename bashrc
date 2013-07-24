@@ -250,7 +250,7 @@ function workon_cwd {
                 then
                     alias django="python $MANAGE_PY"
                 else
-                    unalias django
+                    [ -n "`alias -p | grep '^alias django='`" ] && unalias django
                 fi
             fi
         fi
@@ -262,7 +262,7 @@ function workon_cwd {
         # We've just left the repo, deactivate the environment
         # Note: this only happens if the virtualenv was activated automatically
         deactivate && unset CD_VIRTUAL_ENV
-        unalias django
+        [ -n "`alias -p | grep '^alias django='`" ] && unalias django
     fi
 }
 
