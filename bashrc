@@ -244,15 +244,25 @@ function workon_cwd {
         if [ "$VIRTUAL_ENV" != "$WORKON_HOME/$ENV_NAME" ]; then
             if [ -e "$WORKON_HOME/$ENV_NAME/bin/activate" ]; then
                 workon "$ENV_NAME" && export CD_VIRTUAL_ENV="$ENV_NAME"
+
+                MANAGE_PY=$(find "$PROJECT_ROOT" -name "manage.py" -type f)
+                if [ -e "$MANAGE_PY" ]
+                then
+                    alias django="python $MANAGE_PY"
+                else
+                    unalias django
+                fi
             fi
         fi
         if [ -f "$PROJECT_ROOT/.venv_hook" ]; then
             source "$PROJECT_ROOT/.venv_hook"
         fi
+
     elif [ $CD_VIRTUAL_ENV ]; then
         # We've just left the repo, deactivate the environment
         # Note: this only happens if the virtualenv was activated automatically
         deactivate && unset CD_VIRTUAL_ENV
+        unalias django
     fi
 }
 
