@@ -186,6 +186,7 @@ def gs_init(_={}):
 		'GOBIN',
 		'GOPATH',
 		'GOROOT',
+		'CGO_ENABLED',
 	]
 
 	cmdl = []
@@ -216,7 +217,12 @@ def gs_init(_={}):
 		if m:
 			_env_ext['GOROOT'] = m.group(1).strip('"')
 
-	cr_go = ShellCommand('go version').run()
+	for k in _env_ext:
+		v = os.environ.get(k)
+		if v:
+			_env_ext[k] = v
+
+	cr_go = go_cmd(['version']).run()
 	cr_go_out = cr_go.out + cr_go.err
 	m = about.GO_VERSION_OUTPUT_PAT.search(cr_go_out)
 	if m:
@@ -257,6 +263,17 @@ def _sj_path(p):
 def getenv(name, default='', m={}):
 	return env(m).get(name, default)
 
+def gs_gopath(fn, roots=[]):
+	comps = fn.split(os.sep)
+	l = []
+	for i, s in enumerate(comps):
+		if s.lower() == "src":
+			p = os.path.normpath(os.sep.join(comps[:i]))
+			if p not in roots:
+				l.append(p)
+	l.reverse()
+	return os.pathsep.join(l)
+
 def env(m={}):
 	"""
 	Assemble environment information needed for correct operation. In particular,
@@ -272,18 +289,8 @@ def env(m={}):
 	e.update(_env_ext)
 	e.update(m)
 
-	roots = gs.lst(e.get('GOPATH', '').split(os.pathsep), e.get('GOROOT', ''))
-	lfn = gs.attr('last_active_go_fn', '')
-
-	comps = lfn.split(os.sep)
-	gs_gopath = []
-	for i, s in enumerate(comps):
-		if s.lower() == "src":
-			p = os.sep.join(comps[:i])
-			if p not in roots:
-				gs_gopath.append(p)
-	gs_gopath.reverse()
-	e['GS_GOPATH'] = os.pathsep.join(gs_gopath)
+	roots = [os.path.normpath(s) for s in gs.lst(e.get('GOPATH', '').split(os.pathsep), e.get('GOROOT', ''))]
+	e['GS_GOPATH'] = gs_gopath(gs.getwd(), roots) or gs_gopath(gs.attr('last_active_go_fn', ''), roots)
 
 	uenv = gs.setting('env', {})
 	for k in uenv:
@@ -294,6 +301,9 @@ def env(m={}):
 
 	e.update(uenv)
 	e.update(m)
+
+	if e['GS_GOPATH'] and gs.setting('use_gs_gopath') is True:
+		e['GOPATH'] = e['GS_GOPATH']
 
 	# For custom values of GOPATH, installed binaries via go install
 	# will go into the "bin" dir of the corresponding GOPATH path.
@@ -349,6 +359,7 @@ def env(m={}):
 		'_wd': wd,
 		'_fn': fn,
 		'_nm': fn.replace('\\', '/').split('/')[-1],
+		'_pathsep': psep,
 	})
 
 	# Ensure no unicode objects leak through. The reason is twofold:
@@ -394,8 +405,14 @@ def _which(cmd, env_path):
 
 	return ''
 
-def go(subcmd_str):
-	cr = ShellCommand('go '+subcmd_str).run()
+def go_cmd(cmd_lst):
+	go = which('go')
+	if go:
+		return Command(gs.lst(go, cmd_lst))
+	return ShellCommand('go %s' % (' '.join(cmd_lst)))
+
+def go(cmd_lst):
+	cr = go_cmd(cmd_lst).run()
 	out = cr.out.strip() + '\n' + cr.err.strip()
 	return out.strip()
 

@@ -38,7 +38,7 @@ def gs_init(m={}):
 
 	aso_install_vesion = gs.aso().get('install_version', '')
 	f = lambda: install(aso_install_vesion, False)
-	gsq.do('GoSublime', f, msg='Installing MarGo', set_status=True)
+	gsq.do('GoSublime', f, msg='Installing MarGo', set_status=False)
 
 class Request(object):
 	def __init__(self, f, method='', token=''):
@@ -55,6 +55,9 @@ class Request(object):
 			'method': self.method,
 			'token': self.token,
 		}
+
+def _inst_state():
+	return gs.attr(_inst_name(), '')
 
 def _inst_name():
 	return 'mg9.install.%s' % INSTALL_VERSION
@@ -86,7 +89,7 @@ def sanity_check(env={}, error_log=False):
 	ns = '(not set)'
 
 	sl = [
-		('install state', gs.attr(_inst_name(), '')),
+		('install state', _inst_state()),
 		('sublime.version', sublime.version()),
 		('sublime.channel', sublime.channel()),
 		('about.ann', gs.attr('about.ann', '')),
@@ -128,13 +131,13 @@ def _bins_exist():
 	return os.path.exists(_margo_bin())
 
 def maybe_install():
-	if not _bins_exist():
+	if _inst_state() == '' and not _bins_exist():
 		install('', True)
 
 def install(aso_install_vesion, force_install):
 	global INSTALL_EXE
 
-	if gs.attr(_inst_name(), '') != "":
+	if _inst_state() != "":
 		gs.notify(DOMAIN, 'Installation aborted. Install command already called for GoSublime %s.' % INSTALL_VERSION)
 		return
 
@@ -146,7 +149,6 @@ def install(aso_install_vesion, force_install):
 	gs.set_attr(_inst_name(), 'busy')
 
 	init_start = time.time()
-	err = ''
 
 	if not is_update and not force_install and _bins_exist() and aso_install_vesion == INSTALL_VERSION:
 		m_out = 'no'
@@ -154,11 +156,11 @@ def install(aso_install_vesion, force_install):
 		gs.notify('GoSublime', 'Installing MarGo')
 		start = time.time()
 
-		cmd = sh.Command(['go', 'build', '-v', '-x', '-o', _margo_bin(INSTALL_EXE)])
-		cmd.wd = _margo_src()
+		cmd = sh.Command(['go', 'build', '-v', '-x', '-o', INSTALL_EXE, 'gosubli.me/margo'])
+		cmd.wd = gs.home_dir_path('bin')
 		cmd.env = {
 			'GOBIN': '',
-			'GOPATH': gs.dist_path('something_borrowed'),
+			'GOPATH': gs.dist_path(),
 		}
 
 		ev.debug('%s.build' % DOMAIN, {
@@ -167,30 +169,38 @@ def install(aso_install_vesion, force_install):
 		})
 
 		cr = cmd.run()
-		m_out = 'cmd: `%s`\nstdout: `%s`\nstderr: `%s`' % (
+		m_out = 'cmd: `%s`\nstdout: `%s`\nstderr: `%s`\nexception: `%s`' % (
 			cr.cmd_lst,
 			cr.out.strip(),
 			cr.err.strip(),
+			cr.exc,
 		)
 
-		if not cr.ok:
-			m_out = '%s\nexception: `%s`' % (m_out, cr.exc)
-			err = 'MarGo build failure\n%s' % m_out
-
-		if not err and _bins_exist():
+		if cr.ok and _bins_exist():
 			def f():
 				gs.aso().set('install_version', INSTALL_VERSION)
 				gs.save_aso()
 
 			sublime.set_timeout(f, 0)
+		else:
+			err_prefix = 'MarGo build failed'
+			gs.error(DOMAIN, '%s\n%s' % (err_prefix, m_out))
+
+			sl = [
+				('GoSublime error', '\n'.join((
+					err_prefix,
+					'This is possibly a bug or miss-configuration of your environment.',
+					'For more help, please file an issue with the following build output',
+					'at: https://github.com/DisposaBoy/GoSublime/issues/new',
+					'or alternatively, you may send an email to: gosublime@dby.me',
+					'\n',
+					m_out,
+				)))
+			]
+			sl.extend(sanity_check({}, False))
+			gs.show_output('GoSublime', '\n'.join(sanity_check_sl(sl)))
 
 	gs.set_attr(_inst_name(), 'done')
-
-	if err:
-		gs.error(DOMAIN, err)
-	else:
-		# notify this early so we don't mask any notices below
-		gs.notify('GoSublime', 'Ready')
 
 	if is_update:
 		gs.show_output('GoSublime-source', '\n'.join([
@@ -229,7 +239,6 @@ def install(aso_install_vesion, force_install):
 		try:
 			bin_dirs = [
 				gs.home_path('bin'),
-				os.path.join(sublime.packages_path(), 'User', 'GoSublime', '9', 'bin'),
 			]
 
 			l = []
@@ -287,6 +296,7 @@ def _complete_opts(fn, src, pos):
 		'Src': src or '',
 		'Pos': pos or 0,
 		'Home': home,
+		'Autoinst': gs.setting('autoinst'),
 		'Env': sh.env({
 			'XDG_CONFIG_HOME': home,
 		}),
@@ -330,6 +340,22 @@ def pkg_dirs(f):
 		'env': sh.env(),
 	}, cb)
 
+def a_pkgpaths(exclude, f):
+	tid = gs.begin(DOMAIN, '')
+	def cb(res, err):
+		gs.end(tid)
+		f(res, err)
+
+	m = sh.env()
+	acall('pkgpaths', {
+		'env': {
+			'GOPATH': m.get('GOPATH'),
+			'GOROOT': m.get('GOROOT'),
+			'_pathsep': m.get('_pathsep'),
+		},
+		'exclude': exclude,
+	}, cb)
+
 def declarations(fn, src, pkg_dir, f):
 	tid = gs.begin(DOMAIN, 'Fetching declarations')
 	def cb(res, err):
@@ -345,6 +371,8 @@ def declarations(fn, src, pkg_dir, f):
 
 def imports(fn, src, toggle):
 	return bcall('imports', {
+		'autoinst': gs.setting('autoinst'),
+		'env': sh.env(),
 		'fn': fn or '',
 		'src': src or '',
 		'toggle': toggle or [],
@@ -375,13 +403,10 @@ def share(src, f):
 		f({}, 'Share cancelled')
 
 def acall(method, arg, cb):
-	if not gs.checked(DOMAIN, 'launch _send'):
-		gsq.launch(DOMAIN, _send)
-
 	gs.mg9_send_q.put((method, arg, cb))
 
 def bcall(method, arg):
-	if gs.attr(_inst_name(), '') != "done":
+	if _inst_state() != "done":
 		return {}, 'Blocking call(%s) aborted: Install is not done' % method
 
 	q = gs.queue.Queue()
@@ -468,13 +493,10 @@ def _send():
 				if not proc or proc.poll() is not None:
 					killSrv()
 
-					if gs.attr(_inst_name(), '') != "busy":
+					if _inst_state() != "busy":
 						maybe_install()
 
-					if not gs.checked(DOMAIN, 'launch _recv'):
-						gsq.launch(DOMAIN, _recv)
-
-					while gs.attr(_inst_name(), '') == "busy":
+					while _inst_state() == "busy":
 						time.sleep(0.100)
 
 					mg_bin = _margo_bin()
@@ -485,33 +507,24 @@ def _send():
 						'-tag', TAG,
 					]
 
-					if os.path.exists(mg_bin):
-						c = sh.Command(cmd)
-						c.stderr = gs.LOGFILE
-						c.env = {
-							'GOGC': 10,
-							'XDG_CONFIG_HOME': gs.home_path(),
-						}
+					c = sh.Command(cmd)
+					c.stderr = gs.LOGFILE
+					c.env = {
+						'GOGC': 10,
+						'XDG_CONFIG_HOME': gs.home_path(),
+					}
 
-						pr = c.proc()
-						if pr.ok:
-							proc = pr.p
-							err = ''
-						else:
-							proc = None
-							err = 'Cannot start MarGo: %s' % pr.exc
+					pr = c.proc()
+					if pr.ok:
+						proc = pr.p
+						err = ''
 					else:
 						proc = None
-						err = "Can't find the MarGo binary at `%s`" % mg_bin
+						err = 'Exception: %s' % pr.exc
 
 					if err or not proc or proc.poll() is not None:
 						killSrv()
-
-						gs.notice(DOMAIN, 'Cannot start MarGo:\n%s' % err)
-						try:
-							cb({}, 'Abort. Cannot start MarGo')
-						except:
-							pass
+						_call(cb, {}, 'Abort. Cannot start MarGo: %s' % err)
 
 						continue
 
@@ -553,9 +566,15 @@ def _send():
 			gs.println(gs.traceback())
 			break
 
+def _call(cb, res, err):
+	try:
+		cb(res, err)
+	except Exception:
+		gs.error_traceback(DOMAIN)
+
 def _cb_err(cb, err):
 	gs.error(DOMAIN, err)
-	cb({}, err)
+	_call(cb, {}, err)
 
 
 def _read_stdout(proc):
@@ -586,8 +605,26 @@ def killSrv():
 		except Exception:
 			pass
 
+def on(token, cb):
+	req = Request(f=cb, token=token)
+	gs.set_attr(REQUEST_PREFIX+req.token, req)
+
 def _dump(res, err):
 	gs.println(json.dumps({
 		'res': res,
 		'err': err,
 	}, sort_keys=True, indent=2))
+
+if not gs.checked(DOMAIN, 'launch ipc threads'):
+	gsq.launch(DOMAIN, _send)
+	gsq.launch(DOMAIN, _recv)
+
+def on_mg_msg(res, err):
+	msg = res.get('message', '')
+	if msg:
+		print('GoSublime: MarGo: %s' % msg)
+		gs.notify('MarGo', msg)
+
+	return True
+
+on('margo.message', on_mg_msg)
