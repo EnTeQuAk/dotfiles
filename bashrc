@@ -269,6 +269,7 @@ function workon_cwd {
 # New cd function that does the virtualenv magic
 function venv_cd {
     cd "$@" && workon_cwd
+    history -a
 }
 
 alias cd="venv_cd"
