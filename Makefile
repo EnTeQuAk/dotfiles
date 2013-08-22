@@ -1,5 +1,5 @@
-install: install-vim install-vcprompt install-git install-hub install-bin \
-	install-bash install-pythonrc install-subl install-inputrc
+install: install-bin install-vim install-vcprompt install-git install-hub \
+	install-bash install-pythonrc install-subl install-inputrc install-wtc
 
 
 install-vim:
@@ -21,7 +21,7 @@ install-git:
 	curl -o ~/.git-completion.bash https://github.com/git/git/raw/master/contrib/completion/git-completion.bash -OL
 
 install-hub:
-	curl http://defunkt.io/hub/standalone -sLo ~/bin/hub && chmod +x ~/bin/hub
+	curl http://hub.github.com/standalone -sLo ~/bin/hub && chmod +x ~/bin/hub
 
 install-bin:
 	mkdir -p ~/bin/
@@ -40,6 +40,9 @@ install-inputrc:
 install-pythonrc:
 	rm -f ~/.pythonrc.py
 	ln -s `pwd`/python/pythonrc.py ~/.pythonrc.py
+
+install-wtc:
+	curl http://github.com/lwe/whatthecommit/raw/master/whatthecommit -sLo ~/bin/wtc && chmod +x ~/bin/wtc
 
 install-subl:
 ifeq ($(shell uname),Darwin)
