@@ -64,7 +64,7 @@ shopt -s extglob # Allows basic regexps in bash.
 set ignoreeof on # Typing EOF (CTRL+D) will not exit interactive sessions
 
 # export subl as our editor
-export EDITOR="subl"
+export EDITOR="subl3"
 
 # integrate with ksshaskpass
 if [ -f "/usr/bin/ksshaskpass" ]; then
