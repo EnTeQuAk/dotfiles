@@ -19,6 +19,7 @@ install-git:
 	rm -f ~/.gitconfig
 	ln -n `pwd`/gitconfig ~/.gitconfig
 	curl -o ~/.git-completion.bash https://github.com/git/git/raw/master/contrib/completion/git-completion.bash -OL
+	(cd /tmp && git clone --depth 1 https://github.com/visionmedia/git-extras.git && cd git-extras && sudo make install)
 
 install-hub:
 	curl http://hub.github.com/standalone -sLo ~/bin/hub && chmod +x ~/bin/hub
