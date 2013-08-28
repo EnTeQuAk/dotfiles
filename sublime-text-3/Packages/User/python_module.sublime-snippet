@@ -3,7 +3,7 @@
 #-*- coding: utf-8 -*-
 """
     ${1:module_name}
-    ${1/./=/g}
+    ${1/./~/g}
 
     :copyright: (c) by ${2:Owner}
 """
