@@ -7,29 +7,35 @@
 
 [core]
 	editor = vim
-  pager = cat
+	pager = cat
 	bare = true
 
 [color]
 	ui = true
 
 [color "branch"]
-  current = yellow reverse
-  local = yellow bold
-  remote = green bold
-  plain = red bold
+	current = yellow reverse
+	local = yellow bold
+	remote = green bold
+	plain = red bold
 
 [format]
 	pretty = medium
 
 [alias]
-	st = status -sb
+	st = status -st
+	ci = commit
+	co = checkout
+	br = branch
+	cp = cherry-pick
+	cps = cherry-pick -s
+	today = diff @{yesterday}.. --stat
 	out = cherry -v
 	edit-unmerged = "!f() { git ls-files --unmerged | cut -f2 | sort -u ; }; vim `f`"
 	add-unmerged = "!f() { git ls-files --unmerged | cut -f2 | sort -u ; }; git add `f`"
-	graphviz = "!f() { echo 'digraph git {' ; git log --pretty='format:  %h -> { %p }' \"$@\" | sed 's/[0-9a-f][0-9a-f]*/\"&\"/g' ; echo '}'; }; f"
+
 	record = ! sh -c '(git add -p -- $@ && git commit) || git reset' --
-  who = shortlog -s --
+	who = shortlog -s --
 	lg = log -p
 	lol = log --graph --decorate --pretty=oneline --abbrev-commit
 	lola = log --graph --decorate --pretty=oneline --abbrev-commit --all
@@ -37,10 +43,10 @@
 	lasttag = describe --tags --abbrev=0
 	branches = branch -vv
 	rup = !git remote update `git rev-parse --symbolic-full-name HEAD@{u}|cut -d/ -f3`
-  check = ! sh -c 'git checkout -b "$0" --track $(git branch -a | grep "$0" | tr -d "[:blank:]")'
-  merge = merge --log
-  commit = commit --verbose
-  report = "log --author='Christopher Grebs' --since='2 sunday ago' --until='1 sunday ago' --format='%Cgreen%ci%Creset %s%Creset' --no-merges"
+	check = ! sh -c 'git checkout -b "$0" --track $(git branch -a | grep "$0" | tr -d "[:blank:]")'
+	merge = merge --log
+	commit = commit --verbose
+	report = "log --author='Christopher Grebs' --since='2 sunday ago' --until='1 sunday ago' --format='%Cgreen%ci%Creset %s%Creset' --no-merges"
 
 [branch]
 	autosetupmerge = true
