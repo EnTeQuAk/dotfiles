@@ -62,7 +62,7 @@ shopt -s extglob # Allows basic regexps in bash.
 set ignoreeof on # Typing EOF (CTRL+D) will not exit interactive sessions
 
 # export subl as our editor
-export EDITOR="subl3"
+export EDITOR="vim"
 
 # integrate with ksshaskpass
 if [ -f "/usr/bin/ksshaskpass" ]; then
@@ -72,6 +72,10 @@ fi
 # check the window size after each command and, if necessary,
 # update the values of LINES and COLUMNS.
 shopt -s checkwinsize
+
+export IGNOREEOF=1
+export PYTHONDONTWRITEBYTECODE=1
+export LESS=FRSX
 
 
 # Alias definitions
