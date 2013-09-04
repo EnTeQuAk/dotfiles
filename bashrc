@@ -7,6 +7,10 @@
 
 [ -r /usr/share/bash-completion/bash_completion   ] && . /usr/share/bash-completion/bash_completion
 
+if [ -f /etc/bash_completion ]; then
+  . /etc/bash_completion
+fi
+
 # sudo completion
 complete -cf sudo
 
@@ -59,7 +63,6 @@ shopt -s dotglob # includes dotfiles in pathname expansion
 shopt -s checkwinsize # If window size changes, redraw contents
 shopt -s cmdhist # Multiline commands are a single command in history.
 shopt -s extglob # Allows basic regexps in bash.
-set ignoreeof on # Typing EOF (CTRL+D) will not exit interactive sessions
 
 # export subl as our editor
 export EDITOR="vim"
@@ -73,7 +76,12 @@ fi
 # update the values of LINES and COLUMNS.
 shopt -s checkwinsize
 
+
+# Typing EOF (ctrl+d) will not exit interactive sessions
+set ignoreeof on
 export IGNOREEOF=1
+
+
 export PYTHONDONTWRITEBYTECODE=1
 export LESS=FRSX
 
@@ -279,3 +287,11 @@ alias cd="venv_cd"
 # Set architecture flags
 export ARCHFLAGS="-arch x86_64"
 
+from() { expect -c "spawn -noecho python
+expect \">>> \"
+send \"from $*\r\"
+interact +++ return"; }
+import() { expect -c "spawn -noecho python
+expect \">>> \"
+send \"import $*\r\"
+interact +++ return"; }
