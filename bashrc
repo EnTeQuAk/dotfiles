@@ -295,8 +295,3 @@ import() { expect -c "spawn -noecho python
 expect \">>> \"
 send \"import $*\r\"
 interact +++ return"; }
-
-# Useful command for stripping whitespace
-remove_trailing_whitespace() {
-  find . -name "$*" -exec sed -i '' -e's/[[:space:]]*$//' {} \;
-}
