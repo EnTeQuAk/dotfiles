@@ -2,12 +2,15 @@
 	"installed_packages":
 	[
 		"GoSublime",
+		"Jinja2",
+		"LiveReload",
 		"MaxPane",
 		"Origami",
 		"Package Control",
 		"SearchInProject",
 		"StickySearch",
 		"SublimeGit",
+		"SublimeREPL",
 		"SublimeReStructuredText"
 	]
 }

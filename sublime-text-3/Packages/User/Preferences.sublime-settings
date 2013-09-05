@@ -2,6 +2,7 @@
 	"auto_complete_commit_on_tab": true,
 	"auto_complete_delay": 20,
 	"auto_complete_with_fields": true,
+	"color_scheme": "Packages/Color Scheme - Default/Monokai.tmTheme",
 	"enable_telemetry": true,
 	"ensure_newline_at_eof_on_save": true,
 	"folder_exclude_patterns":
@@ -20,7 +21,6 @@
 	"hot_exit": false,
 	"ignored_packages":
 	[
-		"Vintage"
 	],
 	"remember_open_files": false,
 	"rulers":
