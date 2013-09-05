@@ -13,7 +13,8 @@
 		"CVS",
 		"env"
 	],
-	"font_size": 13,
+	"font_face": "Consolas",
+	"font_size": 14,
 	"highlight_modified_tabs": false,
 	"hot_exit": false,
 	"ignored_packages":
