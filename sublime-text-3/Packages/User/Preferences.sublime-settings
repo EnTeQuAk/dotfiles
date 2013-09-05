@@ -9,6 +9,7 @@
 		".svn",
 		".git",
 		".hg",
+		".tox",
 		"CVS",
 		"env"
 	],
