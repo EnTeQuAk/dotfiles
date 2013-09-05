@@ -19,7 +19,7 @@
 	"hot_exit": false,
 	"ignored_packages":
 	[
-		"Vintage"
+		//"Vintage"
 	],
 	"remember_open_files": false,
 	"rulers":
@@ -32,5 +32,6 @@
 	"translate_tabs_to_spaces": true,
 	"trim_trailing_white_space_on_save": true,
 	"update_check": false,
-	"use_tab_stops": true
+	"use_tab_stops": true,
+    "highlight_line": true,
 }
