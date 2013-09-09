@@ -23,7 +23,7 @@
 	pretty = medium
 
 [alias]
-	st = status -st
+	st = status -sb
 	ci = commit
 	co = checkout
 	br = branch
