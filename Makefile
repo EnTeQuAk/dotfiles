@@ -6,6 +6,7 @@ install-vim:
 	rm -rf ~/.vim ~/.vimrc
 	ln -s `pwd`/vim ~/.vim
 	ln -s `pwd`/vimrc ~/.vimrc
+	cd ~/.vim/ruby/command-t && ruby extconf.rb && make
 
 install-vcprompt:
 	@rm -rf /tmp/vcprompt
