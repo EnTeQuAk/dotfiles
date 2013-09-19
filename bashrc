@@ -47,6 +47,9 @@ export ANDROID_SDK_ROOT=/opt/android-sdk
 export PATH=$ANDROID_NDK_ROOT:$ANDROID_SDK_ROOT:$PATH
 export ANDROID_HOME=$ANDROID_SDK_ROOT
 
+PYENV_ROOT="$HOME/.pyenv"
+PATH="$PYENV_ROOT/bin:$PATH"
+
 
 # Global environment definitions
 # ==============================
@@ -218,19 +221,21 @@ _vcprompt () {
     fi
 }
 
-# Export the promt with advanced vcs information
-export PS1='\[\e[33;1m\]$(_vcprompt)\[\e[0m\]\[\e[32;1m\]\w> \[\e[0m\]'
-
-
 
 # Automatic virtualenv activation based on .venv config file with
 # hook integration.
-export VIRTUALENVWRAPPER_PYTHON=/usr/bin/python
+#export VIRTUALENVWRAPPER_PYTHON=/usr/bin/python
 export WORKON_HOME=$HOME/.virtualenvs
-[ -r /usr/bin/virtualenvwrapper_lazy.sh  ] && . /usr/bin/virtualenvwrapper_lazy.sh
-[ -r /usr/local/bin/virtualenvwrapper_lazy.sh  ] && . /usr/local/bin/virtualenvwrapper_lazy.sh
-export VIRTUAL_ENV_DISABLE_PROMPT=1
-export VIRTUALENV_USE_DISTRIBUTE=1
+#[ -r /usr/bin/virtualenvwrapper_lazy.sh  ] && . /usr/bin/virtualenvwrapper_lazy.sh
+#[ -r /usr/local/bin/virtualenvwrapper_lazy.sh  ] && . /usr/local/bin/virtualenvwrapper_lazy.sh
+#export VIRTUAL_ENV_DISABLE_PROMPT=1
+#export VIRTUALENV_USE_DISTRIBUTE=1
+
+
+# Pyenv
+eval "$(pyenv init -)"
+pyenv virtualenvwrapper_lazy
+
 export PIP_VIRTUALENV_BASE=$WORKON_HOME
 export PIP_REQUIRE_VIRTUALENV=true
 export PIP_RESPECT_VIRTUALENV=true
@@ -295,3 +300,9 @@ import() { expect -c "spawn -noecho python
 expect \">>> \"
 send \"import $*\r\"
 interact +++ return"; }
+
+
+# Export the promt with advanced vcs information
+export PS1='\[\e[33;1m\]$(_vcprompt)\[\e[0m\]\[\e[32;1m\]\w> \[\e[0m\]'
+
+
