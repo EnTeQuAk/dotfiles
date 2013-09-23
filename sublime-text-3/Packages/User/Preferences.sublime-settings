@@ -2,6 +2,7 @@
 	"auto_complete_commit_on_tab": true,
 	"auto_complete_delay": 20,
 	"auto_complete_with_fields": true,
+	"color_scheme": "Packages/Color Scheme - Default/Monokai.tmTheme",
 	"enable_telemetry": true,
 	"ensure_newline_at_eof_on_save": true,
 	"folder_exclude_patterns":
@@ -9,10 +10,13 @@
 		".svn",
 		".git",
 		".hg",
+		".tox",
 		"CVS",
 		"env"
 	],
-	"font_size": 12,
+	"font_face": "Consolas",
+	"font_size": 14,
+	"highlight_line": true,
 	"highlight_modified_tabs": false,
 	"hot_exit": false,
 	"ignored_packages":
@@ -28,7 +32,7 @@
 	"show_tab_close_buttons": false,
 	"spell_check": false,
 	"translate_tabs_to_spaces": true,
-	"trim_trailing_white_space_on_save": false,
+	"trim_trailing_white_space_on_save": true,
 	"update_check": false,
 	"use_tab_stops": true
 }
