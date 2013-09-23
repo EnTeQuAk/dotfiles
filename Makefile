@@ -21,7 +21,7 @@ install-git:
 	curl -o ~/.git-completion.bash https://github.com/git/git/raw/master/contrib/completion/git-completion.bash -OL
 
 install-hub:
-	curl http://defunkt.io/hub/standalone -sLo ~/bin/hub && chmod +x ~/bin/hub
+	curl http://hub.github.com/standalone -sLo ~/bin/hub && chmod +x ~/bin/hub
 
 install-bin:
 	mkdir -p ~/bin/
