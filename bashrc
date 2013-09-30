@@ -42,6 +42,8 @@ export PATH=/opt/android-sdk/tools:$PATH
 
 export PATH=/opt/android-sdk/platform-tools/:$PATH
 
+export PATH=/usr/bin/site_perl/:$PATH
+
 export ANDROID_NDK_ROOT=/opt/android-ndk
 export ANDROID_SDK_ROOT=/opt/android-sdk
 export PATH=$ANDROID_NDK_ROOT:$ANDROID_SDK_ROOT:$PATH
