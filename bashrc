@@ -147,6 +147,14 @@ alias lintdiff='pylint $(git diff --name-only)'
 alias submod='sub $(git diff --name-only)'
 
 
+# Git related shortcuts
+alias gst='git st'
+alias gci='git ci'
+alias gco='git co'
+alias gpu='git pu'
+alias gbr='git br'
+alias gdi='git diff'
+
 function sub() {
     subl3 -n . "$@";
 }
@@ -226,17 +234,11 @@ _vcprompt () {
 
 # Automatic virtualenv activation based on .venv config file with
 # hook integration.
-#export VIRTUALENVWRAPPER_PYTHON=/usr/bin/python
+export VIRTUALENVWRAPPER_PYTHON=/usr/bin/python
 export WORKON_HOME=$HOME/.virtualenvs
-#[ -r /usr/bin/virtualenvwrapper_lazy.sh  ] && . /usr/bin/virtualenvwrapper_lazy.sh
-#[ -r /usr/local/bin/virtualenvwrapper_lazy.sh  ] && . /usr/local/bin/virtualenvwrapper_lazy.sh
-#export VIRTUAL_ENV_DISABLE_PROMPT=1
-#export VIRTUALENV_USE_DISTRIBUTE=1
-
-
-# Pyenv
-eval "$(pyenv init -)"
-pyenv virtualenvwrapper_lazy
+[ -r /usr/bin/virtualenvwrapper_lazy.sh  ] && . /usr/bin/virtualenvwrapper_lazy.sh
+[ -r /usr/local/bin/virtualenvwrapper_lazy.sh  ] && . /usr/local/bin/virtualenvwrapper_lazy.sh
+export VIRTUAL_ENV_DISABLE_PROMPT=1
 
 export PIP_VIRTUALENV_BASE=$WORKON_HOME
 export PIP_REQUIRE_VIRTUALENV=true
