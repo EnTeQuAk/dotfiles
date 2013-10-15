@@ -27,6 +27,8 @@
 	ci = commit
 	co = checkout
 	br = branch
+  di = diff
+  pu = pull
 	cp = cherry-pick
 	cps = cherry-pick -s
 	today = diff @{yesterday}.. --stat
@@ -47,6 +49,9 @@
 	merge = merge --log
 	commit = commit --verbose
 	report = "log --author='Christopher Grebs' --since='2 sunday ago' --until='1 sunday ago' --format='%Cgreen%ci%Creset %s%Creset' --no-merges"
+	lgg = log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
+	unpushed = log --branches --not --remotes --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
+	unp = log --branches --not --remotes --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
 
 [branch]
 	autosetupmerge = true
