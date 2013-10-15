@@ -13,7 +13,7 @@
 		"go build",
 		"build"
 	],
-	"ann": "a13.09.07-1",
-	"install_version": "r13.08.31-1",
-	"version": "r13.08.31-1"
+	"ann": "a13.10.05-1",
+	"install_version": "r13.10.05-1",
+	"version": "r13.10.05-1"
 }

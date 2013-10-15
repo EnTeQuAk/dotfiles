@@ -305,6 +305,8 @@ autocmd FileType ruby setlocal expandtab shiftwidth=4 tabstop=8
 " --------------
 au BufRead,BufNewFile *.pp setfiletype puppet
 
+" Clojure
+autocmd FileType clojure setlocal expandtab shiftwidth=2 tabstop=2 softtabstop=2
 
 " Folding
 " -------
