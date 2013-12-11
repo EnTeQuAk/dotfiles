@@ -30,6 +30,7 @@
   di = diff
   pu = pull
 	cp = cherry-pick
+  su = submodule update --recursive
 	cps = cherry-pick -s
 	today = diff @{yesterday}.. --stat
 	out = cherry -v
