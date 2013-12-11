@@ -1,7 +1,6 @@
 {
 	"installed_packages":
 	[
-		"GoSublime",
 		"Jinja2",
 		"lispindent",
 		"LiveReload",
