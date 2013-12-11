@@ -72,11 +72,6 @@ shopt -s extglob # Allows basic regexps in bash.
 # export subl as our editor
 export EDITOR="vim"
 
-# integrate with ksshaskpass
-if [ -f "/usr/bin/ksshaskpass" ]; then
-    export SSH_ASKPASS="/usr/bin/ksshaskpass"
-fi
-
 # check the window size after each command and, if necessary,
 # update the values of LINES and COLUMNS.
 shopt -s checkwinsize
@@ -310,3 +305,14 @@ interact +++ return"; }
 export PS1='\[\e[33;1m\]$(_vcprompt)\[\e[0m\]\[\e[32;1m\]\w> \[\e[0m\]'
 
 export PIP_REQUIRE_VIRTUALENV=false
+
+# integrate with ksshaskpass
+if [ -f "/usr/bin/ksshaskpass" ]; then
+    export SSH_ASKPASS="/usr/bin/ksshaskpass"
+fi
+
+if [ -f "${HOME}/.gpg-agent-info" ]; then
+  . "${HOME}/.gpg-agent-info"
+  export GPG_AGENT_INFO
+  export SSH_AUTH_SOCK
+fi
