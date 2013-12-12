@@ -49,8 +49,7 @@ export ANDROID_SDK_ROOT=/opt/android-sdk
 export PATH=$ANDROID_NDK_ROOT:$ANDROID_SDK_ROOT:$PATH
 export ANDROID_HOME=$ANDROID_SDK_ROOT
 
-PYENV_ROOT="$HOME/.pyenv"
-PATH="$PYENV_ROOT/bin:$PATH"
+export PATH=$(npm bin):./node_modules/.bin:$PATH
 
 
 # Global environment definitions
