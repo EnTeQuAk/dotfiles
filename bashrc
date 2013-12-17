@@ -315,3 +315,6 @@ if [ -f "${HOME}/.gpg-agent-info" ]; then
   export GPG_AGENT_INFO
   export SSH_AUTH_SOCK
 fi
+
+# added by travis gem
+[ -f /home/ente/.travis/travis.sh ] && source /home/ente/.travis/travis.sh
