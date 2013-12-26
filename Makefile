@@ -12,7 +12,7 @@ install-vcprompt:
 	@rm -rf /tmp/vcprompt
 	@mkdir -p /tmp/vcprompt
 	@cd /tmp/vcprompt && curl -OL https://bitbucket.org/gward/vcprompt/get/default.tar.gz && \
-		tar zxf default.tar.gz && cd gward-* && make && \
+		tar zxf default.tar.gz && cd gward-* && autoconf && ./configure && make && \
 		echo "Installing vcprompt to /usr/local/bin/vcprompt" && sudo mv vcprompt /usr/local/bin/vcprompt
 	@rm -rf /tmp/vcprompt
 
