@@ -293,7 +293,7 @@ autocmd FileType gitconfig setlocal expandtab shiftwidth=2 tabstop=2 softtabstop
 
 " JSON
 " ----
-au! BufRead,BufNewFile *.json setfiletype json 
+au! BufRead,BufNewFile *.json setfiletype json
 
 
 " Vagrantfile support
@@ -375,9 +375,9 @@ nmap <C-S-Right> :bnext<cr>
 set switchbuf=useopen		" quickfix reuses open windows
 
 
-" Mapping for removing that damned  characters
+" Mapping for removing that damned characters
 " ----------------------------------------------
-nmap <C-S-M> :%s///g<cr>
+nmap <C-S-M> :%s///g<cr>
 
 
 " Define better search mapping
@@ -390,7 +390,7 @@ function! CmdLine(str)
     exe "menu Foo.Bar :" . a:str
     emenu Foo.Bar
     unmenu Foo
-endfunction 
+endfunction
 
 " From an idea by Michael Naumann
 function! VisualSearch(direction) range
@@ -496,7 +496,7 @@ let g:solarized_contrast = 'high'
 "  in CLI mode desert looks better (fruity is GUI only)
 
 if has('gui_running')
-    set background=light
+    set background=dark
     set guifont=Consolas\ 13
     colorscheme solarized
 else
