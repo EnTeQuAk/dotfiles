@@ -26,7 +26,7 @@
 		"env"
 	],
 	"font_face": "Consolas",
-	"font_size": 13,
+	"font_size": 16,
 	"highlight_line": true,
 	"highlight_modified_tabs": false,
 	"hot_exit": false,

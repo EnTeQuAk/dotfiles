@@ -18,7 +18,7 @@ if [ -e "$HOME/.git-completion.bash" ]; then
   source "$HOME/.git-completion.bash"
 fi
 
-# Include custom 
+# Include custom
 export PATH=/usr/local/share/python:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:$PATH
 
 
@@ -50,6 +50,10 @@ export PATH=$ANDROID_NDK_ROOT:$ANDROID_SDK_ROOT:$PATH
 export ANDROID_HOME=$ANDROID_SDK_ROOT
 
 export PATH=$(npm bin):./node_modules/.bin:$PATH
+
+if [ -d ./node_modules ]; then
+    export NODE_MODULES="./node_modules"
+fi
 
 
 # Global environment definitions
