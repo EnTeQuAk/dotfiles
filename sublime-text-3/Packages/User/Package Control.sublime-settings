@@ -1,6 +1,9 @@
 {
 	"installed_packages":
 	[
+		"Alignment",
+		"Gist",
+		"GitGutter",
 		"Jinja2",
 		"lispindent",
 		"LiveReload",
@@ -9,9 +12,11 @@
 		"Package Control",
 		"Pretty JSON",
 		"SearchInProject",
+		"Solarized Color Scheme",
 		"StickySearch",
 		"SublimeGit",
 		"SublimeREPL",
-		"SublimeReStructuredText"
+		"SublimeReStructuredText",
+		"Theme - Soda"
 	]
 }

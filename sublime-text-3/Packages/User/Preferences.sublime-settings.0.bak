@@ -2,7 +2,7 @@
 	"auto_complete_commit_on_tab": true,
 	"auto_complete_delay": 20,
 	"auto_complete_with_fields": true,
-	"color_scheme": "Packages/Solarized Color Scheme/Solarized (dark).tmTheme",
+	"color_scheme": "Packages/Color Scheme - Default/Monokai.tmTheme",
 	"enable_telemetry": true,
 	"ensure_newline_at_eof_on_save": true,
 	"folder_exclude_patterns":
@@ -11,17 +11,6 @@
 		".git",
 		".hg",
 		".tox",
-		"bower_components",
-		"node_modules",
-		"*.pyc",
-		".tox",
-		".coverage",
-		"*.egg*",
-		"*~",
-		"docs/_build",
-		".vagrant",
-		"db.sqlite3",
-		"collected_static",
 		"CVS",
 		"env"
 	],
@@ -29,10 +18,9 @@
 	"font_size": 16,
 	"highlight_line": true,
 	"highlight_modified_tabs": false,
-	"hot_exit": true,
+	"hot_exit": false,
 	"ignored_packages":
 	[
-		"RestructuredText",
 		"Vintage"
 	],
 	"remember_open_files": false,
@@ -43,7 +31,6 @@
 	],
 	"show_tab_close_buttons": false,
 	"spell_check": false,
-	"theme": "Soda Dark 3.sublime-theme",
 	"translate_tabs_to_spaces": true,
 	"trim_trailing_white_space_on_save": true,
 	"update_check": false,
