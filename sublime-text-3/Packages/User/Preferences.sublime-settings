@@ -26,14 +26,13 @@
 		"env"
 	],
 	"font_face": "Consolas",
-	"font_size": 16,
+	"font_size": 13,
 	"highlight_line": true,
 	"highlight_modified_tabs": false,
 	"hot_exit": false,
 	"ignored_packages":
 	[
-		"Vintage",
-		"RestructuredText"
+		"Vintage"
 	],
 	"remember_open_files": false,
 	"rulers":

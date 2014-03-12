@@ -29,6 +29,10 @@ if [ -d ~/bin ] ; then
     PATH=~/bin:"${PATH}"
 fi
 
+if [ -d ~/.local/bin ] ; then
+    PATH=~/.local/bin:"${PATH}"
+fi
+
 # Support for local ruby gems
 RUBY_GEM=$(ruby -rubygems -e "puts Gem.user_dir")/bin
 

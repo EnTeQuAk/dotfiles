@@ -1,0 +1,184 @@
+""" ==========================================================
+File:        WakaTime.py
+Description: Automatic time tracking for Sublime Text 2 and 3.
+Maintainer:  WakaTi.me <support@wakatime.com>
+Website:     https://www.wakati.me/
+==========================================================="""
+
+__version__ = '1.6.4'
+
+import sublime
+import sublime_plugin
+
+import glob
+import os
+import platform
+import sys
+import time
+import threading
+import uuid
+from os.path import expanduser, dirname, realpath, isfile, join, exists
+
+
+# globals
+ACTION_FREQUENCY = 2
+ST_VERSION = int(sublime.version())
+PLUGIN_DIR = dirname(realpath(__file__))
+API_CLIENT = '%s/packages/wakatime/wakatime-cli.py' % PLUGIN_DIR
+SETTINGS_FILE = 'WakaTime.sublime-settings'
+SETTINGS = {}
+LAST_ACTION = {
+    'time': 0,
+    'file': None,
+    'is_write': False,
+}
+HAS_SSL = False
+LOCK = threading.RLock()
+
+# check if we have SSL support
+try:
+    import ssl
+    import socket
+    socket.ssl
+    HAS_SSL = True
+except (ImportError, AttributeError):
+    from subprocess import Popen
+
+if HAS_SSL:
+    # import wakatime package
+    sys.path.insert(0, join(PLUGIN_DIR, 'packages', 'wakatime'))
+    import wakatime
+
+
+def prompt_api_key():
+    global SETTINGS
+    if not SETTINGS.get('api_key'):
+        def got_key(text):
+            if text:
+                SETTINGS.set('api_key', str(text))
+                sublime.save_settings(SETTINGS_FILE)
+        window = sublime.active_window()
+        if window:
+            window.show_input_panel('[WakaTime] Enter your wakatime.com api key:', '', got_key, None, None)
+            return True
+        else:
+            print('[WakaTime] Error: Could not prompt for api key because no window found.')
+    return False
+
+
+def python_binary():
+    if platform.system() == 'Windows':
+        try:
+            Popen(['pythonw', '--version'])
+            return 'pythonw'
+        except:
+            for path in glob.iglob('/python*'):
+                if exists(realpath(join(path, 'pythonw.exe'))):
+                    return realpath(join(path, 'pythonw'))
+            return None
+    return 'python'
+
+
+def enough_time_passed(now, last_time):
+    if now - last_time > ACTION_FREQUENCY * 60:
+        return True
+    return False
+
+
+def handle_action(view, is_write=False):
+    global LOCK, LAST_ACTION
+    with LOCK:
+        target_file = view.file_name()
+        if target_file:
+            thread = SendActionThread(target_file, is_write=is_write)
+            thread.start()
+            LAST_ACTION = {
+                'file': target_file,
+                'time': time.time(),
+                'is_write': is_write,
+            }
+
+
+class SendActionThread(threading.Thread):
+
+    def __init__(self, target_file, is_write=False, force=False):
+        threading.Thread.__init__(self)
+        self.target_file = target_file
+        self.is_write = is_write
+        self.force = force
+        self.debug = SETTINGS.get('debug')
+        self.api_key = SETTINGS.get('api_key', '')
+        self.ignore = SETTINGS.get('ignore', [])
+        self.last_action = LAST_ACTION
+
+    def run(self):
+        if self.target_file:
+            self.timestamp = time.time()
+            if self.force or (self.is_write and not self.last_action['is_write']) or self.target_file != self.last_action['file'] or enough_time_passed(self.timestamp, self.last_action['time']):
+                self.send()
+
+    def send(self):
+        if not self.api_key:
+            print('[WakaTime] Error: missing api key.')
+            return
+        ua = 'sublime/%d sublime-wakatime/%s' % (ST_VERSION, __version__)
+        cmd = [
+            API_CLIENT,
+            '--file', self.target_file,
+            '--time', str('%f' % self.timestamp),
+            '--plugin', ua,
+            '--key', str(bytes.decode(self.api_key.encode('utf8'))),
+        ]
+        if self.is_write:
+            cmd.append('--write')
+        for pattern in self.ignore:
+            cmd.extend(['--ignore', pattern])
+        if self.debug:
+            cmd.append('--verbose')
+        if HAS_SSL:
+            if self.debug:
+                print(cmd)
+            code = wakatime.main(cmd)
+            if code != 0:
+                print('[WakaTime] Error: Response code %d from wakatime package.' % code)
+        else:
+            python = python_binary()
+            if python:
+                cmd.insert(0, python)
+                if self.debug:
+                    print(cmd)
+                if platform.system() == 'Windows':
+                    Popen(cmd, shell=False)
+                else:
+                    with open(join(expanduser('~'), '.wakatime.log'), 'a') as stderr:
+                        Popen(cmd, stderr=stderr)
+            else:
+                print('[WakaTime] Error: Unable to find python binary.')
+
+
+def plugin_loaded():
+    global SETTINGS
+    SETTINGS = sublime.load_settings(SETTINGS_FILE)
+    after_loaded()
+
+
+def after_loaded():
+    if not prompt_api_key():
+        sublime.set_timeout(after_loaded, 500)
+
+
+# need to call plugin_loaded because only ST3 will auto-call it
+if ST_VERSION < 3000:
+    plugin_loaded()
+
+
+class WakatimeListener(sublime_plugin.EventListener):
+
+    def on_post_save(self, view):
+        handle_action(view, is_write=True)
+
+    def on_activated(self, view):
+        handle_action(view)
+
+    def on_modified(self, view):
+        handle_action(view)

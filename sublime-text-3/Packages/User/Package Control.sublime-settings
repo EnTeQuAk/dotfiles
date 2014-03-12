@@ -1,17 +1,19 @@
 {
 	"installed_packages":
 	[
+		"EditorConfig",
 		"Jinja2",
 		"lispindent",
 		"LiveReload",
-		"MaxPane",
 		"Origami",
 		"Package Control",
 		"Pretty JSON",
 		"SearchInProject",
 		"StickySearch",
 		"SublimeGit",
+		"SublimeLinter",
 		"SublimeREPL",
-		"SublimeReStructuredText"
+		"SublimeReStructuredText",
+		"WakaTime"
 	]
 }
