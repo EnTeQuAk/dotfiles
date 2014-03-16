@@ -56,6 +56,7 @@
 
 [branch]
 	autosetupmerge = true
+  mergeoptions = --no-commit --no-ff
 
 [push]
 	default = current
