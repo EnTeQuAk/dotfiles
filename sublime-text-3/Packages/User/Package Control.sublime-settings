@@ -2,21 +2,25 @@
 	"installed_packages":
 	[
 		"Alignment",
+		"Djaneiro",
 		"Gist",
 		"GitGutter",
+		"GoSublime",
 		"Jinja2",
 		"lispindent",
 		"LiveReload",
-		"MaxPane",
+		"Monokai Extended",
 		"Origami",
 		"Package Control",
 		"Pretty JSON",
-		"SearchInProject",
+		"Search in Project",
 		"Solarized Color Scheme",
 		"StickySearch",
 		"SublimeGit",
+		"SublimeLinter",
 		"SublimeREPL",
 		"SublimeReStructuredText",
-		"Theme - Soda"
+		"Theme - Soda",
+		"WakaTime"
 	]
 }
