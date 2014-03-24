@@ -1,11 +1,13 @@
 {
 	"installed_packages":
 	[
-		"Alignment",
+		"AlignTab",
 		"Djaneiro",
 		"Gist",
 		"GitGutter",
 		"GoSublime",
+		"HTML5",
+		"Indent XML",
 		"Jinja2",
 		"lispindent",
 		"LiveReload",
@@ -13,6 +15,7 @@
 		"Origami",
 		"Package Control",
 		"Pretty JSON",
+		"Python Imports Sorter",
 		"Search in Project",
 		"Solarized Color Scheme",
 		"StickySearch",

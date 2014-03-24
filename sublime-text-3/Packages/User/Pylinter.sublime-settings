@@ -1,0 +1,10 @@
+{
+    // Show different icons for errors, warnings, etc.
+    "use_icons": true,
+
+    // Automatically run Pylinter when saving a Python document
+    "run_on_save": true,
+
+    // Don't hide pylint messages when moving the cursor
+    "message_stay": true
+}
