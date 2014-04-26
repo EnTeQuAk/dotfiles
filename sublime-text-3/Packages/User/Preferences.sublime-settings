@@ -37,9 +37,12 @@
 	"hot_exit": true,
 	"ignored_packages":
 	[
-		"RestructuredText",
 		"GoSublime",
-		"Vintage"
+		"Vintage",
+		"RestructuredText",
+		"GitGutter",
+		"Monokai Extended",
+		"Solarized Color Scheme"
 	],
 	"line_padding_bottom": 0,
 	"line_padding_top": 0,
