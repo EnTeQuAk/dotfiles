@@ -37,12 +37,11 @@
 	"hot_exit": true,
 	"ignored_packages":
 	[
-		"GoSublime",
+		"Solarized Color Scheme",
+		"GitGutter",
 		"Vintage",
 		"RestructuredText",
-		"GitGutter",
-		"Monokai Extended",
-		"Solarized Color Scheme"
+		"GoSublime"
 	],
 	"line_padding_bottom": 0,
 	"line_padding_top": 0,
