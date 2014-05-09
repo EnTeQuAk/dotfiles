@@ -93,6 +93,9 @@ export PYTHONDONTWRITEBYTECODE=1
 export LESS=FRSX
 
 
+export WINEARCH=win32
+
+
 # Alias definitions
 # -----------------
 
@@ -257,7 +260,7 @@ function workon_cwd {
     if [ $? == 0 ]; then
         # Find the repo root and check for virtualenv name override
         PROJECT_ROOT=$(pwd)
-        ENV_NAME=$(basename $(pwd))
+        ENV_NAME="$(basename $(pwd))"
         if [ -f "$PROJECT_ROOT/.venv" ]; then
             ENV_NAME=`cat "$PROJECT_ROOT/.venv"`
         fi
