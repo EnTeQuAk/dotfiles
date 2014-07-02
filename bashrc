@@ -53,12 +53,15 @@ export ANDROID_SDK_ROOT=/opt/android-sdk
 export PATH=$ANDROID_NDK_ROOT:$ANDROID_SDK_ROOT:$PATH
 export ANDROID_HOME=$ANDROID_SDK_ROOT
 
+if [ -d ${HOME}/Projects/homebrew ]; then
+	export PATH=${HOME}/Projects/homebrew/bin:${PATH}
+fi
+
 export PATH=$(npm bin):./node_modules/.bin:$PATH
 
 if [ -d ./node_modules ]; then
     export NODE_MODULES="./node_modules"
 fi
-
 
 # Global environment definitions
 # ==============================
