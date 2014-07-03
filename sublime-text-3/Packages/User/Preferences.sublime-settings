@@ -31,14 +31,14 @@
 		"__pycache__"
 	],
 	"font_face": "Consolas",
-	"font_size": 14.0,
+	"font_size": 12,
 	"highlight_line": true,
 	"highlight_modified_tabs": false,
 	"hot_exit": true,
 	"ignored_packages":
 	[
-		"RestructuredText",
 		"GoSublime",
+		"RestructuredText",
 		"Vintage"
 	],
 	"line_padding_bottom": 0,
@@ -58,5 +58,6 @@
 	"trim_trailing_white_space_on_save": true,
 	"update_check": false,
 	"use_tab_stops": true,
-	"wide_caret": true
+	"wide_caret": true,
+	"word_wrap": "auto"
 }

@@ -2,10 +2,11 @@
 File:        WakaTime.py
 Description: Automatic time tracking for Sublime Text 2 and 3.
 Maintainer:  WakaTime <support@wakatime.com>
-Website:     https://www.wakatime.com/
+License:     BSD, see LICENSE for more details.
+Website:     https://wakatime.com/
 ==========================================================="""
 
-__version__ = '1.6.5'
+__version__ = '2.0.5'
 
 import sublime
 import sublime_plugin
@@ -17,7 +18,7 @@ import sys
 import time
 import threading
 import uuid
-from os.path import expanduser, dirname, realpath, isfile, join, exists
+from os.path import expanduser, dirname, basename, realpath, isfile, join, exists
 
 
 # globals
@@ -52,7 +53,9 @@ if HAS_SSL:
 
 def prompt_api_key():
     global SETTINGS
-    if not SETTINGS.get('api_key'):
+    if SETTINGS.get('api_key'):
+        return True
+    else:
         def got_key(text):
             if text:
                 SETTINGS.set('api_key', str(text))
@@ -85,12 +88,23 @@ def enough_time_passed(now, last_time):
     return False
 
 
+def find_project_name_from_folders(folders):
+    for folder in folders:
+        for file_name in os.listdir(folder):
+            if file_name.endswith('.sublime-project'):
+                return file_name.replace('.sublime-project', '', 1)
+    return None
+
+
 def handle_action(view, is_write=False):
     global LOCK, LAST_ACTION
     with LOCK:
         target_file = view.file_name()
         if target_file:
-            thread = SendActionThread(target_file, is_write=is_write)
+            project = view.window().project_file_name() if hasattr(view.window(), 'project_file_name') else None
+            if project:
+                project = basename(project).replace('.sublime-project', '', 1)
+            thread = SendActionThread(target_file, is_write=is_write, project=project, folders=view.window().folders())
             thread.start()
             LAST_ACTION = {
                 'file': target_file,
@@ -101,10 +115,12 @@ def handle_action(view, is_write=False):
 
 class SendActionThread(threading.Thread):
 
-    def __init__(self, target_file, is_write=False, force=False):
+    def __init__(self, target_file, is_write=False, project=None, folders=None, force=False):
         threading.Thread.__init__(self)
         self.target_file = target_file
         self.is_write = is_write
+        self.project = project
+        self.folders = folders
         self.force = force
         self.debug = SETTINGS.get('debug')
         self.api_key = SETTINGS.get('api_key', '')
@@ -131,13 +147,19 @@ class SendActionThread(threading.Thread):
         ]
         if self.is_write:
             cmd.append('--write')
+        if self.project:
+            cmd.extend(['--project', self.project])
+        elif self.folders:
+            project_name = find_project_name_from_folders(self.folders)
+            if project_name:
+                cmd.extend(['--project', project_name])
         for pattern in self.ignore:
             cmd.extend(['--ignore', pattern])
         if self.debug:
             cmd.append('--verbose')
         if HAS_SSL:
             if self.debug:
-                print(cmd)
+                print('[WakaTime] %s' % ' '.join(cmd))
             code = wakatime.main(cmd)
             if code != 0:
                 print('[WakaTime] Error: Response code %d from wakatime package.' % code)
@@ -146,7 +168,7 @@ class SendActionThread(threading.Thread):
             if python:
                 cmd.insert(0, python)
                 if self.debug:
-                    print(cmd)
+                    print('[WakaTime] %s' % ' '.join(cmd))
                 if platform.system() == 'Windows':
                     Popen(cmd, shell=False)
                 else:
@@ -158,6 +180,7 @@ class SendActionThread(threading.Thread):
 
 def plugin_loaded():
     global SETTINGS
+    print('[WakaTime] Initializing WakaTime plugin v%s' % __version__)
     SETTINGS = sublime.load_settings(SETTINGS_FILE)
     after_loaded()
 

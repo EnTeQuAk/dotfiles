@@ -3,6 +3,37 @@ History
 -------
 
 
+2.0.3 (2014-06-18)
+++++++++++++++++++
+
+- use project from command line arg when no revision control project is found
+
+
+2.0.2 (2014-06-09)
+++++++++++++++++++
+
+- include python3.2 compatible versions of simplejson, pytz, and tzlocal
+- disable offline logging when Python was not compiled with sqlite3 module
+
+
+2.0.1 (2014-05-26)
+++++++++++++++++++
+
+- fix bug in queue preventing actions with NULL values from being purged
+
+
+2.0.0 (2014-05-25)
+++++++++++++++++++
+
+- offline time logging using sqlite3 to queue editor events
+
+
+1.0.2 (2014-05-06)
+++++++++++++++++++
+
+- ability to set project from command line argument
+
+
 1.0.1 (2014-03-05)
 ++++++++++++++++++
 
