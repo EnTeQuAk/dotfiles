@@ -53,12 +53,15 @@ export ANDROID_SDK_ROOT=/opt/android-sdk
 export PATH=$ANDROID_NDK_ROOT:$ANDROID_SDK_ROOT:$PATH
 export ANDROID_HOME=$ANDROID_SDK_ROOT
 
+if [ -d ${HOME}/Projects/homebrew ]; then
+	export PATH=${HOME}/Projects/homebrew/bin:${PATH}
+fi
+
 export PATH=$(npm bin):./node_modules/.bin:$PATH
 
 if [ -d ./node_modules ]; then
     export NODE_MODULES="./node_modules"
 fi
-
 
 # Global environment definitions
 # ==============================
@@ -91,6 +94,9 @@ export IGNOREEOF=1
 
 export PYTHONDONTWRITEBYTECODE=1
 export LESS=FRSX
+
+
+export WINEARCH=win32
 
 
 # Alias definitions
@@ -257,7 +263,7 @@ function workon_cwd {
     if [ $? == 0 ]; then
         # Find the repo root and check for virtualenv name override
         PROJECT_ROOT=$(pwd)
-        ENV_NAME=$(basename $(pwd))
+        ENV_NAME="$(basename $(pwd))"
         if [ -f "$PROJECT_ROOT/.venv" ]; then
             ENV_NAME=`cat "$PROJECT_ROOT/.venv"`
         fi
