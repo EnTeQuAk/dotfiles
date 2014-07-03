@@ -3,6 +3,40 @@ History
 -------
 
 
+2.0.5 (2014-06-18)
+++++++++++++++++++
+
+- upgrade external wakatime package to v2.0.3
+- use project name from sublime-project file when no revision control project found
+
+
+2.0.4 (2014-06-09)
+++++++++++++++++++
+
+- upgrade external wakatime package to v2.0.2
+- disable offline logging when Python not compiled with sqlite3 module
+
+
+2.0.3 (2014-05-26)
+++++++++++++++++++
+
+- upgrade external wakatime package to v2.0.1
+- fix bug in queue preventing completed tasks from being purged
+
+
+2.0.2 (2014-05-26)
+++++++++++++++++++
+
+- disable syncing offline time until bug fixed
+
+
+2.0.1 (2014-05-25)
+++++++++++++++++++
+
+- upgrade external wakatime package to v2.0.0
+- offline time logging using sqlite3 to queue editor events
+
+
 1.6.5 (2014-03-05)
 ++++++++++++++++++
 

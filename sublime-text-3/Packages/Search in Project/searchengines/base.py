@@ -33,11 +33,17 @@ class Base:
         """
         command_line = self._command_line(query, folders)
         print("Running: %s" % command_line)
-        pipe = subprocess.Popen(command_line, shell=True, stdout=subprocess.PIPE)
+        pipe = subprocess.Popen(command_line,
+            shell=True,
+            executable=self.settings.get('search_in_project_shell', None),
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE
+            )
         output, error = pipe.communicate()
+
         if pipe.returncode != 0:
-            return None
-        return self._parse_output(self._sanitize_output(output).strip())
+            raise RuntimeError(self._sanitize_output(error))
+        return self._parse_output(self._sanitize_output(output))
 
     def _command_line(self, query, folders):
         """
@@ -51,7 +57,7 @@ class Base:
         ] + folders)
 
     def _sanitize_output(self, output):
-        return output.decode('utf-8')
+        return output.decode('utf-8', 'ignore').strip()
 
     def _parse_output(self, output):
         lines = output.split("\n")
