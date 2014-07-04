@@ -37,11 +37,11 @@
 	"hot_exit": true,
 	"ignored_packages":
 	[
-		"GitGutter",
-		"Vintage",
 		"GoSublime",
 		"Solarized Color Scheme",
-		"RestructuredText"
+		"GitGutter",
+		"RestructuredText",
+		"Vintage"
 	],
 	"line_padding_bottom": 0,
 	"line_padding_top": 0,
