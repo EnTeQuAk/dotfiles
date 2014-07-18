@@ -31,16 +31,16 @@
 		"__pycache__"
 	],
 	"font_face": "Consolas",
-	"font_size": 13.0,
+	"font_size": 12.0,
 	"highlight_line": true,
 	"highlight_modified_tabs": false,
 	"hot_exit": false,
 	"ignored_packages":
 	[
-		"GoSublime",
-		"Solarized Color Scheme",
-		"GitGutter",
 		"RestructuredText",
+		"Solarized Color Scheme",
+		"GoSublime",
+		"GitGutter",
 		"Vintage"
 	],
 	"line_padding_bottom": 0,
