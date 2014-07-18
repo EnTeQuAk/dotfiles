@@ -28,7 +28,8 @@
 		"collected_static",
 		"CVS",
 		"env",
-		"__pycache__"
+		"__pycache__",
+		".sass-cache"
 	],
 	"font_face": "Consolas",
 	"font_size": 12.0,
