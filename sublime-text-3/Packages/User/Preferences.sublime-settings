@@ -45,10 +45,10 @@
 	"hot_exit": false,
 	"ignored_packages":
 	[
-		"Vintage",
-		"Solarized Color Scheme",
 		"GitGutter",
+		"Solarized Color Scheme",
 		"GoSublime",
+		"Vintage",
 		"RestructuredText"
 	],
 	"line_padding_bottom": 0,
