@@ -2,6 +2,13 @@
 	"auto_complete": false,
 	"auto_complete_commit_on_tab": true,
 	"auto_complete_delay": 20,
+	"auto_complete_triggers":
+	[
+		{
+			"characters": ".",
+			"selector": "source"
+		}
+	],
 	"auto_complete_with_fields": true,
 	"caret_style": "solid",
 	"color_scheme": "Packages/Monokai Extended/Monokai Extended.tmTheme",
@@ -28,7 +35,8 @@
 		"collected_static",
 		"CVS",
 		"env",
-		"__pycache__"
+		"__pycache__",
+		"htmlcov"
 	],
 	"font_face": "Consolas",
 	"font_size": 13.0,
@@ -37,11 +45,11 @@
 	"hot_exit": false,
 	"ignored_packages":
 	[
-		"GoSublime",
-		"Solarized Color Scheme",
+		"Vintage",
 		"GitGutter",
 		"RestructuredText",
-		"Vintage"
+		"GoSublime",
+		"Solarized Color Scheme"
 	],
 	"line_padding_bottom": 0,
 	"line_padding_top": 0,
