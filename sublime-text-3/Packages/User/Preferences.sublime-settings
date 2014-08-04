@@ -36,20 +36,20 @@
 		"CVS",
 		"env",
 		"__pycache__",
-		"htmlcov"
+		".sass-cache"
 	],
 	"font_face": "Consolas",
-	"font_size": 13.0,
+	"font_size": 11.0,
 	"highlight_line": true,
 	"highlight_modified_tabs": false,
 	"hot_exit": false,
 	"ignored_packages":
 	[
 		"Vintage",
+		"Solarized Color Scheme",
 		"GitGutter",
-		"RestructuredText",
 		"GoSublime",
-		"Solarized Color Scheme"
+		"RestructuredText"
 	],
 	"line_padding_bottom": 0,
 	"line_padding_top": 0,
