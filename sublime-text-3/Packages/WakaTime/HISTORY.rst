@@ -3,6 +3,27 @@ History
 -------
 
 
+2.0.10 (2014-08-29)
+++++++++++++++++++
+
+- upgrade external wakatime package to v2.0.8
+- supress output from svn command
+
+
+2.0.9 (2014-08-27)
+++++++++++++++++++
+
+- upgrade external wakatime package to v2.0.7
+- fix support for subversion projects on Mac OS X
+
+
+2.0.8 (2014-08-07)
+++++++++++++++++++
+
+- upgrade external wakatime package to v2.0.6
+- fix unicode bug by encoding json POST data
+
+
 2.0.7 (2014-07-25)
 ++++++++++++++++++
 
