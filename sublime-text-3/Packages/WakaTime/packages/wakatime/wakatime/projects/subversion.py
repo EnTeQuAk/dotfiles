@@ -32,6 +32,7 @@ except NameError:
 
 
 class Subversion(BaseProject):
+    binary_location = None
 
     def process(self):
         return self._find_project_base(self.path)
@@ -44,13 +45,32 @@ class Subversion(BaseProject):
             unicode(os.path.basename(self.base))
         return None
 
+    def _find_binary(self):
+        if self.binary_location:
+            return self.binary_location
+        locations = [
+            'svn',
+            '/usr/bin/svn',
+            '/usr/local/bin/svn',
+        ]
+        for location in locations:
+            with open(os.devnull, 'wb') as DEVNULL:
+                try:
+                    Popen([location, '--version'], stdout=DEVNULL, stderr=DEVNULL)
+                    self.binary_location = location
+                    return location
+                except:
+                    pass
+        self.binary_location = 'svn'
+        return 'svn'
+
     def _get_info(self, path):
         info = OrderedDict()
         stdout = None
         try:
             os.environ['LANG'] = 'en_US'
             stdout, stderr = Popen([
-                'svn', 'info', os.path.realpath(path)
+                self._find_binary(), 'info', os.path.realpath(path)
             ], stdout=PIPE, stderr=PIPE).communicate()
         except OSError:
             pass

@@ -3,6 +3,36 @@ History
 -------
 
 
+2.0.8 (2014-08-29)
+++++++++++++++++++
+
+- supress output from svn command
+
+
+2.0.7 (2014-08-27)
+++++++++++++++++++
+
+- find svn binary location from common install directories
+
+
+2.0.6 (2014-08-07)
+++++++++++++++++++
+
+- encode json data as str when passing to urllib
+
+
+2.0.5 (2014-07-25)
+++++++++++++++++++
+
+- option in .wakatime.cfg to obfuscate file names
+
+
+2.0.4 (2014-07-25)
+++++++++++++++++++
+
+- use unique logger namespace to prevent collisions in shared plugin environments
+
+
 2.0.3 (2014-06-18)
 ++++++++++++++++++
 
