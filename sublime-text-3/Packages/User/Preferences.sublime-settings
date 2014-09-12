@@ -46,11 +46,15 @@
 	"hot_exit": false,
 	"ignored_packages":
 	[
+		"Solarized Color Scheme",
+		"GitGutter",
 		"GoSublime",
 		"Vintage",
-		"GitGutter",
-		"RestructuredText",
-		"Solarized Color Scheme"
+		"RestructuredText"
+	],
+	"indent_guide_options":
+	[
+		"draw_active"
 	],
 	"line_padding_bottom": 0,
 	"line_padding_top": 0,
@@ -70,9 +74,5 @@
 	"update_check": false,
 	"use_tab_stops": true,
 	"wide_caret": true,
-	"word_wrap": "auto",
-	"indent_guide_options":
-	[
-		"draw_active"
-	],
+	"word_wrap": "auto"
 }
