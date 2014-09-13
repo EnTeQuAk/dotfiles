@@ -46,15 +46,11 @@
 	"hot_exit": false,
 	"ignored_packages":
 	[
+		"Vintage",
 		"Solarized Color Scheme",
 		"GitGutter",
-		"GoSublime",
-		"Vintage",
-		"RestructuredText"
-	],
-	"indent_guide_options":
-	[
-		"draw_active"
+		"RestructuredText",
+		"GoSublime"
 	],
 	"line_padding_bottom": 0,
 	"line_padding_top": 0,
