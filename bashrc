@@ -246,6 +246,10 @@ export VIRTUALENVWRAPPER_PYTHON=/usr/bin/python
 export WORKON_HOME=$HOME/.virtualenvs
 [ -r /usr/bin/virtualenvwrapper_lazy.sh  ] && . /usr/bin/virtualenvwrapper_lazy.sh
 [ -r /usr/local/bin/virtualenvwrapper_lazy.sh  ] && . /usr/local/bin/virtualenvwrapper_lazy.sh
+
+# For OSX with local homebrew
+[ -r ~/Projects/homebrew/bin/virtualenvwrapper_lazy.sh  ] && . ~/Projects/homebrew/bin/virtualenvwrapper_lazy.sh
+
 export VIRTUAL_ENV_DISABLE_PROMPT=1
 
 export PIP_VIRTUALENV_BASE=$WORKON_HOME
