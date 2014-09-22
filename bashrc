@@ -339,9 +339,3 @@ fi
 export PATH=/tmp/packerbuild-1000/sencha-cmd/sencha-cmd/pkg/sencha-cmd/opt/Sencha/Cmd/4.0.1.45:$PATH
 
 export SENCHA_CMD_3_0_0="/tmp/packerbuild-1000/sencha-cmd/sencha-cmd/pkg/sencha-cmd/opt/Sencha/Cmd/4.0.1.45"
-
-
-if [[ "`uname`" == 'Darwin' ]]; then
-    export PYTHONPATH=$PYTHONPATH:$(brew --prefix)/lib/python2.7/site-packages
-    export PYTHONPATH=$PYTHONPATH:$(brew --prefix)/lib/python3.4/site-packages
-fi
