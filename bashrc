@@ -259,6 +259,11 @@ export PIP_RESPECT_VIRTUALENV=true
 # Python development
 export PYTHONSTARTUP="$HOME/.pythonrc.py"
 
+if [ -e `which brew` ]; then
+    export PYTHONPATH=$PYTHONPATH:$(brew --prefix)/lib/python2.7/site-packages
+    export PYTHONPATH=$PYTHONPATH:$(brew --prefix)/lib/python3.4/site-packages
+fi
+
 # Automatically a Projects virtual environments based on the
 # directory name of the project. Virtual environment name will be identified
 # by placing a .venv file in the project root with a virtualenv name in it.
