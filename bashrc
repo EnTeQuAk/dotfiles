@@ -259,10 +259,6 @@ export PIP_RESPECT_VIRTUALENV=true
 # Python development
 export PYTHONSTARTUP="$HOME/.pythonrc.py"
 
-if [ -e `which brew` ]; then
-    export PYTHONPATH=$PYTHONPATH:$(brew --prefix)/lib/python2.7/site-packages
-    export PYTHONPATH=$PYTHONPATH:$(brew --prefix)/lib/python3.4/site-packages
-fi
 
 # Automatically a Projects virtual environments based on the
 # directory name of the project. Virtual environment name will be identified
@@ -343,3 +339,9 @@ fi
 export PATH=/tmp/packerbuild-1000/sencha-cmd/sencha-cmd/pkg/sencha-cmd/opt/Sencha/Cmd/4.0.1.45:$PATH
 
 export SENCHA_CMD_3_0_0="/tmp/packerbuild-1000/sencha-cmd/sencha-cmd/pkg/sencha-cmd/opt/Sencha/Cmd/4.0.1.45"
+
+
+if [[ "`uname`" == 'Darwin' ]]; then
+    export PYTHONPATH=$PYTHONPATH:$(brew --prefix)/lib/python2.7/site-packages
+    export PYTHONPATH=$PYTHONPATH:$(brew --prefix)/lib/python3.4/site-packages
+fi
