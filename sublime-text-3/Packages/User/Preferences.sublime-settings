@@ -49,12 +49,10 @@
 		"Solarized Color Scheme",
 		"GitGutter",
 		"GoSublime",
-		"Vintage",
-		"RestructuredText"
-	],
-	"indent_guide_options":
-	[
-		"draw_active"
+		"RestructuredText",
+		"GitGutter",
+		"Solarized Color Scheme",
+		"Vintage"
 	],
 	"line_padding_bottom": 0,
 	"line_padding_top": 0,
