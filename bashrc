@@ -317,8 +317,6 @@ interact +++ return"; }
 # Export the promt with advanced vcs information
 export PS1='\[\e[33;1m\]$(_vcprompt)\[\e[0m\]\[\e[32;1m\]\w> \[\e[0m\]'
 
-export PIP_REQUIRE_VIRTUALENV=false
-
 # integrate with ksshaskpass
 if [ -f "/usr/bin/ksshaskpass" ]; then
     export SSH_ASKPASS="/usr/bin/ksshaskpass"
