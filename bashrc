@@ -246,6 +246,10 @@ export VIRTUALENVWRAPPER_PYTHON=/usr/bin/python
 export WORKON_HOME=$HOME/.virtualenvs
 [ -r /usr/bin/virtualenvwrapper_lazy.sh  ] && . /usr/bin/virtualenvwrapper_lazy.sh
 [ -r /usr/local/bin/virtualenvwrapper_lazy.sh  ] && . /usr/local/bin/virtualenvwrapper_lazy.sh
+
+# For OSX with local homebrew
+[ -r ~/Projects/homebrew/bin/virtualenvwrapper_lazy.sh  ] && . ~/Projects/homebrew/bin/virtualenvwrapper_lazy.sh
+
 export VIRTUAL_ENV_DISABLE_PROMPT=1
 
 export PIP_VIRTUALENV_BASE=$WORKON_HOME
@@ -254,6 +258,7 @@ export PIP_RESPECT_VIRTUALENV=true
 
 # Python development
 export PYTHONSTARTUP="$HOME/.pythonrc.py"
+
 
 # Automatically a Projects virtual environments based on the
 # directory name of the project. Virtual environment name will be identified
@@ -317,8 +322,6 @@ interact +++ return"; }
 # Export the promt with advanced vcs information
 export PS1='\[\e[33;1m\]$(_vcprompt)\[\e[0m\]\[\e[32;1m\]\w> \[\e[0m\]'
 
-export PIP_REQUIRE_VIRTUALENV=false
-
 # integrate with ksshaskpass
 if [ -f "/usr/bin/ksshaskpass" ]; then
     export SSH_ASKPASS="/usr/bin/ksshaskpass"
@@ -336,3 +339,6 @@ fi
 export PATH=/tmp/packerbuild-1000/sencha-cmd/sencha-cmd/pkg/sencha-cmd/opt/Sencha/Cmd/4.0.1.45:$PATH
 
 export SENCHA_CMD_3_0_0="/tmp/packerbuild-1000/sencha-cmd/sencha-cmd/pkg/sencha-cmd/opt/Sencha/Cmd/4.0.1.45"
+
+export LC_ALL=en_US.UTF-8
+export LANG=en_US.UTF-8
