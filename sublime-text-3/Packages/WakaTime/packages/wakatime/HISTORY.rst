@@ -3,6 +3,18 @@ History
 -------
 
 
+2.1.1 (2014-09-30)
+++++++++++++++++++
+
+- fix bug where binary file opened as utf-8
+
+
+2.1.0 (2014-09-30)
+++++++++++++++++++
+
+- python3 compatibility changes
+
+
 2.0.8 (2014-08-29)
 ++++++++++++++++++
 

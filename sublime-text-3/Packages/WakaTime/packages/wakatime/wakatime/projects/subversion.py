@@ -15,6 +15,7 @@ import platform
 from subprocess import Popen, PIPE
 
 from .base import BaseProject
+from ..compat import u, open
 try:
     from collections import OrderedDict
 except ImportError:
@@ -24,13 +25,6 @@ except ImportError:
 log = logging.getLogger('WakaTime')
 
 
-# str is unicode in Python3
-try:
-    unicode
-except NameError:
-    unicode = str
-
-
 class Subversion(BaseProject):
     binary_location = None
 
@@ -38,11 +32,11 @@ class Subversion(BaseProject):
         return self._find_project_base(self.path)
 
     def name(self):
-        return unicode(self.info['Repository Root'].split('/')[-1])
+        return u(self.info['Repository Root'].split('/')[-1])
 
     def branch(self):
         if self.base:
-            unicode(os.path.basename(self.base))
+            u(os.path.basename(self.base))
         return None
 
     def _find_binary(self):
