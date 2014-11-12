@@ -3,6 +3,26 @@ History
 -------
 
 
+2.0.15 (2014-11-10)
+++++++++++++++++++
+
+- upgrade external wakatime package to v2.1.3
+- correctly detect branch for subversion projects
+
+
+2.0.14 (2014-10-14)
+++++++++++++++++++
+
+- popup error message if Python binary not found
+
+
+2.0.13 (2014-10-07)
+++++++++++++++++++
+
+- upgrade external wakatime package to v2.1.2
+- still log heartbeat when something goes wrong while reading num lines in file
+
+
 2.0.12 (2014-09-30)
 ++++++++++++++++++
 
