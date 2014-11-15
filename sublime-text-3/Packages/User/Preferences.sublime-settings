@@ -11,7 +11,6 @@
 	],
 	"auto_complete_with_fields": true,
 	"caret_style": "solid",
-	"color_scheme": "Packages/Monokai Extended/Monokai Extended.tmTheme",
 	"enable_telemetry": true,
 	"ensure_newline_at_eof_on_save": true,
 	"find_selected_text": true,
@@ -46,11 +45,11 @@
 	"hot_exit": false,
 	"ignored_packages":
 	[
-		"GoSublime",
+		"RestructuredText",
 		"GitGutter",
 		"Solarized Color Scheme",
-		"Vintage",
-		"RestructuredText"
+		"GoSublime",
+		"Vintage"
 	],
 	"line_padding_bottom": 0,
 	"line_padding_top": 0,
@@ -64,7 +63,10 @@
 	"show_minimap": false,
 	"show_tab_close_buttons": false,
 	"spell_check": false,
-	"theme": "Soda Dark 3.sublime-theme",
+//	"theme": "Soda Dark 3.sublime-theme",
+	"color_scheme": "Packages/Monokai Extended/Monokai Extended.tmTheme",
+    "theme": "Spacegray Eighties.sublime-theme",
+//    "color_scheme": "Packages/Theme - Spacegray/base16-eighties.dark.tmTheme",
 	"translate_tabs_to_spaces": true,
 	"trim_trailing_white_space_on_save": true,
 	"update_check": false,
