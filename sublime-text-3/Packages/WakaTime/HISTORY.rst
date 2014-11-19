@@ -3,6 +3,20 @@ History
 -------
 
 
+2.0.17 (2014-11-18)
+++++++++++++++++++
+
+- upgrade external wakatime package to v2.1.6
+- fix list index error when detecting subversion project
+
+
+2.0.16 (2014-11-12)
+++++++++++++++++++
+
+- upgrade external wakatime package to v2.1.4
+- when Python was not compiled with https support, log an error to the log file
+
+
 2.0.15 (2014-11-10)
 ++++++++++++++++++
 

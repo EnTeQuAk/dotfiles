@@ -47,10 +47,10 @@
 	"ignored_packages":
 	[
 		"RestructuredText",
-		"GitGutter",
-		"Solarized Color Scheme",
+		"Vintage",
 		"GoSublime",
-		"Vintage"
+		"Solarized Color Scheme",
+		"GitGutter"
 	],
 	"line_padding_bottom": 0,
 	"line_padding_top": 0,
