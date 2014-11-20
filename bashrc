@@ -57,10 +57,11 @@ if [ -d ${HOME}/Projects/homebrew ]; then
 	export PATH=${HOME}/Projects/homebrew/bin:${PATH}
 fi
 
-export PATH=$(npm bin):./node_modules/.bin:$PATH
+export PATH=$(npm bin):$PATH
 
 if [ -d ./node_modules ]; then
     export NODE_MODULES="./node_modules"
+    export PATH=./node_modules/.bin:$PATH
 fi
 
 # Global environment definitions
@@ -127,7 +128,7 @@ alias ll='ls -lFh' # Long view, no hidden
 
 # Helpers
 alias grep='grep' # Always highlight grep search term
-alias ping='ping -c 5' # Pings with 5 packets, not unlimited
+#alias ping='ping -c 5' # Pings with 5 packets, not unlimited
 alias df='df -h' # Disk free, in gigabytes, not bytes
 alias du='du -h -c' # Calculate total disk usage for a folder
 
