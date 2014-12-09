@@ -3,6 +3,29 @@ History
 -------
 
 
+2.0.20 (2014-12-05)
+++++++++++++++++++
+
+- upgrade external wakatime package to v2.1.9
+- fix bug preventing offline heartbeats from being purged after uploaded
+
+
+2.0.19 (2014-12-04)
+++++++++++++++++++
+
+- upgrade external wakatime package to v2.1.8
+- fix UnicodeDecodeError when building user agent string
+- handle case where response is None
+
+
+2.0.18 (2014-11-30)
+++++++++++++++++++
+
+- upgrade external wakatime package to v2.1.7
+- upgrade pygments to v2.0.1
+- always log an error when api key is incorrect
+
+
 2.0.17 (2014-11-18)
 ++++++++++++++++++
 

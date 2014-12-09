@@ -15,6 +15,7 @@ import logging
 import os
 import traceback
 from time import sleep
+
 try:
     import sqlite3
     HAS_SQL = True
