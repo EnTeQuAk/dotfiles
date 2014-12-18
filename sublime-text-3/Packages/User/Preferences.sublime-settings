@@ -71,5 +71,10 @@
 	"update_check": false,
 	"use_tab_stops": true,
 	"wide_caret": true,
-	"word_wrap": "auto"
+	"word_wrap": "auto",
+	"indent_guide_options":
+	[
+		"draw_normal",
+		"draw_active"
+	],
 }
