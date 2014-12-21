@@ -53,6 +53,11 @@
 		"Vintage",
 		"SublimeLinter"
 	],
+	"indent_guide_options":
+	[
+		"draw_normal",
+		"draw_active"
+	],
 	"line_padding_bottom": 0,
 	"line_padding_top": 0,
 	"remember_open_files": false,
@@ -71,10 +76,5 @@
 	"update_check": false,
 	"use_tab_stops": true,
 	"wide_caret": true,
-	"word_wrap": "auto",
-	"indent_guide_options":
-	[
-		"draw_normal",
-		"draw_active"
-	],
+	"word_wrap": "auto"
 }
