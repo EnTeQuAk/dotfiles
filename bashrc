@@ -311,13 +311,14 @@ alias cd="venv_cd"
 export ARCHFLAGS="-arch x86_64"
 
 from() { expect -c "spawn -noecho python
-expect \">>> \"
-send \"from $*\r\"
-interact +++ return"; }
-import() { expect -c "spawn -noecho python
-expect \">>> \"
-send \"import $*\r\"
-interact +++ return"; }
+    expect \">>> \"
+    send \"from $*\r\"
+    interact +++ return"; }
+    import() { expect -c "spawn -noecho python
+    expect \">>> \"
+    send \"import $*\r\"
+    interact +++ return";
+}
 
 
 # Export the promt with advanced vcs information
@@ -336,10 +337,6 @@ fi
 
 # added by travis gem
 [ -f /home/ente/.travis/travis.sh ] && source /home/ente/.travis/travis.sh
-
-export PATH=/tmp/packerbuild-1000/sencha-cmd/sencha-cmd/pkg/sencha-cmd/opt/Sencha/Cmd/4.0.1.45:$PATH
-
-export SENCHA_CMD_3_0_0="/tmp/packerbuild-1000/sencha-cmd/sencha-cmd/pkg/sencha-cmd/opt/Sencha/Cmd/4.0.1.45"
 
 export LC_ALL=en_US.UTF-8
 export LANG=en_US.UTF-8
