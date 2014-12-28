@@ -50,8 +50,8 @@
 		"SublimeLinter",
 		"Solarized Color Scheme",
 		"GitGutter",
-		"GoSublime",
-		"RestructuredText"
+		"RestructuredText",
+		"GoSublime"
 	],
 	"indent_guide_options":
 	[
