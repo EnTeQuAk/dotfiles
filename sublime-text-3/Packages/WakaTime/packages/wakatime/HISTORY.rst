@@ -3,6 +3,30 @@ History
 -------
 
 
+3.0.3 (2014-12-25)
+++++++++++++++++++
+
+- detect JavaScript frameworks from script tags in Html template files
+
+
+3.0.2 (2014-12-25)
+++++++++++++++++++
+
+- detect frameworks from JavaScript and JSON files
+
+
+3.0.1 (2014-12-23)
+++++++++++++++++++
+
+- handle unknown language when parsing dependencies
+
+
+3.0.0 (2014-12-23)
+++++++++++++++++++
+
+- detect libraries and frameworks for C++, Java, .NET, PHP, and Python files
+
+
 2.1.11 (2014-12-22)
 +++++++++++++++++++
 

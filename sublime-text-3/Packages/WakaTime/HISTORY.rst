@@ -3,6 +3,39 @@ History
 -------
 
 
+3.0.4 (2014-12-26)
+++++++++++++++++++
+
+- fix bug causing plugin to not work in Sublime Text 2
+
+
+3.0.3 (2014-12-25)
+++++++++++++++++++
+
+- upgrade external wakatime package to v3.0.3
+- detect JavaScript frameworks from script tags in Html template files
+
+
+3.0.2 (2014-12-25)
+++++++++++++++++++
+
+- upgrade external wakatime package to v3.0.2
+- detect frameworks from JavaScript and JSON files
+
+
+3.0.1 (2014-12-23)
+++++++++++++++++++
+
+- parse use namespaces from php files
+
+
+3.0.0 (2014-12-23)
+++++++++++++++++++
+
+- upgrade external wakatime package to v3.0.1
+- detect libraries and frameworks for C++, Java, .NET, PHP, and Python files
+
+
 2.0.21 (2014-12-22)
 ++++++++++++++++++
 
