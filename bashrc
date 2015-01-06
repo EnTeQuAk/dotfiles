@@ -278,7 +278,7 @@ function workon_cwd {
             if [ -e "$WORKON_HOME/$ENV_NAME/bin/activate" ]; then
                 workon "$ENV_NAME" && export CD_VIRTUAL_ENV="$ENV_NAME"
 
-                MANAGE_PY=$(find "$PROJECT_ROOT" -name "manage.py" -type f)
+                MANAGE_PY=$(find "$PROJECT_ROOT" -not -path '*tox*' -name 'manage.py' -type f -print | head -n 1)
                 if [ -e "$MANAGE_PY" ]
                 then
                     alias django="python $MANAGE_PY"
