@@ -47,12 +47,8 @@
 	"ignored_packages":
 	[
 		"GitGutter",
-		"SublimeReStructuredText",
-		"GoSublime",
 		"RestructuredText",
-		"Vintage",
-		"SublimeLinter",
-		"Solarized Color Scheme"
+		"GoSublime"
 	],
 	"indent_guide_options":
 	[
