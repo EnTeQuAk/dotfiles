@@ -1,5 +1,5 @@
 install: install-bin install-vim install-vcprompt install-git install-hub \
-	install-bash install-pythonrc install-subl install-inputrc install-wtc
+	install-bash install-pythonrc install-subl install-inputrc install-wtc install-gnupg
 
 
 install-vim:
@@ -45,6 +45,10 @@ install-pythonrc:
 
 install-wtc:
 	curl http://github.com/lwe/whatthecommit/raw/master/whatthecommit -sLo ~/bin/wtc && chmod +x ~/bin/wtc
+
+install-gnupg:
+	rm -f ~/.gnupg/gpg.conf
+	ln -s `pwd`/gpg.conf ~/.gnupg/gpg.conf
 
 install-subl:
 ifeq ($(shell uname),Darwin)
