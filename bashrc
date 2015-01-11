@@ -40,8 +40,6 @@ if [ -d $RUBY_GEM ]; then
     PATH=$RUBY_GEM:"${PATH}"
 fi
 
-PATH="${RUBY_GEM}/bin":"${PATH}"
-
 export PATH=/opt/android-sdk/tools:$PATH
 
 export PATH=/opt/android-sdk/platform-tools/:$PATH
