@@ -46,11 +46,10 @@
 	"hot_exit": false,
 	"ignored_packages":
 	[
-		"GitGutter",
+		"SublimeLinter",
+		"Solarized Color Scheme",
 		"GoSublime",
 		"RestructuredText",
-		"Solarized Color Scheme",
-		"SublimeLinter",
 		"Vintage"
 	],
 	"indent_guide_options":
