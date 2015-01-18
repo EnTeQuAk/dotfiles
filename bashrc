@@ -57,10 +57,6 @@ fi
 
 export PATH=$(npm bin):$PATH
 
-if [ -d ./node_modules ]; then
-    export NODE_MODULES="./node_modules"
-    export PATH=./node_modules/.bin:$PATH
-fi
 
 # Global environment definitions
 # ==============================
@@ -282,6 +278,11 @@ function workon_cwd {
                     alias django="python $MANAGE_PY"
                 else
                     [ -n "`alias -p | grep '^alias django='`" ] && unalias django
+                fi
+
+                if [ -d "$PROJECT_ROOT/node_modules" ]; then
+                    export NODE_MODULES="./node_modules"
+                    export PATH=./node_modules/.bin:$PATH
                 fi
             fi
         fi
