@@ -62,7 +62,7 @@ Configuration files (`~/.codeintel/config' or `project_root/.codeintel/config').
 """
 from __future__ import print_function, unicode_literals
 
-VERSION = "2.1.6"
+VERSION = "2.1.3"
 
 import os
 import re
@@ -125,10 +125,12 @@ condeintel_log_filename = ''
 condeintel_log_file = None
 
 stderr_hdlr = logging.StreamHandler(sys.stderr)
-stderr_hdlr.setFormatter(logging.Formatter("%(name)s: %(levelname)s: %(message)s"))
+stderr_hdlr.setFormatter(
+    logging.Formatter("%(name)s: %(levelname)s: %(message)s"))
 
 codeintel_hdlr = NullHandler()
-codeintel_hdlr.setFormatter(logging.Formatter("%(name)s: %(levelname)s: %(message)s"))
+codeintel_hdlr.setFormatter(
+    logging.Formatter("%(name)s: %(levelname)s: %(message)s"))
 
 # Logging for this file / send to the sublime console
 log = logging.getLogger("SublimeCodeIntel")
@@ -146,7 +148,8 @@ for logger in ('codeintel.db', 'codeintel.pythoncile'):
 for logger in ('citadel', 'css', 'django', 'html', 'html5', 'javascript', 'mason', 'nodejs',
                'perl', 'php', 'python', 'python3', 'rhtml', 'ruby', 'smarty',
                'tcl', 'templatetoolkit', 'xbl', 'xml', 'xslt', 'xul'):
-    logging.getLogger("codeintel." + logger).setLevel(logging.WARNING)  # WARNING
+    logging.getLogger(
+        "codeintel." + logger).setLevel(logging.WARNING)  # WARNING
 
 cpln_fillup_chars = {
     # These are characters that select the first item in an open autocomplete window when pressed.
@@ -273,7 +276,6 @@ def tooltip(view, calltips, text_in_current_line, original_pos, lang):
         if not codeintel_snippets:
             snippet = None
 
-        # Wrap lines that are too long:
         max_line_length = 80
         measured_tips = []
         for tip in tip_info:
@@ -284,7 +286,6 @@ def tooltip(view, calltips, text_in_current_line, original_pos, lang):
             else:
                 measured_tips.append(tip)
 
-        # Insert tooltip snippet
         snippets.extend((('  ' if i > 0 else '') + l, snippet or '${0}') for i, l in enumerate(measured_tips))
 
     if codeintel_tooltips == 'popup':
@@ -498,65 +499,79 @@ def autocomplete(view, timeout, busy_timeout, forms, preemptive=False, args=[], 
         lpos = view.line(sel).begin()
         text_in_current_line = view.substr(sublime.Region(lpos, pos + 1))
 
-        def _trigger(trigger, citdl_expr, calltips, cplns=None):
-            global cplns_were_empty, last_trigger_name, last_citdl_expr
+                if calltips and caller != "on_modified":
+                    if trigger:
+                        print("current triggername: %r" % trigger.name)
+                    tooltip(view, calltips, original_pos, lang)
+                    return
 
-            add_word_completions = settings_manager.get("codeintel_word_completions", language=lang)
+                # under certain circumstances we have to close before reopening
+                # the currently open completions-panel
 
-            if cplns is not None or calltips is not None:
-                codeintel_log.info("Autocomplete called (%s) [%s]", lang, ','.join(c for c in ['cplns' if cplns else None, 'calltips' if calltips else None] if c))
+                # completions are available now, but were empty on last round,
+                # we have to close and reopen the completions tab to show them
+                if cplns_were_empty and cplns is not None:
+                    view.run_command('hide_auto_complete')
 
-            # under certain circumstances we have to close before reopening
-            # the currently open completions-panel
+                # citdl_expr changed, so might the completions!
+                if citdl_expr != last_citdl_expr:
+                    if not (not citdl_expr and not last_citdl_expr):
+                        log.debug(
+                            "hiding automplete-panel, b/c CITDL_EXPR CHANGED: FROM %r TO %r" % (last_citdl_expr, citdl_expr))
+                        view.run_command('hide_auto_complete')
 
-            # completions are available now, but were empty on last round,
-            # we have to close and reopen the completions tab to show them
-            cplns_are_empty = cplns is None
-            if cplns_were_empty and not cplns_are_empty:
-                hide_auto_complete(view)
-            cplns_were_empty = cplns_are_empty
+                # the trigger changed, so will the completions!
+                if (trigger is None and last_trigger_name is not None) or last_trigger_name != (trigger.name if trigger else None):
+                    log.debug("hiding automplete-panel, b/c trigger changed: FROM %r TO %r " %
+                              (last_trigger_name, (trigger.name if trigger else 'None')))
+                    view.run_command('hide_auto_complete')
 
-            # citdl_expr changed, so might the completions!
-            if citdl_expr != last_citdl_expr:
-                if not (not citdl_expr and not last_citdl_expr):
-                    log.debug("hiding automplete-panel, b/c CITDL_EXPR CHANGED: FROM %r TO %r" % (last_citdl_expr, citdl_expr))
-                    hide_auto_complete(view)
-            last_citdl_expr = citdl_expr
+                # cpln_stop_chars could be implemented here ?
 
-            # the trigger changed, so will the completions!
-            current_trigger_name = trigger.name if trigger else None
-            if trigger is None and last_trigger_name is not None or last_trigger_name != current_trigger_name:
-                log.debug("hiding automplete-panel, b/c trigger changed: FROM %r TO %r " % (last_trigger_name, (trigger.name if trigger else 'None')))
-                hide_auto_complete(view)
-            last_trigger_name = current_trigger_name
+                api_completions_only = False
+                if trigger:
+                    log.debug("current triggername: %r" % trigger.name)
+                    print("current triggername: %r" % trigger.name)
+                    api_cplns_only_trigger = [
+                        "php-complete-static-members",
+                        "php-complete-object-members",
+                        "python3-complete-module-members",
+                        "python3-complete-object-members",
+                        "python3-complete-available-imports",
+                        "javascript-complete-object-members"
+                    ]
+                    if cplns is not None and trigger.name in api_cplns_only_trigger:
+                        api_completions_only = True
+                        add_word_completions = "None"
 
-            api_completions_only = False
-            if trigger:
-                log.debug("current triggername: %r" % trigger.name)
-                print("current triggername: %r" % trigger.name)
-                api_cplns_only_trigger = [
-                    "php-complete-static-members",
-                    "php-complete-object-members",
-                    "python3-complete-module-members",
-                    "python3-complete-object-members",
-                    "python3-complete-available-imports",
-                    "javascript-complete-object-members"
-                ]
-                if cplns is not None and trigger.name in api_cplns_only_trigger:
-                    api_completions_only = True
-                    add_word_completions = "None"
+                last_trigger_name = trigger.name if trigger else None
+                last_citdl_expr = citdl_expr
 
-            show_auto_complete(view, {
-                'params': ("cplns", add_word_completions, text_in_current_line, lang, trigger, False),
-                'cplns': cplns,
-            }, api_completions_only=api_completions_only)
+                # if cplns is not None:
+                on_query_info = {}
+                on_query_info["params"] = (
+                    "cplns", add_word_completions, text_in_current_line, lang, trigger)
+                on_query_info["cplns"] = cplns
 
-            if calltips:
-                tooltip(view, calltips, text_in_current_line, original_pos, lang)
+                completions[vid] = on_query_info
 
-        content = view.substr(sublime.Region(0, view.size()))
-        codeintel(view, path, content, lang, pos, forms, _trigger, caller=caller)
-    queue(view, _autocomplete_callback, timeout, busy_timeout, preemptive, args=args, kwargs=kwargs)
+                def show_autocomplete():
+                    view.run_command('auto_complete', {
+                        'disable_auto_insert': True,
+                        'api_completions_only': api_completions_only,
+                        'next_completion_if_showing': False,
+                        'auto_complete_commit_on_tab': True,
+                    })
+
+                sublime.set_timeout(show_autocomplete, 0)
+
+                cplns_were_empty = cplns is None
+
+            content = view.substr(sublime.Region(0, view.size()))
+            codeintel(view, path, content, lang, pos, forms, _trigger, caller=caller)
+    # If it's a fill char, queue using lower values and preemptive behavior
+    queue(view, _autocomplete_callback, timeout,
+          busy_timeout, preemptive, args=args, kwargs=kwargs)
 
 
 _ci_envs_ = {}
@@ -758,7 +773,8 @@ def codeintel_manager(manager_id=None):
         mgr.initialize()
 
         # Connect the logging file to the handler
-        condeintel_log_filename = os.path.join(codeintel_database_dir, 'codeintel.log')
+        condeintel_log_filename = os.path.join(
+            codeintel_database_dir, 'codeintel.log')
         condeintel_log_file = open(condeintel_log_filename, 'w', 1)
         codeintel_log.handlers = [logging.StreamHandler(condeintel_log_file)]
         msg = "Starting logging SublimeCodeIntel v%s rev %s (%s) on %s" % (VERSION, get_revision()[:12], os.stat(__file__)[stat.ST_MTIME], datetime.datetime.now().ctime())
@@ -883,6 +899,14 @@ def codeintel_scan(view, path, content, lang, callback=None, pos=None, forms=Non
                 codeintel_log.warning(msg)
                 msgs.append(('info', msg))
 
+            ###################
+            # CREATE THE BUFFER
+            buf = mgr.buf_from_content(
+                content, lang, env, path or "<Unsaved>", 'utf-8')
+            buf.caller = caller
+            buf.orig_pos = pos
+            ###################
+
             if mgr.is_citadel_lang(lang):
                 buf = mgr.buf_from_content(content, lang, env, path or "<Unsaved>", 'utf-8')
                 buf.caller = caller
@@ -914,7 +938,7 @@ def codeintel_scan(view, path, content, lang, callback=None, pos=None, forms=Non
     threading.Thread(target=_codeintel_scan, name="scanning thread").start()
 
 
-def codeintel(view, path, content, lang, pos, forms, callback, timeout=7000, caller=None):
+def codeintel(view, path, content, lang, pos, forms, callback=None, timeout=7000, caller=None):
     start = time.time()
 
     def _codeintel(buf, msgs):
@@ -1222,8 +1246,11 @@ class SettingsManager():
         self.sublime_auto_complete = None
 
     def loadSublimeSettings(self):
-        self.sublime_settings_file = sublime.load_settings('Preferences.sublime-settings')
-        self.sublime_auto_complete = self.sublime_settings_file.get('auto_complete')
+        window = sublime.active_window()
+        view = window.active_view()
+        if view:
+            self.sublime_settings_file = sublime.load_settings('Preferences.sublime-settings')
+            self.sublime_auto_complete = self.sublime_settings_file.get('auto_complete')
 
     def project_data(self):
         """
@@ -1256,21 +1283,13 @@ class SettingsManager():
             return window.project_file_name()
         if not window.folders():
             return None
-        session_filename = os.path.normpath(os.path.join(sublime.packages_path(), '..', 'Settings', 'Session.sublime_session'))
-        try:
-            data = file(session_filename, 'r').read()
-        except IOError:
-            projects = []
-        else:
-            data = data.decode('utf-8').replace('\t', ' ')
-            data = json.loads(data, strict=False)
-            projects = data['workspaces']['recent_workspaces']
-        autosave_filename = os.path.normpath(os.path.join(sublime.packages_path(), '..', 'Settings', 'Auto Save Session.sublime_session'))
-        try:
-            data = file(autosave_filename, 'r').read()
-        except IOError:
-            pass
-        else:
+        data = file(os.path.normpath(os.path.join(sublime.packages_path(), '..', 'Settings', 'Session.sublime_session')), 'r').read()
+        data = data.decode('utf-8').replace('\t', ' ')
+        data = json.loads(data, strict=False)
+        projects = data['workspaces']['recent_workspaces']
+
+        if os.path.lexists(os.path.join(sublime.packages_path(), '..', 'Settings', 'Auto Save Session.sublime_session')):
+            data = file(os.path.normpath(os.path.join(sublime.packages_path(), '..', 'Settings', 'Auto Save Session.sublime_session')), 'r').read()
             data = data.decode('utf-8').replace('\t', ' ')
             data = json.loads(data, strict=False)
             if hasattr(data, 'workspaces') and hasattr(data['workspaces'], 'recent_workspaces') and data['workspaces']['recent_workspaces']:
@@ -1452,7 +1471,8 @@ class PythonCodeIntel(sublime_plugin.EventListener):
         path = view.file_name()
         lang = guess_lang(view, path, sublime_scope)
 
-        exclude_scopes = settings_manager.get("codeintel_exclude_scopes_from_complete_triggers", language=lang, default=[])
+        exclude_scopes = settings_manager.get(
+            "codeintel_exclude_scopes_from_complete_triggers", language=lang, default=[])
 
         for exclude_scope in exclude_scopes:
             if exclude_scope in sublime_scope:
@@ -1461,8 +1481,8 @@ class PythonCodeIntel(sublime_plugin.EventListener):
         if not lang or lang.lower() not in [l.lower() for l in settings_manager.get('codeintel_enabled_languages', [])]:
             # restore the original sublime auto_complete settings from Preferences.sublime-settings file in User package
             # this is for files with mixed languages (HTML/PHP)
-            view.settings().set('auto_complete', settings_manager.sublime_auto_complete)
-            # if live completion is disabled, we're wrong here!
+            view.settings().set(
+                'auto_complete', settings_manager.sublime_auto_complete)
             return
 
         if not settings_manager.get('codeintel_live', default=True, language=lang):
@@ -1506,7 +1526,8 @@ class PythonCodeIntel(sublime_plugin.EventListener):
                     triggerWordCompletions(view, lang, codeintel_word_completions)
 
             # will queue an autocomplete job
-            autocomplete(view, 0, 50, forms, True, args=[path, pos, lang], kwargs={'caller': 'on_modified'})
+            autocomplete(view, 0 if is_fill_char else 200, 50 if is_fill_char else 600,
+                         forms, is_fill_char, args=[path, pos, lang], kwargs={"caller":"on_modified"})
         else:
             hide_auto_complete(view)
 
