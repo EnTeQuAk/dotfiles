@@ -180,6 +180,41 @@ More information in SublimeCodeIntel/CodeIntelSources/`src <https://github.com/S
 What's New
 ----------
 
+v2.1.7 (2015-01-26):
+
++ Fixed triggering issues with autocompletion and stop chars.
+
++ ST2 improvements. Still might show "slow plugin"
+  (just ignore, project_file_name is being emulated from ST3, which is "slow")
+
++ Cleanups
+
+
+v2.1.6 (2015-01-23):
+
++ Optimizations.
+
++ Compatibility issues with ST2.
+
++ Stop characters fixed.
+
+
+v2.1.5 (2015-01-22):
+
++ Cleanups.
+
++ Autocomplete also triggered after space (for import<space> autocompletions).
+
++ Tooltip and snippets for functions re-added.
+
+
+v2.1.4 (2015-01-21):
+
++ Improved compatibility with ST2
+
++ PHP magic-methods tweaks ported from wizza-smile's fork.
+
+
 v2.1.3 (2015-01-20):
 
 + Features and enhancements from wizza-smile's fork.

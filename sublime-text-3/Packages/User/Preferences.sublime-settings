@@ -46,11 +46,11 @@
 	"hot_exit": false,
 	"ignored_packages":
 	[
-		"SublimeLinter",
-		"Solarized Color Scheme",
 		"GoSublime",
 		"Vintage",
-		"RestructuredText"
+		"Solarized Color Scheme",
+		"RestructuredText",
+		"SublimeLinter"
 	],
 	"indent_guide_options":
 	[

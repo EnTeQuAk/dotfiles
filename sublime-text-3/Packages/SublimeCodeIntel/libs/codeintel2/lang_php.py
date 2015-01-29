@@ -235,6 +235,8 @@ class PHPLangIntel(CitadelLangIntel, ParenStyleCalltipIntelMixin,
                     elif prev_style == self.operator_style and \
                             prev_char == "," and implicit:
                         return self._functionCalltipTrigger(ac, prev_pos, DEBUG)
+                    elif text == "namespace":
+                        return Trigger(lang, TRG_FORM_CPLN, "use-global-namespaces", pos, implicit)
             elif last_style == self.operator_style:
                 if DEBUG:
                     print("  lang_style is operator style")
@@ -307,9 +309,6 @@ class PHPLangIntel(CitadelLangIntel, ParenStyleCalltipIntelMixin,
                                 pos, implicit)
 
                 elif last_char == "\\":
-                    # Ensure does not trigger when defining a new namespace,
-                    # i.e., do not trigger for:
-                    #      namespace foo\<|>
                     style = last_style
                     while style in (self.operator_style, self.identifier_style):
                         p, c, style = ac.getPrecedingPosCharStyle(
@@ -331,7 +330,13 @@ class PHPLangIntel(CitadelLangIntel, ParenStyleCalltipIntelMixin,
                             print("Triggering use-namespace completion")
                         return Trigger(lang, TRG_FORM_CPLN, "use-namespace",
                                        pos, implicit)
-                    elif prev_text[1] != "namespace":
+                    elif prev_text[1] == "namespace": #namespace completions on "namespace" keyword!
+                        if DEBUG:
+                            print("Triggering namespace completion")
+                        return Trigger(
+                            lang, TRG_FORM_CPLN, "namespace-members-nmspc-only",
+                            pos, implicit)
+                    else:
                         if DEBUG:
                             print("Triggering namespace completion")
                         return Trigger(
@@ -585,6 +590,7 @@ class PHPLangIntel(CitadelLangIntel, ParenStyleCalltipIntelMixin,
         # Else, let's try to work out some other options
         accessor = buf.accessor
         prev_style = accessor.style_at_pos(curr_pos - 1)
+
         if prev_style in (self.identifier_style, self.keyword_style):
             # We don't know what to trigger here... could be one of:
             # functions:
@@ -606,6 +612,12 @@ class PHPLangIntel(CitadelLangIntel, ParenStyleCalltipIntelMixin,
                 print("  prev_style: %d" % prev_style)
                 ac.dump()
             if pos_before_identifer < pos:
+                last_keyword = ac.getTextBackWithStyle(self.keyword_style, max_text_len=9)[1].strip()
+                if last_keyword == "namespace":
+                    implicit = False
+                    return Trigger(
+                        lang, TRG_FORM_CPLN, "use-global-namespaces",
+                        pos, implicit)
                 resetPos = min(pos_before_identifer + 4, accessor.length() - 1)
                 ac.resetToPosition(resetPos)
                 if DEBUG:
@@ -767,7 +779,7 @@ class PHPLangIntel(CitadelLangIntel, ParenStyleCalltipIntelMixin,
                     print("i now: %d, ch: %r" % (i, ch))
 
                 if ch in WHITESPACE:
-                    if trg.type in ("use-namespace", "namespace-members"):
+                    if trg.type in ("use-namespace", "namespace-members", "namespace-members-nmspc-only"):
                         # Namespaces cannot be split over whitespace.
                         break
                     while ch in WHITESPACE:
@@ -887,7 +899,7 @@ class PHPLangIntel(CitadelLangIntel, ParenStyleCalltipIntelMixin,
             print(util.banner("done"))
         return citdl_expr
 
-    def citdl_expr_from_trg(self, buf, trg):
+    def citdl_expr_from_trg(self, buf, trg, DEBUG=False):
         """Return a PHP CITDL expression preceding the given trigger.
 
         The expression drops newlines, whitespace, and function call
@@ -926,9 +938,10 @@ class PHPLangIntel(CitadelLangIntel, ParenStyleCalltipIntelMixin,
                 i = trg.extra.get("bracket_pos")   # triggered on foo['
             elif trg.type == "use":
                 i = trg.pos + 1
-            elif trg.type == "namespace-members" or \
-                    trg.type == "use-namespace":
+            elif trg.type in ["namespace-members","use-namespace","namespace-members-nmspc-only"]:
                 i = trg.pos - 1
+            elif trg.type == "use-global-namespaces":
+                i = trg.pos + 1
             else:
                 i = trg.pos - 2  # skip past the trigger char
             citdl_expr = self._citdl_expr_from_pos(trg, buf, i, trg.implicit,
