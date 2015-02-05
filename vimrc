@@ -490,6 +490,9 @@ call togglebg#map("<F6>")
 let g:solarized_visibility = 'low'
 let g:solarized_contrast = 'high'
 
+map  <F12> :r! date +\%H:\%M<cr>
+
+
 " Enable Syntax Colors
 " --------------------
 "  in GUI mode we go with fruity and Consolas 10
