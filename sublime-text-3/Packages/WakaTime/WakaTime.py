@@ -6,7 +6,7 @@ License:     BSD, see LICENSE for more details.
 Website:     https://wakatime.com/
 ==========================================================="""
 
-__version__ = '3.0.6'
+__version__ = '3.0.7'
 
 import sublime
 import sublime_plugin
@@ -119,10 +119,13 @@ def enough_time_passed(now, last_time):
 
 
 def find_project_name_from_folders(folders):
-    for folder in folders:
-        for file_name in os.listdir(folder):
-            if file_name.endswith('.sublime-project'):
-                return file_name.replace('.sublime-project', '', 1)
+    try:
+        for folder in folders:
+            for file_name in os.listdir(folder):
+                if file_name.endswith('.sublime-project'):
+                    return file_name.replace('.sublime-project', '', 1)
+    except:
+        pass
     return None
 
 
