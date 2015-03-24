@@ -149,6 +149,8 @@ alias git='hub'
 alias lintdiff='pylint $(git diff --name-only)'
 alias submod='sub $(git diff --name-only)'
 
+alias initworkscreen='xrandr --output eDP1 --auto --output DP1-2 --left-of eDP1 --output DP1-1-2 --auto --left-of DP1-2'
+
 
 # Git related shortcuts
 alias gst='git st'
@@ -328,14 +330,14 @@ if [ -f "/usr/bin/ksshaskpass" ]; then
     export SSH_ASKPASS="/usr/bin/ksshaskpass"
 fi
 
-if [ -f "${HOME}/.gpg-agent-info" ]; then
-  . "${HOME}/.gpg-agent-info"
-  export GPG_AGENT_INFO
-  export SSH_AUTH_SOCK
-fi
-
 # added by travis gem
 [ -f /home/ente/.travis/travis.sh ] && source /home/ente/.travis/travis.sh
 
 export LC_ALL=en_US.UTF-8
 export LANG=en_US.UTF-8
+
+if [ -f "${HOME}/.gpg-agent-info" ]; then
+    . "${HOME}/.gpg-agent-info"
+    export GPG_AGENT_INFO
+    export SSH_AUTH_SOCK
+fi
