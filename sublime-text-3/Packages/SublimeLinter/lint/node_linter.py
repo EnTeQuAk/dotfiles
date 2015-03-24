@@ -12,7 +12,6 @@
 
 import json
 import hashlib
-import codecs
 import sublime
 
 from functools import lru_cache

@@ -3,41 +3,6 @@ History
 -------
 
 
-3.0.12 (2015-03-23)
-+++++++++++++++++++
-
-- always use unicode function from compat module when encoding log messages
-
-
-3.0.11 (2015-03-23)
-+++++++++++++++++++
-
-- upgrade simplejson package to v3.6.5
-
-
-3.0.10 (2015-03-22)
-+++++++++++++++++++
-
-- ability to disable status bar message from WakaTime.sublime-settings file
-
-
-3.0.9 (2015-03-20)
-++++++++++++++++++
-
-- status bar message showing when WakaTime plugin is enabled
-- moved some logic into thread to help prevent slow plugin warning message
-
-
-3.0.8 (2015-03-09)
-++++++++++++++++++
-
-- upgrade wakatime cli to v4.0.4
-- use requests library instead of urllib2, so api SSL cert is verified
-- new --notfile argument to support logging time without a real file
-- new --proxy argument for https proxy support
-- new options for excluding and including directories
-
-
 3.0.7 (2015-02-05)
 ++++++++++++++++++
 
