@@ -1,1 +1,1 @@
-{"platforms": ["*"], "description": "Sublime Text 2 & 3 plugin for analytics about your programming", "version": "3.0.6", "dependencies": [], "url": "https://wakatime.com", "sublime_text": "*"}
+{"sublime_text": "*", "description": "Sublime Text 2 & 3 plugin for analytics about your programming", "version": "3.0.12", "url": "https://wakatime.com", "platforms": ["*"], "dependencies": []}

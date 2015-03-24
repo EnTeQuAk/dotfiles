@@ -62,7 +62,7 @@ Configuration files (`~/.codeintel/config' or `project_root/.codeintel/config').
 """
 from __future__ import print_function, unicode_literals
 
-VERSION = "2.1.7"
+VERSION = "2.1.9"
 
 import os
 import re
@@ -1390,7 +1390,7 @@ settings_manager = SettingsManager()
 
 
 # make sure all settings could be loaded and sublime is ready
-def codeintel_enabled(default=False):
+def codeintel_enabled(view=None, default=False):
     return settings_manager.sublime_auto_complete is not None
 
 
@@ -1465,6 +1465,9 @@ class PythonCodeIntel(sublime_plugin.EventListener):
         sel = view_sel[0]
         pos = sel.end()
         next_char = view.substr(sublime.Region(pos - 1, pos))
+
+        if next_char == '\n':
+            return
 
         is_fill_char = next_char and next_char in cpln_fillup_chars.get(lang, '')
         is_stop_char = next_char and next_char in cpln_stop_chars.get(lang, '')
@@ -1756,7 +1759,7 @@ class CodeintelCommand(sublime_plugin.TextCommand):
 
 
 class SublimecodeintelWindowCommand(sublime_plugin.WindowCommand):
-    def is_enabled(self):
+    def is_enabled(self, *args):
         view = self.window.active_view()
         return bool(view)
 
@@ -1784,17 +1787,17 @@ class SublimecodeintelCommand(SublimecodeintelWindowCommand):
 
 
 class SublimecodeintelEnableCommand(SublimecodeintelCommand):
-    def is_enabled(self):
+    def is_enabled(self, *args):
         return super(SublimecodeintelEnableCommand, self).is_enabled(False)
 
 
 class SublimecodeintelDisableCommand(SublimecodeintelCommand):
-    def is_enabled(self):
+    def is_enabled(self, *args):
         return super(SublimecodeintelDisableCommand, self).is_enabled(True)
 
 
 class SublimecodeintelResetCommand(SublimecodeintelCommand):
-    def is_enabled(self):
+    def is_enabled(self, *args):
         return super(SublimecodeintelResetCommand, self).is_enabled()
 
 
@@ -1816,20 +1819,20 @@ class SublimecodeintelLiveCommand(SublimecodeintelCommand):
 
 
 class SublimecodeintelEnableLiveCommand(SublimecodeintelLiveCommand):
-    def is_enabled(self):
+    def is_enabled(self, *args):
         return super(SublimecodeintelEnableLiveCommand, self).is_enabled(False, False)
 
 
 class SublimecodeintelDisableLiveCommand(SublimecodeintelLiveCommand):
-    def is_enabled(self):
+    def is_enabled(self, *args):
         return super(SublimecodeintelDisableLiveCommand, self).is_enabled(True, False)
 
 
 class SublimecodeintelEnableLiveLangCommand(SublimecodeintelLiveCommand):
-    def is_enabled(self):
+    def is_enabled(self, *args):
         return super(SublimecodeintelEnableLiveLangCommand, self).is_enabled(False, True)
 
 
 class SublimecodeintelDisableLiveLangCommand(SublimecodeintelLiveCommand):
-    def is_enabled(self):
+    def is_enabled(self, *args):
         return super(SublimecodeintelDisableLiveLangCommand, self).is_enabled(True, True)

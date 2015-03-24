@@ -44,11 +44,14 @@ class SearchInProjectCommand(sublime_plugin.WindowCommand):
         selection_text = view.substr(view.sel()[0])
         self.window.show_input_panel(
             "Search in project:",
-            selection_text or self.last_search_string,
+            not "\n" in selection_text and selection_text or self.last_search_string,
             self.perform_search, None, None)
         pass
 
     def perform_search(self, text):
+        if not text:
+            return
+
         self.last_search_string = text
         folders = self.search_folders()
 
@@ -60,10 +63,10 @@ class SearchInProjectCommand(sublime_plugin.WindowCommand):
                 self.window.show_quick_panel(self.results, self.goto_result)
             else:
                 self.results = []
-                self.window.show_quick_panel(["No results"], None)
-        except RuntimeError as e:
+                sublime.message_dialog('No results')
+        except Exception as e:
             self.results = []
-            self.window.show_quick_panel([["%s running search engine %s:"%(e.__class__.__name__,self.engine_name),  e.args[0]]], None)
+            sublime.error_message("%s running search engine %s:"%(e.__class__.__name__,self.engine_name) + "\n" + str(e))
 
 
     def goto_result(self, file_no):
@@ -74,11 +77,14 @@ class SearchInProjectCommand(sublime_plugin.WindowCommand):
             view.add_regions("search_in_project", regions, "entity.name.filename.find-in-files", "circle", sublime.DRAW_OUTLINED)
 
     def search_folders(self):
-        window_folders = self.window.folders()
-        for index, item in enumerate(window_folders):
-                window_folders[index] = "\"" + window_folders[index] + "\""
-        file_dirname = ["\"" + os.path.dirname(self.window.active_view().file_name()) + "\""]
-        return window_folders or file_dirname
+        search_folders = self.window.folders()
+        if not search_folders:
+            filename = self.window.active_view().file_name()
+            if filename:
+                search_folders = [os.path.dirname(filename)]
+            else:
+                search_folders = [os.path.expanduser("~")]
+        return search_folders
 
     def find_common_path(self, paths):
         paths = [path.replace("\"", "") for path in paths]

@@ -40,17 +40,17 @@
 		"htmlcov"
 	],
 	"font_face": "Consolas",
-	"font_size": 14.0,
+	"font_size": 15,
 	"highlight_line": true,
 	"highlight_modified_tabs": false,
 	"hot_exit": false,
 	"ignored_packages":
 	[
+		"SublimeLinter",
 		"GoSublime",
 		"RestructuredText",
-		"SublimeLinter",
-		"Solarized Color Scheme",
-		"Vintage"
+		"Vintage",
+		"Solarized Color Scheme"
 	],
 	"indent_guide_options":
 	[
