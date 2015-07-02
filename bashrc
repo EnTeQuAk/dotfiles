@@ -161,7 +161,7 @@ alias gbr='git br'
 alias gdi='git diff'
 
 function sub() {
-    subl3 -n . "$@";
+    subl -n . "$@";
 }
 
 alias subl='sub'
