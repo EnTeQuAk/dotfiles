@@ -47,6 +47,7 @@ install-wtc:
 	curl http://github.com/lwe/whatthecommit/raw/master/whatthecommit -sLo ~/bin/wtc && chmod +x ~/bin/wtc
 
 install-gnupg:
+	mkdir -p ~/.gnupg
 	rm -f ~/.gnupg/gpg.conf
 	ln -s `pwd`/gpg.conf ~/.gnupg/gpg.conf
 
