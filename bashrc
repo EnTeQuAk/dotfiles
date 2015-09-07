@@ -57,6 +57,7 @@ fi
 
 export PATH=$(npm bin):$PATH
 
+export PATH=$PATH:/Applications/Postgres.app/Contents/Versions/9.4/bin
 
 # Global environment definitions
 # ==============================
