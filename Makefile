@@ -56,5 +56,7 @@ ifeq ($(shell uname),Darwin)
 	sudo rm -f /usr/local/bin/subl /usr/local/bin/subl3
 	sudo ln -s "/Applications/Sublime Text.app/Contents/SharedSupport/bin/subl" /usr/local/bin/subl
 	sudo ln -s /usr/local/bin/subl /usr/local/bin/subl3
+	sudo ln -s `pwd`/sublime-text-3/Packages "/Users/ente/Library/Application Support/Sublime Text 3/"
+	sudo ln -s "`pwd`/sublime-text-3/Installed Packages" "/Users/ente/Library/Application Support/Sublime Text 3/"
 endif
 
