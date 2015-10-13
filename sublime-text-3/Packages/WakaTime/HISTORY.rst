@@ -3,6 +3,255 @@ History
 -------
 
 
+5.0.1 (2015-10-06)
+++++++++++++++++++
+
+- look for python in system PATH again
+
+
+5.0.0 (2015-10-02)
+++++++++++++++++++
+
+- improve logging with levels and log function
+- switch registry warnings to debug log level
+
+
+4.0.20 (2015-10-01)
+++++++++++++++++++
+
+- correctly find python binary in non-Windows environments
+
+
+4.0.19 (2015-10-01)
+++++++++++++++++++
+
+- handle case where ST builtin python does not have _winreg or winreg module
+
+
+4.0.18 (2015-10-01)
+++++++++++++++++++
+
+- find python location from windows registry
+
+
+4.0.17 (2015-10-01)
+++++++++++++++++++
+
+- download python in non blocking background thread for Windows machines
+
+
+4.0.16 (2015-09-29)
+++++++++++++++++++
+
+- upgrade wakatime cli to v4.1.8
+- fix bug in guess_language function
+- improve dependency detection
+- default request timeout of 30 seconds
+- new --timeout command line argument to change request timeout in seconds
+- allow passing command line arguments using sys.argv
+- fix entry point for pypi distribution
+- new --entity and --entitytype command line arguments
+
+
+4.0.15 (2015-08-28)
+++++++++++++++++++
+
+- upgrade wakatime cli to v4.1.3
+- fix local session caching
+
+
+4.0.14 (2015-08-25)
+++++++++++++++++++
+
+- upgrade wakatime cli to v4.1.2
+- fix bug in offline caching which prevented heartbeats from being cleaned up
+
+
+4.0.13 (2015-08-25)
+++++++++++++++++++
+
+- upgrade wakatime cli to v4.1.1
+- send hostname in X-Machine-Name header
+- catch exceptions from pygments.modeline.get_filetype_from_buffer
+- upgrade requests package to v2.7.0
+- handle non-ASCII characters in import path on Windows, won't fix for Python2
+- upgrade argparse to v1.3.0
+- move language translations to api server
+- move extension rules to api server
+- detect correct header file language based on presence of .cpp or .c files named the same as the .h file
+
+
+4.0.12 (2015-07-31)
+++++++++++++++++++
+
+- correctly use urllib in Python3
+
+
+4.0.11 (2015-07-31)
+++++++++++++++++++
+
+- install python if missing on Windows OS
+
+
+4.0.10 (2015-07-31)
+++++++++++++++++++
+
+- downgrade requests library to v2.6.0
+
+
+4.0.9 (2015-07-29)
+++++++++++++++++++
+
+- catch exceptions from pygments.modeline.get_filetype_from_buffer
+
+
+4.0.8 (2015-06-23)
+++++++++++++++++++
+
+- fix offline logging
+- limit language detection to known file extensions, unless file contents has a vim modeline
+- upgrade wakatime cli to v4.0.16
+
+
+4.0.7 (2015-06-21)
+++++++++++++++++++
+
+- allow customizing status bar message in sublime-settings file
+- guess language using multiple methods, then use most accurate guess
+- use entity and type for new heartbeats api resource schema
+- correctly log message from py.warnings module
+- upgrade wakatime cli to v4.0.15
+
+
+4.0.6 (2015-05-16)
+++++++++++++++++++
+
+- fix bug with auto detecting project name
+- upgrade wakatime cli to v4.0.13
+
+
+4.0.5 (2015-05-15)
+++++++++++++++++++
+
+- correctly display caller and lineno in log file when debug is true
+- project passed with --project argument will always be used
+- new --alternate-project argument
+- upgrade wakatime cli to v4.0.12
+
+
+4.0.4 (2015-05-12)
+++++++++++++++++++
+
+- reuse SSL connection over multiple processes for improved performance
+- upgrade wakatime cli to v4.0.11
+
+
+4.0.3 (2015-05-06)
+++++++++++++++++++
+
+- send cursorpos to wakatime cli
+- upgrade wakatime cli to v4.0.10
+
+
+4.0.2 (2015-05-06)
+++++++++++++++++++
+
+- only send heartbeats for the currently active buffer
+
+
+4.0.1 (2015-05-06)
+++++++++++++++++++
+
+- ignore git temporary files
+- don't send two write heartbeats within 2 seconds of eachother
+
+
+4.0.0 (2015-04-12)
+++++++++++++++++++
+
+- listen for selection modified instead of buffer activated for better performance
+
+
+3.0.19 (2015-04-07)
++++++++++++++++++++
+
+- fix bug in project detection when folder not found
+
+
+3.0.18 (2015-04-04)
++++++++++++++++++++
+
+- upgrade wakatime cli to v4.0.8
+- added api_url config option to .wakatime.cfg file
+
+
+3.0.17 (2015-04-02)
++++++++++++++++++++
+
+- use open folder as current project when not using revision control
+
+
+3.0.16 (2015-04-02)
++++++++++++++++++++
+
+- copy list when obfuscating api key so original command is not modified
+
+
+3.0.15 (2015-04-01)
++++++++++++++++++++
+
+- obfuscate api key when logging to Sublime Text Console in debug mode
+
+
+3.0.14 (2015-03-31)
++++++++++++++++++++
+
+- always use external python binary because ST builtin python does not support checking SSL certs
+- upgrade wakatime cli to v4.0.6
+
+
+3.0.13 (2015-03-23)
++++++++++++++++++++
+
+- correctly check for SSL support in ST built-in python
+- fix status bar message
+
+
+3.0.12 (2015-03-23)
++++++++++++++++++++
+
+- always use unicode function from compat module when encoding log messages
+
+
+3.0.11 (2015-03-23)
++++++++++++++++++++
+
+- upgrade simplejson package to v3.6.5
+
+
+3.0.10 (2015-03-22)
++++++++++++++++++++
+
+- ability to disable status bar message from WakaTime.sublime-settings file
+
+
+3.0.9 (2015-03-20)
+++++++++++++++++++
+
+- status bar message showing when WakaTime plugin is enabled
+- moved some logic into thread to help prevent slow plugin warning message
+
+
+3.0.8 (2015-03-09)
+++++++++++++++++++
+
+- upgrade wakatime cli to v4.0.4
+- use requests library instead of urllib2, so api SSL cert is verified
+- new --notfile argument to support logging time without a real file
+- new --proxy argument for https proxy support
+- new options for excluding and including directories
+
+
 3.0.7 (2015-02-05)
 ++++++++++++++++++
 

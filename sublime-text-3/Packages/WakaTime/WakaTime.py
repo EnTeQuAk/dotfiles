@@ -6,53 +6,75 @@ License:     BSD, see LICENSE for more details.
 Website:     https://wakatime.com/
 ==========================================================="""
 
-__version__ = '3.0.7'
+
+__version__ = '5.0.1'
+
 
 import sublime
 import sublime_plugin
 
-import glob
 import os
 import platform
+import re
 import sys
 import time
 import threading
+import urllib
 import webbrowser
 from datetime import datetime
-from os.path import expanduser, dirname, basename, realpath, join
+from subprocess import Popen
+try:
+    import _winreg as winreg  # py2
+except ImportError:
+    try:
+        import winreg  # py3
+    except ImportError:
+        winreg = None
+
 
 # globals
-ACTION_FREQUENCY = 2
+HEARTBEAT_FREQUENCY = 2
 ST_VERSION = int(sublime.version())
-PLUGIN_DIR = dirname(realpath(__file__))
-API_CLIENT = '%s/packages/wakatime/cli.py' % PLUGIN_DIR
+PLUGIN_DIR = os.path.dirname(os.path.realpath(__file__))
+API_CLIENT = os.path.join(PLUGIN_DIR, 'packages', 'wakatime', 'cli.py')
 SETTINGS_FILE = 'WakaTime.sublime-settings'
 SETTINGS = {}
-LAST_ACTION = {
+LAST_HEARTBEAT = {
     'time': 0,
     'file': None,
     'is_write': False,
 }
-HAS_SSL = False
 LOCK = threading.RLock()
 PYTHON_LOCATION = None
 
+
+# Log Levels
+DEBUG = 'DEBUG'
+INFO = 'INFO'
+WARNING = 'WARNING'
+ERROR = 'ERROR'
+
+
 # add wakatime package to path
-sys.path.insert(0, join(PLUGIN_DIR, 'packages'))
-
-# check if we have SSL support
+sys.path.insert(0, os.path.join(PLUGIN_DIR, 'packages'))
 try:
-    import ssl
-    import socket
-    assert ssl
-    assert socket.ssl
-    HAS_SSL = True
-except (ImportError, AttributeError):
-    from subprocess import Popen
+    from wakatime.base import parseConfigFile
+except ImportError:
+    pass
 
-if HAS_SSL:
-    # import wakatime package so we can use built-in python
-    import wakatime
+
+def log(lvl, message, *args, **kwargs):
+    try:
+        if lvl == DEBUG and not SETTINGS.get('debug'):
+            return
+        msg = message
+        if len(args) > 0:
+            msg = message.format(*args)
+        elif len(kwargs) > 0:
+            msg = message.format(**kwargs)
+        print('[WakaTime] [{lvl}] {msg}'.format(lvl=lvl, msg=msg))
+    except RuntimeError:
+        sublime.set_timeout(lambda: log(lvl, message, *args, **kwargs), 0)
 
 
 def createConfigFile():
@@ -80,7 +102,6 @@ def prompt_api_key():
 
     default_key = ''
     try:
-        from wakatime.base import parseConfigFile
         configs = parseConfigFile()
         if configs is not None:
             if configs.has_option('settings', 'api_key'):
@@ -100,63 +121,196 @@ def prompt_api_key():
             window.show_input_panel('[WakaTime] Enter your wakatime.com api key:', default_key, got_key, None, None)
             return True
         else:
-            print('[WakaTime] Error: Could not prompt for api key because no window found.')
+            log(ERROR, 'Could not prompt for api key because no window found.')
     return False
 
 
 def python_binary():
-    global PYTHON_LOCATION
     if PYTHON_LOCATION is not None:
         return PYTHON_LOCATION
+
+    # look for python in PATH and common install locations
     paths = [
-        "pythonw",
-        "python",
-        "/usr/local/bin/python",
-        "/usr/bin/python",
+        None,
+        '/',
+        '/usr/local/bin/',
+        '/usr/bin/',
     ]
     for path in paths:
-        try:
-            Popen([path, '--version'])
-            PYTHON_LOCATION = path
+        path = find_python_in_folder(path)
+        if path is not None:
+            set_python_binary_location(path)
             return path
-        except:
-            pass
-    for path in glob.iglob('/python*'):
-        path = realpath(join(path, 'pythonw'))
-        try:
-            Popen([path, '--version'])
-            PYTHON_LOCATION = path
-            return path
-        except:
-            pass
+
+    # look for python in windows registry
+    path = find_python_from_registry(r'SOFTWARE\Python\PythonCore')
+    if path is not None:
+        set_python_binary_location(path)
+        return path
+    path = find_python_from_registry(r'SOFTWARE\Wow6432Node\Python\PythonCore')
+    if path is not None:
+        set_python_binary_location(path)
+        return path
+
     return None
 
 
-def enough_time_passed(now, last_time):
-    if now - last_time > ACTION_FREQUENCY * 60:
-        return True
-    return False
+def set_python_binary_location(path):
+    global PYTHON_LOCATION
+    PYTHON_LOCATION = path
+    log(DEBUG, 'Python Binary Found: {0}'.format(path))
 
 
-def find_project_name_from_folders(folders):
+def find_python_from_registry(location, reg=None):
+    if platform.system() != 'Windows' or winreg is None:
+        return None
+
+    if reg is None:
+        path = find_python_from_registry(location, reg=winreg.HKEY_CURRENT_USER)
+        if path is None:
+            path = find_python_from_registry(location, reg=winreg.HKEY_LOCAL_MACHINE)
+        return path
+
+    val = None
+    sub_key = 'InstallPath'
+    compiled = re.compile(r'^\d+\.\d+$')
+
     try:
-        for folder in folders:
-            for file_name in os.listdir(folder):
-                if file_name.endswith('.sublime-project'):
-                    return file_name.replace('.sublime-project', '', 1)
+        with winreg.OpenKey(reg, location) as handle:
+            versions = []
+            try:
+                for index in range(1024):
+                    version = winreg.EnumKey(handle, index)
+                    try:
+                        if compiled.search(version):
+                            versions.append(version)
+                    except re.error:
+                        pass
+            except EnvironmentError:
+                pass
+            versions.sort(reverse=True)
+            for version in versions:
+                try:
+                    path = winreg.QueryValue(handle, version + '\\' + sub_key)
+                    if path is not None:
+                        path = find_python_in_folder(path)
+                        if path is not None:
+                            log(DEBUG, 'Found python from {reg}\\{key}\\{version}\\{sub_key}.'.format(
+                                reg=reg,
+                                key=location,
+                                version=version,
+                                sub_key=sub_key,
+                            ))
+                            return path
+                except WindowsError:
+                    log(DEBUG, 'Could not read registry value "{reg}\\{key}\\{version}\\{sub_key}".'.format(
+                        reg=reg,
+                        key=location,
+                        version=version,
+                        sub_key=sub_key,
+                    ))
+    except WindowsError:
+        if SETTINGS.get('debug'):
+            log(DEBUG, 'Could not read registry value "{reg}\\{key}".'.format(
+                reg=reg,
+                key=location,
+            ))
+
+    return val
+
+
+def find_python_in_folder(folder):
+    path = 'pythonw'
+    if folder is not None:
+        path = os.path.realpath(os.path.join(folder, 'pythonw'))
+    try:
+        Popen([path, '--version'])
+        return path
+    except:
+        pass
+    path = 'python'
+    if folder is not None:
+        path = os.path.realpath(os.path.join(folder, 'python'))
+    try:
+        Popen([path, '--version'])
+        return path
     except:
         pass
     return None
 
 
-def handle_action(view, is_write=False):
-    target_file = view.file_name()
-    project = view.window().project_file_name() if hasattr(view.window(), 'project_file_name') else None
-    thread = SendActionThread(target_file, view, is_write=is_write, project=project, folders=view.window().folders())
-    thread.start()
+def obfuscate_apikey(command_list):
+    cmd = list(command_list)
+    apikey_index = None
+    for num in range(len(cmd)):
+        if cmd[num] == '--key':
+            apikey_index = num + 1
+            break
+    if apikey_index is not None and apikey_index < len(cmd):
+        cmd[apikey_index] = 'XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXX' + cmd[apikey_index][-4:]
+    return cmd
 
 
-class SendActionThread(threading.Thread):
+def enough_time_passed(now, last_heartbeat, is_write):
+    if now - last_heartbeat['time'] > HEARTBEAT_FREQUENCY * 60:
+        return True
+    if is_write and now - last_heartbeat['time'] > 2:
+        return True
+    return False
+
+
+def find_folder_containing_file(folders, current_file):
+    """Returns absolute path to folder containing the file.
+    """
+
+    parent_folder = None
+
+    current_folder = current_file
+    while True:
+        for folder in folders:
+            if os.path.realpath(os.path.dirname(current_folder)) == os.path.realpath(folder):
+                parent_folder = folder
+                break
+        if parent_folder is not None:
+            break
+        if not current_folder or os.path.dirname(current_folder) == current_folder:
+            break
+        current_folder = os.path.dirname(current_folder)
+
+    return parent_folder
+
+
+def find_project_from_folders(folders, current_file):
+    """Find project name from open folders.
+    """
+
+    folder = find_folder_containing_file(folders, current_file)
+    return os.path.basename(folder) if folder else None
+
+
+def is_view_active(view):
+    if view:
+        active_window = sublime.active_window()
+        if active_window:
+            active_view = active_window.active_view()
+            if active_view:
+                return active_view.buffer_id() == view.buffer_id()
+    return False
+
+
+def handle_heartbeat(view, is_write=False):
+    window = view.window()
+    if window is not None:
+        target_file = view.file_name()
+        project = window.project_data() if hasattr(window, 'project_data') else None
+        folders = window.folders()
+        thread = SendHeartbeatThread(target_file, view, is_write=is_write, project=project, folders=folders)
+        thread.start()
+
+
+class SendHeartbeatThread(threading.Thread):
+    """Non-blocking thread for sending heartbeats to api.
+    """
 
     def __init__(self, target_file, view, is_write=False, project=None, folders=None, force=False):
         threading.Thread.__init__(self)
@@ -169,19 +323,20 @@ class SendActionThread(threading.Thread):
         self.debug = SETTINGS.get('debug')
         self.api_key = SETTINGS.get('api_key', '')
         self.ignore = SETTINGS.get('ignore', [])
-        self.last_action = LAST_ACTION.copy()
+        self.last_heartbeat = LAST_HEARTBEAT.copy()
+        self.cursorpos = view.sel()[0].begin() if view.sel() else None
         self.view = view
 
     def run(self):
         with self.lock:
             if self.target_file:
                 self.timestamp = time.time()
-                if self.force or (self.is_write and not self.last_action['is_write']) or self.target_file != self.last_action['file'] or enough_time_passed(self.timestamp, self.last_action['time']):
+                if self.force or self.target_file != self.last_heartbeat['file'] or enough_time_passed(self.timestamp, self.last_heartbeat, self.is_write):
                     self.send_heartbeat()
 
     def send_heartbeat(self):
         if not self.api_key:
-            print('[WakaTime] Error: missing api key.')
+            log(ERROR, 'missing api key.')
             return
         ua = 'sublime/%d sublime-wakatime/%s' % (ST_VERSION, __version__)
         cmd = [
@@ -193,66 +348,86 @@ class SendActionThread(threading.Thread):
         ]
         if self.is_write:
             cmd.append('--write')
-        if self.project:
-            self.project = basename(self.project).replace('.sublime-project', '', 1)
-        if self.project:
-            cmd.extend(['--project', self.project])
+        if self.project and self.project.get('name'):
+            cmd.extend(['--alternate-project', self.project.get('name')])
         elif self.folders:
-            project_name = find_project_name_from_folders(self.folders)
+            project_name = find_project_from_folders(self.folders, self.target_file)
             if project_name:
-                cmd.extend(['--project', project_name])
+                cmd.extend(['--alternate-project', project_name])
+        if self.cursorpos is not None:
+            cmd.extend(['--cursorpos', '{0}'.format(self.cursorpos)])
         for pattern in self.ignore:
             cmd.extend(['--ignore', pattern])
         if self.debug:
             cmd.append('--verbose')
-        if HAS_SSL:
-            if self.debug:
-                print('[WakaTime] %s' % ' '.join(cmd))
-            code = wakatime.main(cmd)
-            if code != 0:
-                print('[WakaTime] Error: Response code %d from wakatime package.' % code)
+        if python_binary():
+            cmd.insert(0, python_binary())
+            log(DEBUG, ' '.join(obfuscate_apikey(cmd)))
+            if platform.system() == 'Windows':
+                Popen(cmd, shell=False)
             else:
-                self.sent()
+                with open(os.path.join(os.path.expanduser('~'), '.wakatime.log'), 'a') as stderr:
+                    Popen(cmd, stderr=stderr)
+            self.sent()
         else:
-            python = python_binary()
-            if python:
-                cmd.insert(0, python)
-                if self.debug:
-                    print('[WakaTime] %s %s' % (python, ' '.join(cmd)))
-                if platform.system() == 'Windows':
-                    Popen(cmd, shell=False)
-                else:
-                    with open(join(expanduser('~'), '.wakatime.log'), 'a') as stderr:
-                        Popen(cmd, stderr=stderr)
-                self.sent()
-            else:
-                print('[WakaTime] Error: Unable to find python binary.')
+            log(ERROR, 'Unable to find python binary.')
 
     def sent(self):
-        if SETTINGS.get('status_bar_message'):
-            sublime.set_timeout(lambda: self.view.set_status('wakatime', 'WakaTime active {0}'.format(datetime.now().strftime('%I:%M %p'))), 0)
-        sublime.set_timeout(self.set_last_action, 0)
+        sublime.set_timeout(self.set_status_bar, 0)
+        sublime.set_timeout(self.set_last_heartbeat, 0)
 
-    def set_last_action(self):
-        global LAST_ACTION
-        LAST_ACTION = {
+    def set_status_bar(self):
+        if SETTINGS.get('status_bar_message'):
+            self.view.set_status('wakatime', datetime.now().strftime(SETTINGS.get('status_bar_message_fmt')))
+
+    def set_last_heartbeat(self):
+        global LAST_HEARTBEAT
+        LAST_HEARTBEAT = {
             'file': self.target_file,
             'time': self.timestamp,
             'is_write': self.is_write,
         }
 
 
+class InstallPython(threading.Thread):
+    """Non-blocking thread for installing Python on Windows machines.
+    """
+
+    def run(self):
+        log(INFO, 'Downloading and installing python...')
+        url = 'https://www.python.org/ftp/python/3.4.3/python-3.4.3.msi'
+        if platform.architecture()[0] == '64bit':
+            url = 'https://www.python.org/ftp/python/3.4.3/python-3.4.3.amd64.msi'
+        python_msi = os.path.join(os.path.expanduser('~'), 'python.msi')
+        try:
+            urllib.urlretrieve(url, python_msi)
+        except AttributeError:
+            urllib.request.urlretrieve(url, python_msi)
+        args = [
+            'msiexec',
+            '/i',
+            python_msi,
+            '/norestart',
+            '/qb!',
+        ]
+        Popen(args)
+
+
 def plugin_loaded():
     global SETTINGS
-    print('[WakaTime] Initializing WakaTime plugin v%s' % __version__)
+    log(INFO, 'Initializing WakaTime plugin v%s' % __version__)
 
-    if not HAS_SSL:
-        python = python_binary()
-        if not python:
+    SETTINGS = sublime.load_settings(SETTINGS_FILE)
+
+    if not python_binary():
+        log(WARNING, 'Python binary not found.')
+        if platform.system() == 'Windows':
+            thread = InstallPython()
+            thread.start()
+        else:
             sublime.error_message("Unable to find Python binary!\nWakaTime needs Python to work correctly.\n\nGo to https://www.python.org/downloads")
             return
 
-    SETTINGS = sublime.load_settings(SETTINGS_FILE)
     after_loaded()
 
 
@@ -269,13 +444,15 @@ if ST_VERSION < 3000:
 class WakatimeListener(sublime_plugin.EventListener):
 
     def on_post_save(self, view):
-        handle_action(view, is_write=True)
+        handle_heartbeat(view, is_write=True)
 
-    def on_activated(self, view):
-        handle_action(view)
+    def on_selection_modified(self, view):
+        if is_view_active(view):
+            handle_heartbeat(view)
 
     def on_modified(self, view):
-        handle_action(view)
+        if is_view_active(view):
+            handle_heartbeat(view)
 
 
 class WakatimeDashboardCommand(sublime_plugin.ApplicationCommand):
