@@ -162,10 +162,9 @@ alias gbr='git br'
 alias gdi='git diff'
 
 function sub() {
-    subl -n . "$@";
+    subl3 -n . "$@";
 }
 
-alias subl='sub'
 
 
 # bash function to decompress archives - http://www.shell-fu.org/lister.php?id=375

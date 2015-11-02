@@ -58,5 +58,9 @@ ifeq ($(shell uname),Darwin)
 	sudo ln -s /usr/local/bin/subl /usr/local/bin/subl3
 	sudo ln -s `pwd`/sublime-text-3/Packages "/Users/ente/Library/Application Support/Sublime Text 3/"
 	sudo ln -s "`pwd`/sublime-text-3/Installed Packages" "/Users/ente/Library/Application Support/Sublime Text 3/"
+else
+	rm -rf /home/chris/.config/sublime-text-3/{Packages,"Installed Packages"}
+	sudo ln -s "`pwd`/sublime-text-3/Packages" "/home/chris/.config/sublime-text-3/"
+	sudo ln -s "`pwd`/sublime-text-3/Installed Packages" "/home/chris/.config/sublime-text-3/"
 endif
 
