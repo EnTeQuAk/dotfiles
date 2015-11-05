@@ -164,7 +164,7 @@ alias gdi='git diff'
 function sub() {
     subl3 -n . "$@";
 }
-
+alias subl='sub'
 
 
 # bash function to decompress archives - http://www.shell-fu.org/lister.php?id=375
@@ -274,7 +274,7 @@ function workon_cwd {
             if [ -e "$WORKON_HOME/$ENV_NAME/bin/activate" ]; then
                 workon "$ENV_NAME" && export CD_VIRTUAL_ENV="$ENV_NAME"
 
-                MANAGE_PY=$(find "$PROJECT_ROOT" -not -path '*tox*' -name 'manage.py' -type f -print | head -n 1)
+                MANAGE_PY=$(find "$PROJECT_ROOT" -not -path '*tox*' -or -path '*.git*' -name 'manage.py' -type f -print | head -n 1)
                 if [ -e "$MANAGE_PY" ]
                 then
                     alias django="python $MANAGE_PY"
