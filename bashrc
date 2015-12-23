@@ -274,7 +274,7 @@ function workon_cwd {
             if [ -e "$WORKON_HOME/$ENV_NAME/bin/activate" ]; then
                 workon "$ENV_NAME" && export CD_VIRTUAL_ENV="$ENV_NAME"
 
-                MANAGE_PY=$(find "$PROJECT_ROOT" -not -path '*tox*' -or -path '*.git*' -name 'manage.py' -type f -print | head -n 1)
+                MANAGE_PY=$(find "$PROJECT_ROOT" -not -path '(*tox*|*.git*)' -name 'manage.py' -type f -print | head -n 1)
                 if [ -e "$MANAGE_PY" ]
                 then
                     alias django="python $MANAGE_PY"
@@ -336,8 +336,12 @@ fi
 export LC_ALL=en_US.UTF-8
 export LANG=en_US.UTF-8
 
-if [ -f "${HOME}/.gpg-agent-info" ]; then
-    . "${HOME}/.gpg-agent-info"
-    export GPG_AGENT_INFO
-    export SSH_AUTH_SOCK
+if ! pgrep -u $USER ssh-agent > /dev/null; then
+    ssh-agent > ~/.ssh-agent-thing
 fi
+if [[ "$SSH_AGENT_PID" == "" ]]; then
+    eval $(<~/.ssh-agent-thing)
+fi
+ssh-add -l >/dev/null || alias ssh='ssh-add -l >/dev/null || ssh-add && unalias ssh; ssh'
+
+export SPIDERMONKEY_INSTALLATION=~/.spidermonkey
