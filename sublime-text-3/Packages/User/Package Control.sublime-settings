@@ -5,6 +5,7 @@
 	],
 	"installed_packages":
 	[
+		"Babel",
 		"Djaneiro",
 		"Dockerfile Syntax Highlighting",
 		"EditorConfig",
@@ -33,10 +34,10 @@
 		"SublimeCodeIntel",
 		"SublimeGit",
 		"SublimeLinter",
+		"SublimeLinter-contrib-write-good",
 		"Theme - Soda",
 		"Theme - Spacegray",
 		"Tomorrow Color Schemes",
-		"WakaTime",
 		"WordCount"
 	]
 }
