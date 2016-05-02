@@ -34,7 +34,7 @@ su = submodule update --recursive
 cps = cherry-pick -s
 today = diff @{yesterday}.. --stat
 out = cherry -v
-edit-unmerged = "!f() { git ls-files --unmerged | cut -f2 | sort -u ; }; vim `f`"
+edit-unmerged = "!f() { git ls-files --unmerged | cut -f2 | sort -u ; }; subl `f`"
 add-unmerged = "!f() { git ls-files --unmerged | cut -f2 | sort -u ; }; git add `f`"
 
 record = ! sh -c '(git add -p -- $@ && git commit) || git reset' --
@@ -67,3 +67,7 @@ pager = less -R
 
 [diff]
 algorithm = patience
+renamelimit=0
+
+[merge]
+renameLimit=0
