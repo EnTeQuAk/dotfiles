@@ -20,6 +20,7 @@ fi
 
 # Include custom
 export PATH=/usr/local/share/python:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:$PATH
+export PATH=/usr/local/heroku/bin:$PATH
 
 
 # PATH modifications
@@ -65,8 +66,10 @@ export PATH=$PATH:/Applications/Postgres.app/Contents/Versions/9.4/bin
 # History control
 # --------------
 
-export HISTCONTROL=erasedups # Ignore duplicate entries in history
-export HISTSIZE=1000000 # Increases size of history
+unset HISTFILESIZE
+export HISTCONTROL=ignoredups # Ignore duplicate entries in history
+export HISTSIZE=1000000
+export HISTFILESIZE=1000000
 export HISTIGNORE="&:ls:ll:la:l.:pwd:exit:clear:clr:[bf]g"
 shopt -s histappend # Append history instead of overwriting
 shopt -s cdspell # Correct minor spelling errors in cd command
@@ -345,3 +348,13 @@ fi
 ssh-add -l >/dev/null || alias ssh='ssh-add -l >/dev/null || ssh-add && unalias ssh; ssh'
 
 export SPIDERMONKEY_INSTALLATION=~/.spidermonkey
+
+gifify() {
+    if [[ -n "$1" ]]; then
+        ffmpeg -i $1 -r 20 -vcodec png out-static-%05d.png
+        time convert -verbose +dither -layers Optimize -resize 600x600\> out-static*.png  GIF:- | gifsicle --colors 128 --delay=5 --loop --optimize=3 --multifile - >! $1.gif
+        rm -f out-static*.png
+    else
+        echo "proper usage: gifify <input_movie.mov>. You DO need to include extension."
+    fi
+}
