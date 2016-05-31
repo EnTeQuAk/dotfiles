@@ -358,3 +358,7 @@ gifify() {
         echo "proper usage: gifify <input_movie.mov>. You DO need to include extension."
     fi
 }
+
+onmn() {
+    echo "Next migration-number: $(ls src/olympia/migrations/ | cut -d '-' -f 1 | sort -rn | awk '{printf "%03d", $1 + 1; exit}')"
+}
