@@ -60,6 +60,10 @@ export PATH=$(npm bin):$PATH
 
 export PATH=$PATH:/Applications/Postgres.app/Contents/Versions/9.4/bin
 
+if [ -d ${HOME}/.cargo/bin ]; then
+    export PATH=${HOME}/.cargo/bin:${PATH}
+fi
+
 # Global environment definitions
 # ==============================
 
@@ -284,12 +288,11 @@ function workon_cwd {
                 else
                     [ -n "`alias -p | grep '^alias django='`" ] && unalias django
                 fi
-
-                if [ -d "$PROJECT_ROOT/node_modules" ]; then
-                    export NODE_MODULES="./node_modules"
-                    export PATH=./node_modules/.bin:$PATH
-                fi
-            fi
+           fi
+           if [ -d "$PROJECT_ROOT/node_modules" ]; then
+                export NODE_MODULES="./node_modules"
+                export PATH=./node_modules/.bin:$PATH
+           fi
         fi
         if [ -f "$PROJECT_ROOT/.venv_hook" ]; then
             source "$PROJECT_ROOT/.venv_hook"
@@ -362,3 +365,7 @@ gifify() {
 onmn() {
     echo "Next migration-number: $(ls src/olympia/migrations/ | cut -d '-' -f 1 | sort -rn | awk '{printf "%03d", $1 + 1; exit}')"
 }
+
+# added by travis gem
+[ -f /home/chris/.travis/travis.sh ] && source /home/chris/.travis/travis.sh
+# source /usr/share/nvm/init-nvm.sh
