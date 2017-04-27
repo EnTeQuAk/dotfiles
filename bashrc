@@ -41,22 +41,21 @@ if [ -d $RUBY_GEM ]; then
     PATH=$RUBY_GEM:"${PATH}"
 fi
 
-export PATH=/opt/android-sdk/tools:$PATH
-
-export PATH=/opt/android-sdk/platform-tools/:$PATH
-
 export PATH=/usr/bin/site_perl/:$PATH
 
 export ANDROID_NDK_ROOT=/opt/android-ndk
 export ANDROID_SDK_ROOT=/opt/android-sdk
 export PATH=$ANDROID_NDK_ROOT:$ANDROID_SDK_ROOT:$PATH
 export ANDROID_HOME=$ANDROID_SDK_ROOT
+export PATH=${PATH}:${ANDROID_HOME}/tools
+export PATH=${PATH}:${ANDROID_HOME}/platform-tools
 
 if [ -d ${HOME}/Projects/homebrew ]; then
 	export PATH=${HOME}/Projects/homebrew/bin:${PATH}
 fi
 
 export PATH=$(npm bin):$PATH
+export PATH=$PATH:/usr/lib/node_modules/.bin/
 
 export PATH=$PATH:/Applications/Postgres.app/Contents/Versions/9.4/bin
 
@@ -290,8 +289,8 @@ function workon_cwd {
                 fi
            fi
            if [ -d "$PROJECT_ROOT/node_modules" ]; then
-                export NODE_MODULES="./node_modules"
-                export PATH=./node_modules/.bin:$PATH
+                export NODE_MODULES="$PROJECT_ROOT/node_modules"
+                export PATH=$PROJECT_ROOT/node_modules/.bin:$PATH
            fi
         fi
         if [ -f "$PROJECT_ROOT/.venv_hook" ]; then

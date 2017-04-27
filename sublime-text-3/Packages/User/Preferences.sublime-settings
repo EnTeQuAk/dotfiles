@@ -11,7 +11,7 @@
 	],
 	"auto_complete_with_fields": true,
 	"caret_style": "solid",
-	"color_scheme": "Packages/Color Scheme - Default/Monokai.tmTheme",
+	"color_scheme": "Packages/User/SublimeLinter/Monokai (SL).tmTheme",
 	"enable_telemetry": true,
 	"ensure_newline_at_eof_on_save": true,
 	"find_selected_text": true,
@@ -47,8 +47,6 @@
 	"ignored_packages":
 	[
 		"RestructuredText",
-		"Solarized Color Scheme",
-		"SublimeLinter",
 		"Vintage"
 	],
 	"indent_guide_options":
@@ -61,14 +59,14 @@
 	"remember_open_files": false,
 	"rulers":
 	[
-		80,
+		79,
 		100
 	],
 	"show_full_path": true,
 	"show_minimap": false,
 	"show_tab_close_buttons": false,
 	"spell_check": false,
-	"theme": "Spacegray Eighties.sublime-theme",
+	"theme": "Default.sublime-theme",
 	"translate_tabs_to_spaces": true,
 	"trim_trailing_white_space_on_save": true,
 	"update_check": false,
