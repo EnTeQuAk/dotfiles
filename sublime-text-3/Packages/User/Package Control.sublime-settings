@@ -23,6 +23,7 @@
 		"Origami",
 		"Package Control",
 		"Pretty JSON",
+		"PyRefactor",
 		"Python 3",
 		"Python Breakpoints",
 		"Python Imports Sorter",
@@ -37,7 +38,6 @@
 		"SublimeLinter",
 		"SublimeLinter-contrib-eslint",
 		"SublimeLinter-flake8",
-		"Theme - Soda",
 		"Theme - Spacegray",
 		"WordCount"
 	]

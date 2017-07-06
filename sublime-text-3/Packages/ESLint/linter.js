@@ -1,14 +1,27 @@
 'use strict';
 
+var fs = require('fs');
+var path = require('path');
 var args = process.argv.slice(2);
+
 var targetPath = args[0];
+var targetDir = path.dirname(targetPath);
+
 var nodeModulesPath = args[1];
 if (nodeModulesPath) {
   module.paths.push(nodeModulesPath);
 }
 var configFile = args[2];
 
-var CLIEngine = require('eslint').CLIEngine;
+var eslintPath = path.join(targetDir, 'node_modules', 'eslint');
+var eslint;
+if (fs.existsSync(eslintPath)) {
+  eslint = require(eslintPath);
+} else {
+  eslint = require('eslint');
+}
+
+var CLIEngine = eslint.CLIEngine;
 var options = {};
 if (configFile) {
   options.configFile = configFile;
