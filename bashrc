@@ -19,7 +19,7 @@ if [ -e "$HOME/.git-completion.bash" ]; then
 fi
 
 # Include custom
-export PATH=/usr/local/share/python:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:$PATH
+export PATH=/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:$PATH
 export PATH=/usr/local/heroku/bin:$PATH
 
 
@@ -362,3 +362,4 @@ gifify() {
 onmn() {
     echo "Next migration-number: $(ls src/olympia/migrations/ | cut -d '-' -f 1 | sort -rn | awk '{printf "%03d", $1 + 1; exit}')"
 }
+export PATH="/usr/local/sbin:$PATH"
