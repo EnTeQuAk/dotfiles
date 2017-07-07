@@ -19,7 +19,7 @@
             "osx": [],
             "windows": []
         },
-        "rc_search_limit": 3,
+        "rc_search_limit": 8,
         "shell_timeout": 10,
         "show_errors_on_save": false,
         "show_marks_in_minimap": true,
@@ -33,6 +33,10 @@
             "javascript (babel)": "javascript",
             "php": "html"
         },
+        "tooltip_fontsize": "1rem",
+        "tooltip_theme": "Packages/SublimeLinter/tooltip-themes/Default/Default.tooltip-theme",
+        "tooltip_theme_excludes": [],
+        "tooltips": false,
         "warning_color": "DDB700",
         "wrap_find": true
     }

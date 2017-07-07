@@ -41,24 +41,27 @@ if [ -d $RUBY_GEM ]; then
     PATH=$RUBY_GEM:"${PATH}"
 fi
 
-export PATH=/opt/android-sdk/tools:$PATH
-
-export PATH=/opt/android-sdk/platform-tools/:$PATH
-
 export PATH=/usr/bin/site_perl/:$PATH
 
 export ANDROID_NDK_ROOT=/opt/android-ndk
 export ANDROID_SDK_ROOT=/opt/android-sdk
 export PATH=$ANDROID_NDK_ROOT:$ANDROID_SDK_ROOT:$PATH
 export ANDROID_HOME=$ANDROID_SDK_ROOT
+export PATH=${PATH}:${ANDROID_HOME}/tools
+export PATH=${PATH}:${ANDROID_HOME}/platform-tools
 
 if [ -d ${HOME}/Projects/homebrew ]; then
 	export PATH=${HOME}/Projects/homebrew/bin:${PATH}
 fi
 
 export PATH=$(npm bin):$PATH
+export PATH=$PATH:/usr/lib/node_modules/.bin/
 
 export PATH=$PATH:/Applications/Postgres.app/Contents/Versions/9.4/bin
+
+if [ -d ${HOME}/.cargo/bin ]; then
+    export PATH=${HOME}/.cargo/bin:${PATH}
+fi
 
 # Global environment definitions
 # ==============================
@@ -284,12 +287,11 @@ function workon_cwd {
                 else
                     [ -n "`alias -p | grep '^alias django='`" ] && unalias django
                 fi
-
-                if [ -d "$PROJECT_ROOT/node_modules" ]; then
-                    export NODE_MODULES="./node_modules"
-                    export PATH=./node_modules/.bin:$PATH
-                fi
-            fi
+           fi
+           if [ -d "$PROJECT_ROOT/node_modules" ]; then
+                export NODE_MODULES="$PROJECT_ROOT/node_modules"
+                export PATH=$PROJECT_ROOT/node_modules/.bin:$PATH
+           fi
         fi
         if [ -f "$PROJECT_ROOT/.venv_hook" ]; then
             source "$PROJECT_ROOT/.venv_hook"
@@ -362,4 +364,9 @@ gifify() {
 onmn() {
     echo "Next migration-number: $(ls src/olympia/migrations/ | cut -d '-' -f 1 | sort -rn | awk '{printf "%03d", $1 + 1; exit}')"
 }
+
 export PATH="/usr/local/sbin:$PATH"
+
+# added by travis gem
+[ -f /home/chris/.travis/travis.sh ] && source /home/chris/.travis/travis.sh
+# source /usr/share/nvm/init-nvm.sh
