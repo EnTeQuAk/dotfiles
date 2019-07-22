@@ -35,15 +35,16 @@ if [ -d ~/.local/bin ] ; then
 fi
 
 # Support for local ruby gems
-RUBY_GEM=$(ruby -rubygems -e "puts Gem.user_dir")/bin
+RUBY_GEM=$(ruby -e "puts Gem.user_dir")/bin
 
 if [ -d $RUBY_GEM ]; then
     PATH=$RUBY_GEM:"${PATH}"
 fi
 
+alias subl="subl -n ."
+
 export PATH=/usr/bin/site_perl/:$PATH
 
-export ANDROID_NDK_ROOT=/opt/android-ndk
 export ANDROID_SDK_ROOT=/opt/android-sdk
 export PATH=$ANDROID_NDK_ROOT:$ANDROID_SDK_ROOT:$PATH
 export ANDROID_HOME=$ANDROID_SDK_ROOT
@@ -81,7 +82,6 @@ shopt -s checkwinsize # If window size changes, redraw contents
 shopt -s cmdhist # Multiline commands are a single command in history.
 shopt -s extglob # Allows basic regexps in bash.
 
-# export subl as our editor
 export EDITOR="vim"
 
 # check the window size after each command and, if necessary,
@@ -134,14 +134,10 @@ alias df='df -h' # Disk free, in gigabytes, not bytes
 alias du='du -h -c' # Calculate total disk usage for a folder
 
 # Nifty extras
-alias servethis="python2 -c 'import SimpleHTTPServer; SimpleHTTPServer.test()'"
 alias clr='clear;echo "Currently logged in on $(tty), as $(whoami) in directory $(pwd)."'
-alias pypath='python -c "import sys; print(sys.path)" | tr "," "\n" | grep -v "egg"'
-alias py2path='python2 -c "import sys; print(sys.path)" | tr "," "\n" | grep -v "egg"'
 alias pycclean='find . -name "*.pyc" -exec rm {} \;'
 alias xo='xdg-open'
 alias wtc="curl --silent 'http://whatthecommit.com/index.txt'"
-alias rvim="gvim --remote-silent"
 
 # "last as root"
 alias lr='su -c "$(history | tail -n 2 | head -n 1 | sed -e "s/^[ ]*[0-9]*[ ]*//g")"'
@@ -153,11 +149,7 @@ alias ll='ls -halG'
 alias ipy='python -c "import IPython; IPython.embed()"'
 alias jpp='python -mjson.tool'
 alias git='hub'
-alias lintdiff='pylint $(git diff --name-only)'
-alias submod='sub $(git diff --name-only)'
-
-alias initworkscreen='xrandr --output eDP1 --auto --output DP1-2 --left-of eDP1 --output DP1-1-2 --auto --left-of DP1-2'
-
+alias submod='subl $(git diff --name-only)'
 
 # Git related shortcuts
 alias gst='git st'
@@ -166,12 +158,6 @@ alias gco='git co'
 alias gpu='git pu'
 alias gbr='git br'
 alias gdi='git diff'
-
-function sub() {
-    subl3 -n . "$@";
-}
-alias subl='sub'
-
 
 # bash function to decompress archives - http://www.shell-fu.org/lister.php?id=375
 extract () {
@@ -335,9 +321,6 @@ if [ -f "/usr/bin/ksshaskpass" ]; then
     export SSH_ASKPASS="/usr/bin/ksshaskpass"
 fi
 
-# added by travis gem
-[ -f /home/ente/.travis/travis.sh ] && source /home/ente/.travis/travis.sh
-
 export LC_ALL=en_US.UTF-8
 export LANG=en_US.UTF-8
 
@@ -368,3 +351,14 @@ onmn() {
 # added by travis gem
 [ -f /home/chris/.travis/travis.sh ] && source /home/chris/.travis/travis.sh
 # source /usr/share/nvm/init-nvm.sh
+
+export GOPATH=$HOME/.go
+export PATH="$PATH:$GOPATH/bin"  # Ditto.
+
+export PATH="$HOME/.cargo/bin:$PATH"
+
+source /usr/share/nvm/init-nvm.sh
+
+
+export B2_ACCOUNT_ID=001e3682bee50b70000000001
+export B2_ACCOUNT_KEY=K001XjGYEx14aoewSbL2z4hXGClfba4
